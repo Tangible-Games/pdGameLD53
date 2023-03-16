@@ -1,4 +1,5 @@
 #include "pd_api.h"
+#include "math_intersect.h"
 
 #ifdef _WINDLL
 __declspec(dllexport)
