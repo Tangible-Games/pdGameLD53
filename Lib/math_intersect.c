@@ -5,7 +5,7 @@
 #define Epsilon 0.00000001f
 
 int symIntersectSegments(const Point* o1, const Point* e1, const Point* o2,
-                         const Point* e2, float eps, Point* intersectionOut) {
+                         const Point* e2, float eps, Point* intersection_out) {
   Point v1;
   v1.x = e1->x - o1->x;
   v1.y = e1->y - o1->y;
@@ -25,44 +25,44 @@ int symIntersectSegments(const Point* o1, const Point* e1, const Point* o2,
 
   float t = (a.x * v2.y - a.y * v2.x) / D;
   if (t < 0.0f) {
-    return 0;
+    return -1;
   }
   if (t > 1.0f) {
-    return 0;
+    return -1;
   }
 
   float u = (a.x * v1.y - a.y * v1.x) / D;
   if (u < 0.0f) {
-    return 0;
+    return -1;
   }
   if (u > 1.0f) {
-    return 0;
+    return -1;
   }
 
-  intersectionOut->x = o1->x + v1.x * t;
-  intersectionOut->y = o1->y + v1.y * t;
+  intersection_out->x = o1->x + v1.x * t;
+  intersection_out->y = o1->y + v1.y * t;
 
-  return 1;
+  return 0;
 }
 
 void symIntersectSquareFromInside(float x, float y, float rX, float rY,
-                                  float sX, float sY, int* indexXOut,
-                                  int* indexYOut, float* xOut, float* yOut) {
-  *indexXOut = 0;
-  *indexYOut = 0;
+                                  float sX, float sY, int* d_i, int* d_j,
+                                  float* x_out, float* y_out) {
+  *d_i = 0;
+  *d_j = 0;
 
-  *xOut = 0.0f;
-  *yOut = 0.0f;
+  *x_out = 0.0f;
+  *y_out = 0.0f;
 
-  float R = sqrtf(sX * sX + sY * sY) + 1.0f;
+  float R = sqrtf(sX * sX + sY * sY) * 1.5f;
 
-  Point rayStart;
-  rayStart.x = x;
-  rayStart.y = y;
+  Point ray_start;
+  ray_start.x = x;
+  ray_start.y = y;
 
-  Point rayEnd;
-  rayEnd.x = rayStart.x + rX * R;
-  rayEnd.y = rayStart.y + rY * R;
+  Point ray_end;
+  ray_end.x = ray_start.x + rX * R;
+  ray_end.y = ray_start.y + rY * R;
 
   // p1--p2
   // |   |
@@ -85,24 +85,24 @@ void symIntersectSquareFromInside(float x, float y, float rX, float rY,
   p0.y = 0.0f;
 
   Point intersection;
-  if (symIntersectSegments(&rayStart, &rayEnd, &p3, &p2, Epsilon,
+  if (symIntersectSegments(&ray_start, &ray_end, &p3, &p2, Epsilon,
                            &intersection)) {
     // RIGHT
-    *indexXOut = 1;
-  } else if (symIntersectSegments(&rayStart, &rayEnd, &p1, &p2, Epsilon,
+    *d_i = 1;
+  } else if (symIntersectSegments(&ray_start, &ray_end, &p1, &p2, Epsilon,
                                   &intersection)) {
     // UP
-    *indexYOut = 1;
-  } else if (symIntersectSegments(&rayStart, &rayEnd, &p0, &p1, Epsilon,
+    *d_j = 1;
+  } else if (symIntersectSegments(&ray_start, &ray_end, &p0, &p1, Epsilon,
                                   &intersection)) {
     // LEFT
-    *indexXOut = -1;
-  } else if (symIntersectSegments(&rayStart, &rayEnd, &p0, &p3, Epsilon,
+    *d_i = -1;
+  } else if (symIntersectSegments(&ray_start, &ray_end, &p0, &p3, Epsilon,
                                   &intersection)) {
     // DOWN
-    *indexYOut = -1;
+    *d_j = -1;
   }
 
-  *xOut = intersection.x;
-  *yOut = intersection.y;
+  *x_out = intersection.x;
+  *y_out = intersection.y;
 }
