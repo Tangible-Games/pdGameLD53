@@ -134,12 +134,26 @@ static int update(void* userdata) {
 
   float column_angle = horizontal_fov / (float)screen_width;
 
-  Point seg_0;
-  seg_0.x = 0.0f;
-  seg_0.y = 100.0f;
-  Point seg_1;
-  seg_1.x = 100.0;
-  seg_1.y = 100.0f;
+  Point seg_0_0;
+  seg_0_0.x = 0.0f;
+  seg_0_0.y = 100.0f;
+  Point seg_0_1;
+  seg_0_1.x = 100.0;
+  seg_0_1.y = 100.0f;
+
+  Point seg_1_0;
+  seg_1_0.x = 0.0f;
+  seg_1_0.y = 25.0f;
+  Point seg_1_1;
+  seg_1_1.x = 0.0;
+  seg_1_1.y = 75.0f;
+
+  Point seg_2_0;
+  seg_2_0.x = 100.0f;
+  seg_2_0.y = 25.0f;
+  Point seg_2_1;
+  seg_2_1.x = 100.0;
+  seg_2_1.y = 75.0f;
 
   float wall_height = 100.0f;
 
@@ -180,7 +194,14 @@ static int update(void* userdata) {
     view.y = eye.y + 500.0f * ray_y;
 
     Point intersection;
-    int result = symIntersectSegments(&seg_0, &seg_1, &eye, &view, 0.00000001f, &intersection);
+    int result = symIntersectSegments(&seg_0_0, &seg_0_1, &eye, &view, 0.00000001f, &intersection);
+    if (result != 0) {
+      result = symIntersectSegments(&seg_1_0, &seg_1_1, &eye, &view, 0.00000001f, &intersection);
+      if (result != 0) {
+        result = symIntersectSegments(&seg_2_0, &seg_2_1, &eye, &view, 0.00000001f, &intersection);
+      }
+    }
+
     if (result == 0) {
       float d_x = intersection.x - eye.x;
       float d_y = intersection.y - eye.y;
