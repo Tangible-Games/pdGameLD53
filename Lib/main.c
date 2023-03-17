@@ -118,38 +118,111 @@ void Level_Rasterize(PlaydateAPI* playdate, Point* eye, float view_x,
   }
 }
 
+Point eye;
+
 static int update(void* userdata) {
   PlaydateAPI* playdate = userdata;
 
+  PDButtons buttons_current;
+  PDButtons buttons_pushed;
+  PDButtons buttons_released;
+  playdate->system->getButtonState(&buttons_current, &buttons_pushed, &buttons_released);
+
   playdate->graphics->clear(kColorWhite);
 
+  int screen_center_x = screen_width / 2;
+
+  float column_angle = horizontal_fov / (float)screen_width;
+
   Point seg_0;
-  seg_0.x = 20.0f;
-  seg_0.y = 30.0f;
+  seg_0.x = 0.0f;
+  seg_0.y = 100.0f;
   Point seg_1;
-  seg_1.x = 350.0f;
-  seg_1.y = 45.0f;
+  seg_1.x = 100.0;
+  seg_1.y = 100.0f;
 
-  Point eye;
-  eye.x = (float) screen_width / 2.0f;
-  eye.y = (float) screen_height / 2.0f;
+  float wall_height = 100.0f;
 
-  Point view;
-  view.x = eye.x + 500.0f * cosf(Math_DegToRad(playdate->system->getCrankAngle()));
-  view.y = eye.y + 500.0f * sinf(Math_DegToRad(playdate->system->getCrankAngle()));
+  float view_x = cosf(Math_DegToRad(playdate->system->getCrankAngle()));
+  float view_y = sinf(Math_DegToRad(playdate->system->getCrankAngle()));
 
-  Point intersection;
-  int result = symIntersectSegments(&seg_0, &seg_1, &eye, &view, 0.00000001f, &intersection);
-
-  playdate->graphics->drawLine((int) seg_0.x, (int) seg_0.y, (int) seg_1.x, (int) seg_1.y, 4, kColorBlack);
-
-  playdate->graphics->drawLine((int) eye.x, (int) eye.y, (int) view.x, (int) view.y, 1, kColorBlack);
-
-  if (result == 0) {
-    playdate->graphics->drawRect((int) intersection.x - 5, (int) intersection.y - 5, 10, 10, kColorBlack);
+  if (buttons_current == kButtonUp) {
+    eye.x = eye.x + 2.0f * view_x;
+    eye.y = eye.y + 2.0f * view_y;
+  } else if (buttons_current == kButtonDown) {
+    eye.x = eye.x - 2.0f * view_x;
+    eye.y = eye.y - 2.0f * view_y;
   }
 
+  if (buttons_current == kButtonLeft) {
+    float side_x;
+    float side_y;
+    Vector_GetRotated(Math_DegToRad(-90.0f), view_x, view_y, &side_x, &side_y);
+    eye.x = eye.x + 2.0f * side_x;
+    eye.y = eye.y + 2.0f * side_y;
+  } else if (buttons_current == kButtonRight) {
+    float side_x;
+    float side_y;
+    Vector_GetRotated(Math_DegToRad(90.0f), view_x, view_y, &side_x, &side_y);
+    eye.x = eye.x + 2.0f * side_x;
+    eye.y = eye.y + 2.0f * side_y;
+  }
+
+  for (int i = 0; i < screen_width; ++i) {
+    float angle = column_angle * (i - screen_center_x);
+
+    float ray_x;
+    float ray_y;
+    Vector_GetRotated(Math_DegToRad(angle), view_x, view_y, &ray_x, &ray_y);
+
+    Point view;
+    view.x = eye.x + 500.0f * ray_x;
+    view.y = eye.y + 500.0f * ray_y;
+
+    Point intersection;
+    int result = symIntersectSegments(&seg_0, &seg_1, &eye, &view, 0.00000001f, &intersection);
+    if (result == 0) {
+      float d_x = intersection.x - eye.x;
+      float d_y = intersection.y - eye.y;
+      float d = sqrtf(d_x * d_x + d_y * d_y);
+      float x = d * tanf(vertical_fov) * cosf(Math_DegToRad(angle));
+
+      int wall_size_in_px = (float) screen_height * (wall_height / x);
+      int y0 = (screen_height - wall_size_in_px) / 2;
+      int y1 = y0 + wall_size_in_px;
+      playdate->graphics->drawLine(i, y0, i, y1, 4, kColorBlack);
+    }
+  }
+
+  // Point seg_0;
+  // seg_0.x = 20.0f;
+  // seg_0.y = 30.0f;
+  // Point seg_1;
+  // seg_1.x = 350.0f;
+  // seg_1.y = 45.0f;
+
+  // Point eye;
+  // eye.x = (float) screen_width / 2.0f;
+  // eye.y = (float) screen_height / 2.0f;
+
+  // Point view;
+  // view.x = eye.x + 500.0f * cosf(Math_DegToRad(playdate->system->getCrankAngle()));
+  // view.y = eye.y + 500.0f * sinf(Math_DegToRad(playdate->system->getCrankAngle()));
+
+  // Point intersection;
+  // int result = symIntersectSegments(&seg_0, &seg_1, &eye, &view, 0.00000001f, &intersection);
+
+  // playdate->graphics->drawLine((int) seg_0.x, (int) seg_0.y, (int) seg_1.x, (int) seg_1.y, 4, kColorBlack);
+
+  // playdate->graphics->drawLine((int) eye.x, (int) eye.y, (int) view.x, (int) view.y, 1, kColorBlack);
+
+  // if (result == 0) {
+  //   playdate->graphics->drawRect((int) intersection.x - 5, (int) intersection.y - 5, 10, 10, kColorBlack);
+  // }
+
   playdate->system->drawFPS(0,0);
+
+  return 0;
 }
 
 #ifdef _WINDLL
@@ -158,6 +231,8 @@ __declspec(dllexport)
     int eventHandler(PlaydateAPI* playdate, PDSystemEvent event, uint32_t arg) {
   playdate->system->logToConsole("Event handler.");
   if (event == kEventInit) {
+    eye.x = 50.0f;
+    eye.y = 0.0f;
     playdate->system->setUpdateCallback(update, playdate);
   }
   return 0;
