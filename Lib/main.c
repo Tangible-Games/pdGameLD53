@@ -182,6 +182,11 @@ static int update(void* userdata) {
     eye.y = eye.y + 2.0f * side_y;
   }
 
+  int prev_segment_id = -1;
+  int prev_y_0 = -1;
+  int prev_y_1 = 1000;
+  float prev_d = -1.0f;
+
   for (int i = 0; i < screen_width; ++i) {
     float angle = column_angle * (i - screen_center_x);
 
@@ -195,24 +200,56 @@ static int update(void* userdata) {
 
     Point intersection;
     int result = symIntersectSegments(&seg_0_0, &seg_0_1, &eye, &view, 0.00000001f, &intersection);
+    int segment_id = -1;
     if (result != 0) {
       result = symIntersectSegments(&seg_1_0, &seg_1_1, &eye, &view, 0.00000001f, &intersection);
       if (result != 0) {
         result = symIntersectSegments(&seg_2_0, &seg_2_1, &eye, &view, 0.00000001f, &intersection);
+        if (result == 0) {
+          segment_id = 2;
+        }
+      } else {
+        segment_id = 1;
       }
+    } else {
+      segment_id = 0;
     }
 
+    int y_0 = -1;
+    int y_1 = -1;
+    float d = -1.0f;
     if (result == 0) {
       float d_x = intersection.x - eye.x;
       float d_y = intersection.y - eye.y;
-      float d = sqrtf(d_x * d_x + d_y * d_y);
+      d = sqrtf(d_x * d_x + d_y * d_y);
       float x = d * tanf(vertical_fov) * cosf(Math_DegToRad(angle));
 
       int wall_size_in_px = (float) screen_height * (wall_height / x);
-      int y0 = (screen_height - wall_size_in_px) / 2;
-      int y1 = y0 + wall_size_in_px;
-      playdate->graphics->drawLine(i, y0, i, y1, 4, kColorBlack);
+      y_0 = (screen_height - wall_size_in_px) / 2;
+      y_1 = y_0 + wall_size_in_px;
     }
+
+    if (segment_id != prev_segment_id) {
+      if (prev_segment_id == -1) {
+        playdate->graphics->drawLine(i, y_0, i, y_1, 2, kColorBlack);
+      } else if (segment_id == -1) {
+        playdate->graphics->drawLine(i, prev_y_0, i, prev_y_1, 2, kColorBlack);
+      } else {
+        if (d < prev_d) {
+          playdate->graphics->drawLine(i, y_0, i, y_1, 2, kColorBlack);
+        } else {
+          playdate->graphics->drawLine(i, prev_y_0, i, prev_y_1, 2, kColorBlack);
+        }
+      }
+    } else if (segment_id != -1) {
+      playdate->graphics->drawLine(i, y_0, i, y_0 - 2, 1, kColorBlack);
+      playdate->graphics->drawLine(i, y_1, i, y_1 + 2, 1, kColorBlack);
+    }
+
+    prev_segment_id = segment_id;
+    prev_y_0 = y_0;
+    prev_y_1 = y_1;
+    prev_d = d;
   }
 
   // Point seg_0;
