@@ -37,3 +37,8 @@ else()
 endif()
 
 include(${SDK}/C_API/buildsupport/playdate_game.cmake)
+
+enable_testing()
+
+add_executable(vector2d-test Lib/PdSymphony/vector2d_test.cpp)
+add_test(vector2d-test vector2d-test)

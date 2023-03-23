@@ -1,6 +1,8 @@
 #ifndef __PD_SYMPHONY_MATH_VECTOR_H_
 #define __PD_SYMPHONY_MATH_VECTOR_H_
 
+#include <math.h>
+
 namespace PdSymphony {
 namespace Math {
 class Vector2d {
