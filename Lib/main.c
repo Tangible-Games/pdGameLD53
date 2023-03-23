@@ -1,3 +1,4 @@
+#include "game.h"
 #include "math_intersect.h"
 #include "pd_api.h"
 
@@ -46,8 +47,9 @@ void Level_GetCell(Point* eye, int* level_i_out, int* level_j_out) {
   *level_j_out = (int)(eye->y / level_cell_size);
 }
 
-void Level_TraceRay(PlaydateAPI* playdate, Point* eye, int level_i, int level_j, float ray_x,
-                    float ray_y, LevelCollision* level_collision_out) {
+void Level_TraceRay(PlaydateAPI* playdate, Point* eye, int level_i, int level_j,
+                    float ray_x, float ray_y,
+                    LevelCollision* level_collision_out) {
   int cell_i = level_i;
   int cell_j = level_j;
 
@@ -64,15 +66,13 @@ void Level_TraceRay(PlaydateAPI* playdate, Point* eye, int level_i, int level_j,
                                  level_cell_size, level_cell_size, &d_i, &d_j,
                                  &intersection.x, &intersection.y);
 
-    playdate->system->logToConsole("d_i: %i, d_j: %i", d_i,
-                                   d_j);
+    playdate->system->logToConsole("d_i: %i, d_j: %i", d_i, d_j);
 
     cell_i = cell_i + d_i;
     cell_j = cell_j + d_j;
     int cell_index = cell_j * level_width + cell_i;
     playdate->system->logToConsole("c: %i", level[cell_index]);
-    if (level[cell_index] == 1 ||
-        level[cell_index] == 2) {
+    if (level[cell_index] == 1 || level[cell_index] == 2) {
       float p_x = level_cell_size * cell_i + intersection.x;
       float p_y = level_cell_size * cell_j + intersection.y;
       float d_x = p_x - eye->x;
@@ -111,7 +111,8 @@ void Level_Rasterize(PlaydateAPI* playdate, Point* eye, float view_x,
 
     LevelCollision level_collision;
 
-    Level_TraceRay(playdate, eye, level_i, level_j, ray_x, ray_y, &level_collision);
+    Level_TraceRay(playdate, eye, level_i, level_j, ray_x, ray_y,
+                   &level_collision);
 
     playdate->system->logToConsole("%i %i", level_collision.i,
                                    level_collision.j);
@@ -119,14 +120,30 @@ void Level_Rasterize(PlaydateAPI* playdate, Point* eye, float view_x,
 }
 
 Point eye;
+float view_x;
+float view_y;
 
-static int update(void* userdata) {
+typedef struct Wall {
+  Point p_0;
+  Point p_1;
+} Wall;
+
+Wall walls[3];
+
+float prev_time = 0.0f;
+
+int update(void* userdata) {
   PlaydateAPI* playdate = userdata;
+
+  float cur_time = playdate->system->getElapsedTime();
+  float dt = cur_time - prev_time;
+  prev_time = cur_time;
 
   PDButtons buttons_current;
   PDButtons buttons_pushed;
   PDButtons buttons_released;
-  playdate->system->getButtonState(&buttons_current, &buttons_pushed, &buttons_released);
+  playdate->system->getButtonState(&buttons_current, &buttons_pushed,
+                                   &buttons_released);
 
   playdate->graphics->clear(kColorWhite);
 
@@ -134,52 +151,30 @@ static int update(void* userdata) {
 
   float column_angle = horizontal_fov / (float)screen_width;
 
-  Point seg_0_0;
-  seg_0_0.x = 0.0f;
-  seg_0_0.y = 100.0f;
-  Point seg_0_1;
-  seg_0_1.x = 100.0;
-  seg_0_1.y = 100.0f;
-
-  Point seg_1_0;
-  seg_1_0.x = 0.0f;
-  seg_1_0.y = 25.0f;
-  Point seg_1_1;
-  seg_1_1.x = 0.0;
-  seg_1_1.y = 75.0f;
-
-  Point seg_2_0;
-  seg_2_0.x = 100.0f;
-  seg_2_0.y = 25.0f;
-  Point seg_2_1;
-  seg_2_1.x = 100.0;
-  seg_2_1.y = 75.0f;
-
   float wall_height = 100.0f;
 
-  float view_x = cosf(Math_DegToRad(playdate->system->getCrankAngle()));
-  float view_y = sinf(Math_DegToRad(playdate->system->getCrankAngle()));
-
   if (buttons_current == kButtonUp) {
-    eye.x = eye.x + 2.0f * view_x;
-    eye.y = eye.y + 2.0f * view_y;
+    eye.x = eye.x + 100.0f * dt * view_x;
+    eye.y = eye.y + 100.0f * dt * view_y;
   } else if (buttons_current == kButtonDown) {
-    eye.x = eye.x - 2.0f * view_x;
-    eye.y = eye.y - 2.0f * view_y;
+    eye.x = eye.x - 100.0f * dt * view_x;
+    eye.y = eye.y - 100.0f * dt * view_y;
   }
 
   if (buttons_current == kButtonLeft) {
-    float side_x;
-    float side_y;
-    Vector_GetRotated(Math_DegToRad(-90.0f), view_x, view_y, &side_x, &side_y);
-    eye.x = eye.x + 2.0f * side_x;
-    eye.y = eye.y + 2.0f * side_y;
+    float new_view_x;
+    float new_view_y;
+    Vector_GetRotated(Math_DegToRad(-270.0f) * dt, view_x, view_y, &new_view_x,
+                      &new_view_y);
+    view_x = new_view_x;
+    view_y = new_view_y;
   } else if (buttons_current == kButtonRight) {
-    float side_x;
-    float side_y;
-    Vector_GetRotated(Math_DegToRad(90.0f), view_x, view_y, &side_x, &side_y);
-    eye.x = eye.x + 2.0f * side_x;
-    eye.y = eye.y + 2.0f * side_y;
+    float new_view_x;
+    float new_view_y;
+    Vector_GetRotated(Math_DegToRad(270.0f) * dt, view_x, view_y, &new_view_x,
+                      &new_view_y);
+    view_x = new_view_x;
+    view_y = new_view_y;
   }
 
   int prev_segment_id = -1;
@@ -195,36 +190,35 @@ static int update(void* userdata) {
     Vector_GetRotated(Math_DegToRad(angle), view_x, view_y, &ray_x, &ray_y);
 
     Point view;
-    view.x = eye.x + 500.0f * ray_x;
-    view.y = eye.y + 500.0f * ray_y;
+    view.x = eye.x + 1000.0f * ray_x;
+    view.y = eye.y + 1000.0f * ray_y;
 
-    Point intersection;
-    int result = symIntersectSegments(&seg_0_0, &seg_0_1, &eye, &view, 0.00000001f, &intersection);
+    int result = -1;
     int segment_id = -1;
-    if (result != 0) {
-      result = symIntersectSegments(&seg_1_0, &seg_1_1, &eye, &view, 0.00000001f, &intersection);
-      if (result != 0) {
-        result = symIntersectSegments(&seg_2_0, &seg_2_1, &eye, &view, 0.00000001f, &intersection);
-        if (result == 0) {
-          segment_id = 2;
+    float d = 1000000.0f;
+    for (int i = 0; i < 3; ++i) {
+      Point intersection;
+      int new_result = symIntersectSegments(&walls[i].p_0, &walls[i].p_1, &eye,
+                                            &view, 0.00000001f, &intersection);
+      if (new_result == 0) {
+        float d_x = intersection.x - eye.x;
+        float d_y = intersection.y - eye.y;
+        float new_d = sqrtf(d_x * d_x + d_y * d_y);
+        if (new_d < d) {
+          d = new_d;
+          segment_id = i;
         }
-      } else {
-        segment_id = 1;
+
+        result = 0;
       }
-    } else {
-      segment_id = 0;
     }
 
     int y_0 = -1;
     int y_1 = -1;
-    float d = -1.0f;
     if (result == 0) {
-      float d_x = intersection.x - eye.x;
-      float d_y = intersection.y - eye.y;
-      d = sqrtf(d_x * d_x + d_y * d_y);
       float x = d * tanf(vertical_fov) * cosf(Math_DegToRad(angle));
 
-      int wall_size_in_px = (float) screen_height * (wall_height / x);
+      int wall_size_in_px = (float)screen_height * (wall_height / x);
       y_0 = (screen_height - wall_size_in_px) / 2;
       y_1 = y_0 + wall_size_in_px;
     }
@@ -238,7 +232,8 @@ static int update(void* userdata) {
         if (d < prev_d) {
           playdate->graphics->drawLine(i, y_0, i, y_1, 2, kColorBlack);
         } else {
-          playdate->graphics->drawLine(i, prev_y_0, i, prev_y_1, 2, kColorBlack);
+          playdate->graphics->drawLine(i, prev_y_0, i, prev_y_1, 2,
+                                       kColorBlack);
         }
       }
     } else if (segment_id != -1) {
@@ -252,33 +247,7 @@ static int update(void* userdata) {
     prev_d = d;
   }
 
-  // Point seg_0;
-  // seg_0.x = 20.0f;
-  // seg_0.y = 30.0f;
-  // Point seg_1;
-  // seg_1.x = 350.0f;
-  // seg_1.y = 45.0f;
-
-  // Point eye;
-  // eye.x = (float) screen_width / 2.0f;
-  // eye.y = (float) screen_height / 2.0f;
-
-  // Point view;
-  // view.x = eye.x + 500.0f * cosf(Math_DegToRad(playdate->system->getCrankAngle()));
-  // view.y = eye.y + 500.0f * sinf(Math_DegToRad(playdate->system->getCrankAngle()));
-
-  // Point intersection;
-  // int result = symIntersectSegments(&seg_0, &seg_1, &eye, &view, 0.00000001f, &intersection);
-
-  // playdate->graphics->drawLine((int) seg_0.x, (int) seg_0.y, (int) seg_1.x, (int) seg_1.y, 4, kColorBlack);
-
-  // playdate->graphics->drawLine((int) eye.x, (int) eye.y, (int) view.x, (int) view.y, 1, kColorBlack);
-
-  // if (result == 0) {
-  //   playdate->graphics->drawRect((int) intersection.x - 5, (int) intersection.y - 5, 10, 10, kColorBlack);
-  // }
-
-  playdate->system->drawFPS(0,0);
+  playdate->system->drawFPS(0, 0);
 
   return 0;
 }
@@ -289,8 +258,31 @@ __declspec(dllexport)
     int eventHandler(PlaydateAPI* playdate, PDSystemEvent event, uint32_t arg) {
   playdate->system->logToConsole("Event handler.");
   if (event == kEventInit) {
+    void* userdata = SetupGame(playdate);
+    playdate->system->setUpdateCallback(Update, userdata);
+
     eye.x = 50.0f;
     eye.y = 0.0f;
+    view_x = 0.0f;
+    view_y = 1.0f;
+
+    walls[0].p_0.x = 0.0f;
+    walls[0].p_0.y = 100.0f;
+    walls[0].p_1.x = 100.0;
+    walls[0].p_1.y = 100.0f;
+
+    walls[1].p_0.x = 0.0f;
+    walls[1].p_0.y = 25.0f;
+    walls[1].p_1.x = 0.0;
+    walls[1].p_1.y = 75.0f;
+
+    walls[2].p_0.x = 100.0f;
+    walls[2].p_0.y = 25.0f;
+    walls[2].p_1.x = 100.0;
+    walls[2].p_1.y = 75.0f;
+
+    playdate->display->setRefreshRate(60);
+    prev_time = playdate->system->getElapsedTime();
     playdate->system->setUpdateCallback(update, playdate);
   }
   return 0;
