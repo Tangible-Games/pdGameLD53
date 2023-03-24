@@ -42,3 +42,6 @@ enable_testing()
 
 add_executable(vector2d-test Lib/PdSymphony/vector2d_test.cpp)
 add_test(vector2d-test vector2d-test)
+
+add_executable(point2d-test Lib/PdSymphony/point2d_test.cpp)
+add_test(point2d-test point2d-test)
