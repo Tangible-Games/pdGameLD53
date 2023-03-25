@@ -21,6 +21,8 @@ class Vector2d {
 
   Vector2d operator*(float v) { return Vector2d(x * v, y * v); }
 
+  float operator*(const Vector2d& v) const { return x * v.x + y * v.y; }
+
   float GetLengthSq() const { return x * x + y * y; }
 
   float GetLength() const { return sqrtf(GetLengthSq()); }
@@ -49,10 +51,7 @@ class Vector2d {
   }
 
   void Rotate(float angle_rad) {
-    float c = cosf(angle_rad);
-    float s = sinf(angle_rad);
-    x = c * x - s * y;
-    y = s * x + c * y;
+    Rotate(cosf(angle_rad), sinf(angle_rad));
   }
 
   Vector2d GetRotated(float angle_rad) const {
@@ -62,8 +61,10 @@ class Vector2d {
   }
 
   void Rotate(float cos_val, float sin_val) {
-    x = cos_val * x - sin_val * y;
-    y = sin_val * x + cos_val * y;
+    float new_x = cos_val * x - sin_val * y;
+    float new_y = sin_val * x + cos_val * y;
+    x = new_x;
+    y = new_y;
   }
 
   Vector2d GetRotated(float cos_val, float sin_val) const {

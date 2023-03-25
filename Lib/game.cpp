@@ -63,12 +63,21 @@ class Game {
       screen_angles_cos_[i] = cosf(Math_DegToRad(angle));
       screen_angles_sin_[i] = sinf(Math_DegToRad(angle));
     }
+
+    const char* error = 0;
+    enemy_sprite_ = playdate_->graphics->loadBitmap("data/1.png", &error);
+    playdate_->system->logToConsole("error: %s", error);
+    enemy_pos_ = PdSymphony::Math::Point2d(50.0f, 75.0f);
+    enemy_radius_ = 5.0f;
+    enemy_height_ = 50.0f;
   }
 
   void onUpdateAndDraw(float dt) {
     playdate_->graphics->clear(kColorWhite);
 
     onUpdateView(dt);
+
+    PdSymphony::Math::Segment2d enemy_segment = buildEnemySegment();
 
     int screen_width = playdate_->display->getWidth();
     int screen_height = playdate_->display->getHeight();
@@ -124,6 +133,44 @@ class Game {
         playdate_->graphics->drawLine(i, y1, i, y1 + 2, 1, kColorBlack);
       }
 
+      {
+        PdSymphony::Math::Point2d intersection;
+        float u = 0.0f;
+        float t = 0.0f;
+        if (ray_seg.Intersect(enemy_segment, 0.001f, intersection, u, t)) {
+          float enemy_d = (intersection - eye_).GetLength();
+          if (enemy_d < d) {
+            float x = enemy_d * vertical_fov_tan_ * screen_angles_cos_[i];
+            int enemy_size_in_px =
+                (int)((float)screen_height * (enemy_height_ / x));
+            int enemy_y0 = (screen_height - enemy_size_in_px) / 2;
+            int enemy_y1 = enemy_y0 + enemy_size_in_px;
+
+            int sprite_width = 0;
+            int sprite_height = 0;
+            int sprite_rowbytes = 0;
+            uint8_t* sprite_mask = 0;
+            uint8_t* sprite_data = 0;
+            playdate_->graphics->getBitmapData(enemy_sprite_, &sprite_width, &sprite_height, &sprite_rowbytes, &sprite_mask, &sprite_data);
+
+            int x_in_sprite = (int) (u * sprite_width);
+            for (int y = enemy_y1 + 1; y <= enemy_y0; ++y) {
+              int y_in_sprite = (int) ((float) (y - enemy_y0) / (float) enemy_size_in_px * sprite_height);
+              if (y_in_sprite < 0) {
+                y_in_sprite = 0;
+              }
+
+              uint8_t* row = sprite_data + sprite_rowbytes * (sprite_height - y_in_sprite - 1);
+              uint8_t pixel_byte = row[x_in_sprite / 8];
+              if (pixel_byte & (1 << (8 - x_in_sprite % 8 - 1))) {
+              } else {
+                playdate_->graphics->drawLine(i, y, i, y, 1, kColorBlack);
+              }
+            }
+          }
+        }
+      }
+
       prev_segment_id = segment_id;
       prev_y0 = y0;
       prev_y1 = y1;
@@ -155,6 +202,15 @@ class Game {
     }
   }
 
+  PdSymphony::Math::Segment2d buildEnemySegment() const {
+    PdSymphony::Math::Vector2d to_enemy = (enemy_pos_ - eye_).GetNormalized();
+    PdSymphony::Math::Vector2d ray_right_norm =
+        to_enemy.GetRotated(Math_DegToRad(90.0f));
+    return PdSymphony::Math::Segment2d(
+        enemy_pos_ - ray_right_norm * enemy_radius_,
+        enemy_pos_ + ray_right_norm * enemy_radius_);
+  }
+
   PlaydateAPI* playdate_;
   float prev_time_;
 
@@ -172,6 +228,11 @@ class Game {
   float wall_height_;
   float* screen_angles_cos_;
   float* screen_angles_sin_;
+
+  LCDBitmap* enemy_sprite_;
+  PdSymphony::Math::Point2d enemy_pos_;
+  float enemy_radius_;
+  float enemy_height_;
 };
 
 void* SetupGame(PlaydateAPI* playdate) {
