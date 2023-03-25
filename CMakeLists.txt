@@ -31,9 +31,9 @@ set(PLAYDATE_GAME_DEVICE hello_world_DEVICE)
 project(${PLAYDATE_GAME_NAME} C CXX ASM)
 
 if (TOOLCHAIN STREQUAL "armgcc")
-	add_executable(${PLAYDATE_GAME_DEVICE} Lib/main.c Lib/game.cpp Lib/math_intersect.c)
+	add_executable(${PLAYDATE_GAME_DEVICE} Lib/main.c Lib/game.cpp)
 else()
-	add_library(${PLAYDATE_GAME_NAME} SHARED Lib/main.c Lib/game.cpp Lib/math_intersect.c)
+	add_library(${PLAYDATE_GAME_NAME} SHARED Lib/main.c Lib/game.cpp)
 endif()
 
 include(${SDK}/C_API/buildsupport/playdate_game.cmake)
@@ -45,3 +45,6 @@ add_test(vector2d-test vector2d-test)
 
 add_executable(point2d-test Lib/PdSymphony/point2d_test.cpp)
 add_test(point2d-test point2d-test)
+
+add_executable(segment2d-test Lib/PdSymphony/segment2d_test.cpp)
+add_test(segment2d-test segment2d-test)

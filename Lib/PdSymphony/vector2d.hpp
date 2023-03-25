@@ -11,13 +11,15 @@ class Vector2d {
 
   Vector2d(float new_x, float new_y) : x(new_x), y(new_y) {}
 
-  Vector2d operator+(const Vector2d& rhv) {
+  Vector2d operator+(const Vector2d& rhv) const {
     return Vector2d(x + rhv.x, y + rhv.y);
   }
 
-  Vector2d operator-(const Vector2d& rhv) {
+  Vector2d operator-(const Vector2d& rhv) const {
     return Vector2d(x - rhv.x, y - rhv.y);
   }
+
+  Vector2d operator*(float v) { return Vector2d(x * v, y * v); }
 
   float GetLengthSq() const { return x * x + y * y; }
 
@@ -56,6 +58,17 @@ class Vector2d {
   Vector2d GetRotated(float angle_rad) const {
     Vector2d v(x, y);
     v.Rotate(angle_rad);
+    return v;
+  }
+
+  void Rotate(float cos_val, float sin_val) {
+    x = cos_val * x - sin_val * y;
+    y = sin_val * x + cos_val * y;
+  }
+
+  Vector2d GetRotated(float cos_val, float sin_val) const {
+    Vector2d v(x, y);
+    v.Rotate(cos_val, sin_val);
     return v;
   }
 
