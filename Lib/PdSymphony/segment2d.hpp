@@ -18,7 +18,8 @@ class Segment2d {
     return Intersect(seg1, eps, intersection_out, u, v);
   }
 
-  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out, float& u_out, float t_out) {
+  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out,
+                 float& u_out, float t_out) {
     Vector2d v1 = p1 - p0;
     Vector2d v2 = seg1.p1 - seg1.p0;
 

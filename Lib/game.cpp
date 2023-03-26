@@ -65,7 +65,7 @@ class Game {
     }
 
     const char* error = 0;
-    enemy_sprite_ = playdate_->graphics->loadBitmap("data/1.png", &error);
+    enemy_sprite_ = playdate_->graphics->loadBitmap("data/nazi.png", &error);
     playdate_->system->logToConsole("error: %s", error);
     enemy_pos_ = PdSymphony::Math::Point2d(50.0f, 75.0f);
     enemy_radius_ = 5.0f;
@@ -151,16 +151,20 @@ class Game {
             int sprite_rowbytes = 0;
             uint8_t* sprite_mask = 0;
             uint8_t* sprite_data = 0;
-            playdate_->graphics->getBitmapData(enemy_sprite_, &sprite_width, &sprite_height, &sprite_rowbytes, &sprite_mask, &sprite_data);
+            playdate_->graphics->getBitmapData(enemy_sprite_, &sprite_width,
+                                               &sprite_height, &sprite_rowbytes,
+                                               &sprite_mask, &sprite_data);
 
-            int x_in_sprite = (int) (u * sprite_width);
+            int x_in_sprite = (int)(u * sprite_width);
             for (int y = enemy_y1 + 1; y <= enemy_y0; ++y) {
-              int y_in_sprite = (int) ((float) (y - enemy_y0) / (float) enemy_size_in_px * sprite_height);
+              int y_in_sprite = (int)((float)(y - enemy_y0) /
+                                      (float)enemy_size_in_px * sprite_height);
               if (y_in_sprite < 0) {
                 y_in_sprite = 0;
               }
 
-              uint8_t* row = sprite_data + sprite_rowbytes * (sprite_height - y_in_sprite - 1);
+              uint8_t* row = sprite_data + sprite_rowbytes * (sprite_height -
+                                                              y_in_sprite - 1);
               uint8_t pixel_byte = row[x_in_sprite / 8];
               if (pixel_byte & (1 << (8 - x_in_sprite % 8 - 1))) {
               } else {

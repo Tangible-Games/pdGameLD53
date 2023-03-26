@@ -36,9 +36,15 @@ std::string FormatAssertMessage(AssertType assert_type,
                                 const ActualValueType& actual_value,
                                 const char* file_name, int line) {
   std::string operatior_string = "==";
-  if (assert_type == ASSERT_TYPE_NE) operatior_string = "!=";
-  if (assert_type == ASSERT_TYPE_GE) operatior_string = ">=";
-  if (assert_type == ASSERT_TYPE_LE) operatior_string = "<=";
+  if (assert_type == ASSERT_TYPE_NE) {
+    operatior_string = "!=";
+  }
+  if (assert_type == ASSERT_TYPE_GE) {
+    operatior_string = ">=";
+  }
+  if (assert_type == ASSERT_TYPE_LE) {
+    operatior_string = "<=";
+  }
 
   std::string expected_value_string = TypeToString(expected_value);
   std::string actual_value_string = TypeToString(actual_value);
@@ -58,7 +64,27 @@ bool AssertEq(const std::string& expected_expression,
               const std::string& actual_expression,
               const ActualValueType& actual_value, const char* file_name,
               int line) {
-  if (expected_value == actual_value) return true;
+  if (expected_value == actual_value) {
+    return true;
+  }
+
+  std::string result =
+      FormatAssertMessage(ASSERT_TYPE_EQ, expected_expression, expected_value,
+                          actual_expression, actual_value, file_name, line);
+
+  std::cout << result << std::endl;
+
+  abort();
+
+  return false;
+}
+
+bool AssertEqFloat(const std::string& expected_expression, float expected_value,
+                   const std::string& actual_expression, float actual_value,
+                   float eps, const char* file_name, int line) {
+  if (fabs(expected_value - actual_value) < eps) {
+    return true;
+  }
 
   std::string result =
       FormatAssertMessage(ASSERT_TYPE_EQ, expected_expression, expected_value,
@@ -77,7 +103,9 @@ bool AssertNe(const std::string& expected_expression,
               const std::string& actual_expression,
               const ActualValueType& actual_value, const char* file_name,
               int line) {
-  if (expected_value != actual_value) return true;
+  if (expected_value != actual_value) {
+    return true;
+  }
 
   std::string result =
       FormatAssertMessage(ASSERT_TYPE_NE, expected_expression, expected_value,
@@ -97,7 +125,9 @@ bool AssertGe(const std::string& expected_expression,
               const std::string& actual_expression,
               const ActualValueType& actual_value, const char* file_name,
               int line) {
-  if (expected_value <= actual_value) return true;
+  if (expected_value <= actual_value) {
+    return true;
+  }
 
   std::string result =
       FormatAssertMessage(ASSERT_TYPE_GE, expected_expression, expected_value,
@@ -117,7 +147,9 @@ bool AssertLe(const std::string& expected_expression,
               const std::string& actual_expression,
               const ActualValueType& actual_value, const char* file_name,
               int line) {
-  if (expected_value >= actual_value) return true;
+  if (expected_value >= actual_value) {
+    return true;
+  }
 
   std::string result =
       FormatAssertMessage(ASSERT_TYPE_GE, expected_expression, expected_value,
@@ -135,6 +167,11 @@ bool AssertLe(const std::string& expected_expression,
 #define TEST_ASSERT_EQ(expected_value, actual_expression)                     \
   PdSymphony::AssertEq(#expected_value, (expected_value), #actual_expression, \
                        (actual_expression), __FILE__, __LINE__)
+
+#define TEST_ASSERT_EQ_F(expected_value, actual_expression, eps)            \
+  PdSymphony::AssertEqFloat(#expected_value, (expected_value),              \
+                            #actual_expression, (actual_expression), (eps), \
+                            __FILE__, __LINE__)
 
 #define TEST_ASSERT_NE(expected_value, actual_expression)                     \
   PdSymphony::AssertNe(#expected_value, (expected_value), #actual_expression, \

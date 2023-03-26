@@ -50,9 +50,7 @@ class Vector2d {
     return v;
   }
 
-  void Rotate(float angle_rad) {
-    Rotate(cosf(angle_rad), sinf(angle_rad));
-  }
+  void Rotate(float angle_rad) { Rotate(cosf(angle_rad), sinf(angle_rad)); }
 
   Vector2d GetRotated(float angle_rad) const {
     Vector2d v(x, y);

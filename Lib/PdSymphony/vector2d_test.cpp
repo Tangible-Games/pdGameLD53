@@ -10,24 +10,24 @@ void vector2d_plus_minus() {
   PdSymphony::Math::Vector2d v2(5.0f, 7.0f);
 
   PdSymphony::Math::Vector2d v3 = v1 + v2;
-  TEST_ASSERT_EQ(6.0f, v3.x);
-  TEST_ASSERT_EQ(9.0f, v3.y);
+  TEST_ASSERT_EQ_F(6.0f, v3.x, 0.001f);
+  TEST_ASSERT_EQ_F(9.0f, v3.y, 0.001f);
 
   PdSymphony::Math::Vector2d v4 = v1 - v2;
-  TEST_ASSERT_EQ(-4.0f, v4.x);
-  TEST_ASSERT_EQ(-5.0f, v4.y);
+  TEST_ASSERT_EQ_F(-4.0f, v4.x, 0.001f);
+  TEST_ASSERT_EQ_F(-5.0f, v4.y, 0.001f);
 }
 
 void vector2d_rotation() {
   PdSymphony::Math::Vector2d v(0.0f, 1.0f);
 
   PdSymphony::Math::Vector2d v1 = v.GetRotated(Math_DegToRad(90.0f));
-  TEST_ASSERT_EQ(-1.0f, v1.x);
-  TEST_ASSERT_EQ(0.0f, v1.y);
+  TEST_ASSERT_EQ_F(-1.0f, v1.x, 0.001f);
+  TEST_ASSERT_EQ_F(0.0f, v1.y, 0.001f);
 
   PdSymphony::Math::Vector2d v2 = v.GetRotated(Math_DegToRad(-90.0f));
-  TEST_ASSERT_EQ(1.0f, v1.x);
-  TEST_ASSERT_EQ(0.0f, v1.y);
+  TEST_ASSERT_EQ_F(1.0f, v2.x, 0.001f);
+  TEST_ASSERT_EQ_F(0.0f, v2.y, 0.001f);
 }
 
 int main() {
