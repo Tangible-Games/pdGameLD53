@@ -1,0 +1,1 @@
+option('pd_sdk', type : 'string', description : 'Path of PlayDate SDK')

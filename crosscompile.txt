@@ -1,0 +1,17 @@
+[binaries]
+c = 'arm-none-eabi-gcc'
+cpp = 'arm-none-eabi-g++'
+ar = 'arm-none-eabi-gcc-ar'
+strip = 'arm-none-eabi-strip'
+objcopy = 'arm-none-eabi-objcopy'
+objdump = 'arm-none-eabi-objdump'
+size = 'arm-none-eabi-size'
+
+[properties]
+#needs_exe_wrapper = false
+
+[host_machine]
+system = 'none'
+cpu_family = 'arm'
+cpu = 'cortex-m7'
+endian = 'little'
