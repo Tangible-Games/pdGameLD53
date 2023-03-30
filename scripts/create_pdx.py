@@ -13,8 +13,10 @@ def create_sim(pd_sdk, bin, dest, resources_dir):
         if os.path.basename(bin) == "pdex.bin":
             shutil.copy(bin, os.path.join(tmp, 'pdex.bin'))
         else:
-            shutil.copy(bin, os.path.join(tmp, 'pdex.so'))
+            ext = os.path.splitext(bin)[1]
+            shutil.copy(bin, os.path.join(tmp, 'pdex' + ext))
             os.system('touch {}'.format(os.path.join(tmp, 'pdex.bin')))
+            os.system('touch {}'.format(os.path.join(tmp, 'main.pdz')))
         if resources_dir is not None:
             os.system('cp -r {}/* {}/'.format(resources_dir, tmp))
         os.system('{} -sdkpath {} {} {}'.format(os.path.join(pd_sdk, 'bin', 'pdc'), pd_sdk, tmp, dest))

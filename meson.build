@@ -4,8 +4,8 @@ project('pdGameLD53',
     meson_version : '>= 0.60',
     default_options : [
         'warning_level=3',
-        'c_std=gnu11', 'cpp_std=c++20',
-        'build.c_std=c11', 'build.cpp_std=c++20',
+        'c_std=gnu11', 'cpp_std=c++17',
+        'build.c_std=c11', 'build.cpp_std=c++17',
         'werror=true',
         'default_library=static',
         'buildtype=custom',
@@ -27,13 +27,16 @@ subdir('Lib')
 targets = ['cross', 'native']
 targets_dep = {}
 foreach t : targets
-    lib = static_library(
-        'lib' + meson.project_name() + '_' + t,
-        lib_srcs,
-        include_directories: lib_incs,
-        native: t == 'native'
-    )
-    dep = declare_dependency(link_with: lib, include_directories: lib_incs)
+    dep = []
+    if lib_srcs.length() != 0
+      lib = static_library(
+          meson.project_name() + '_' + t,
+          lib_srcs,
+          include_directories: lib_incs,
+          native: t == 'native'
+      )
+      dep = declare_dependency(link_with: lib, include_directories: lib_incs)
+    endif
     targets_dep += {t : dep}
 endforeach
 
@@ -65,9 +68,23 @@ sim_pdx = custom_target(meson.project_name() + '_host_pdx',
 
 message('sim pdx: ', sim_pdx.full_path())
 
+pd_simulator = ''
+if build_machine.system() == 'darwin'
+  pd_simulator += pd_sdk / 'bin' / 'Playdate Simulator.app' / 'Contents' / 'MacOS' / 'Playdate Simulator'
+elif build_machine.system() == 'linux'
+  pd_simulator += pd_sdk / 'bin' / 'PlaydateSimulator'
+endif
+
+if pd_simulator == ''
+  error('Build on ' + build_machine.system() + ' is not supported')
+endif
+
 run_target('sim',
-  command : [pd_sdk / 'bin' / 'PlaydateSimulator', sim_pdx.full_path()],
+  command : [pd_simulator, sim_pdx.full_path()],
   depends: sim_pdx)
+
+# Doesn't work yet
+if build_machine.system() != 'darwin'
 
 pd_exe = executable(
     meson.project_name() + '_exe',
@@ -98,3 +115,5 @@ pd_pdx = custom_target(meson.project_name() + '_cross_pdx',
   depends : pd_bin)
 
 message('cross pdx: ', pd_pdx.full_path())
+
+endif

@@ -24,7 +24,7 @@ add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'])
 add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'], native: true)
 
 # Arguments don't apply properly from project default options
-add_project_arguments('-std=c++20', language: 'cpp', native: true)
+add_project_arguments('-std=c++17', language: 'cpp', native: true)
 add_project_arguments('-std=gnu11', language: 'c', native: true)
 
 # host only
