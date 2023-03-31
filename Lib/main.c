@@ -5,6 +5,7 @@
 __declspec(dllexport)
 #endif
     int eventHandler(PlaydateAPI* playdate, PDSystemEvent event, uint32_t arg) {
+  (void)arg;
   playdate->system->logToConsole("Event handler");
   if (event == kEventInit) {
     playdate->display->setRefreshRate(50);
@@ -14,3 +15,18 @@ __declspec(dllexport)
   }
   return 0;
 }
+
+void __attribute__((noreturn)) _exit(int status) {
+  (void)status;
+  for (;;) {
+  }
+}
+
+int _getpid() { return 1; }
+
+int _kill(int pid, int sig) {
+  (void)pid;
+  (void)sig;
+  return -1;
+}
+
