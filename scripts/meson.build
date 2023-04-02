@@ -24,7 +24,7 @@ add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'])
 add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'], native: true)
 
 # Arguments don't apply properly from project default options
-add_project_arguments('-std=c++17', language: 'cpp', native: true)
+add_project_arguments('-std=c++2a', language: 'cpp', native: true)
 add_project_arguments('-std=gnu11', language: 'c', native: true)
 
 # host only
@@ -61,7 +61,8 @@ add_project_arguments('-fms-extensions', language: ['cpp'])
 pdsdk_link_args = [
     '-T@0@'.format(meson.current_source_dir() / 'link_map.ld'),
     '-Wl,-Map=game.map,--cref,--gc-sections,--no-warn-mismatch',
-    '-mthumb', '-mcpu=cortex-m7', '-mfloat-abi=hard', '-mfpu=fpv5-sp-d16'
+    '-mthumb', '-mcpu=cortex-m7', '-mfloat-abi=hard', '-mfpu=fpv5-sp-d16',
+    '--specs=nosys.specs'
 ]
 
 # Glue code
