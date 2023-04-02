@@ -4,8 +4,8 @@ project('pdGameLD53',
     meson_version : '>= 0.60',
     default_options : [
         'warning_level=3',
-        'c_std=gnu11', 'cpp_std=c++17',
-        'build.c_std=c11', 'build.cpp_std=c++17',
+        'c_std=gnu11', 'cpp_std=c++2a',
+        'build.c_std=c11', 'build.cpp_std=c++2a',
         'werror=true',
         'default_library=static',
         'buildtype=custom',
@@ -56,7 +56,7 @@ resources_dir = meson.current_source_dir() / 'Source'
 
 python = find_program('python3')
 sim_pdx_dir = meson.project_name() + '_host.pdx'
-sim_pdx = custom_target(meson.project_name() + '_host_pdx',
+sim_pdx = custom_target(meson.project_name() + '_host.pdx',
   output : meson.project_name() + '_host.pdx',
   command : [python,
                 [meson.project_source_root() / 'scripts' / 'create_pdx.py',
@@ -64,7 +64,8 @@ sim_pdx = custom_target(meson.project_name() + '_host_pdx',
                 sim_bin.full_path(),
                 meson.current_build_dir() / sim_pdx_dir,
                 resources_dir]],
-  depends : sim_bin)
+  depends : sim_bin,
+  build_always_stale: true)
 
 message('sim pdx: ', sim_pdx.full_path())
 
@@ -82,9 +83,6 @@ endif
 run_target('sim',
   command : [pd_simulator, sim_pdx.full_path()],
   depends: sim_pdx)
-
-# Doesn't work yet
-if build_machine.system() != 'darwin'
 
 pd_exe = executable(
     meson.project_name() + '_exe',
@@ -104,16 +102,16 @@ pd_bin = custom_target('pdex.bin',
   depends : pd_exe)
 
 pd_pdx_dir = meson.project_name() + '_cross.pdx'
-pd_pdx = custom_target(meson.project_name() + '_cross_pdx',
-  output : meson.project_name() + '_cross_pdx',
+pd_pdx = custom_target(meson.project_name() + '_cross.pdx',
+  output : meson.project_name() + '_cross.pdx',
   command : [python,
                 [meson.project_source_root() / 'scripts' / 'create_pdx.py',
                 pd_sdk,
                 pd_bin.full_path(),
                 meson.current_build_dir() / pd_pdx_dir,
                 resources_dir]],
-  depends : pd_bin)
+  depends : pd_bin,
+  build_always_stale: true)
 
 message('cross pdx: ', pd_pdx.full_path())
 
-endif
