@@ -16,14 +16,17 @@ __declspec(dllexport)
   return 0;
 }
 
+void __attribute__((noreturn)) _exit(int status);
 void __attribute__((noreturn)) _exit(int status) {
   (void)status;
   for (;;) {
   }
 }
 
-int _getpid() { return 1; }
+int _getpid(void);
+int _getpid(void) { return 1; }
 
+int _kill(int pid, int sig);
 int _kill(int pid, int sig) {
   (void)pid;
   (void)sig;
