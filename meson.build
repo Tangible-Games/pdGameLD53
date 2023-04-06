@@ -10,7 +10,7 @@ project('pdGameLD53',
         'default_library=static',
         'buildtype=custom',
         'debug=false',
-        'optimization=plain'
+        'optimization=plain',
     ]
 )
 
@@ -24,7 +24,11 @@ lib_incs = []
 subdir('scripts')
 subdir('Lib')
 
-targets = ['cross', 'native']
+targets = ['native']
+if meson.is_cross_build()
+targets += ['cross']
+endif
+
 targets_dep = {}
 foreach t : targets
     dep = []
@@ -47,7 +51,7 @@ sim_bin = shared_library(
     include_directories: exe_incs,
     dependencies: [
         targets_dep['native'],
-        pdsdk_dep_host
+        pdsdk_dep
     ],
     native: true
 )
@@ -56,8 +60,8 @@ resources_dir = meson.current_source_dir() / 'Source'
 
 python = find_program('python3')
 sim_pdx_dir = meson.project_name() + '_host.pdx'
-sim_pdx = custom_target(meson.project_name() + '_host.pdx',
-  output : meson.project_name() + '_host.pdx',
+sim_pdx = custom_target(sim_pdx_dir,
+  output : sim_pdx_dir,
   command : [python,
                 [meson.project_source_root() / 'scripts' / 'create_pdx.py',
                 pd_sdk,
@@ -84,6 +88,8 @@ run_target('sim',
   command : [pd_simulator, sim_pdx.full_path()],
   depends: sim_pdx)
 
+if meson.is_cross_build()
+
 pd_exe = executable(
     meson.project_name() + '_exe',
     exe_srcs + exe_srcs_cross,
@@ -91,7 +97,7 @@ pd_exe = executable(
     link_args: pdsdk_link_args,
     dependencies: [
         targets_dep['cross'],
-        pdsdk_dep_cross
+        pdsdk_dep
     ]
 )
 
@@ -101,9 +107,9 @@ pd_bin = custom_target('pdex.bin',
   command : [objcopy, ['-O', 'binary', '-S', pd_exe.full_path(), 'pdex.bin']],
   depends : pd_exe)
 
-pd_pdx_dir = meson.project_name() + '_cross.pdx'
-pd_pdx = custom_target(meson.project_name() + '_cross.pdx',
-  output : meson.project_name() + '_cross.pdx',
+pd_pdx_dir = meson.project_name() + '.pdx'
+pd_pdx = custom_target(pd_pdx_dir,
+  output : pd_pdx_dir,
   command : [python,
                 [meson.project_source_root() / 'scripts' / 'create_pdx.py',
                 pd_sdk,
@@ -115,3 +121,4 @@ pd_pdx = custom_target(meson.project_name() + '_cross.pdx',
 
 message('cross pdx: ', pd_pdx.full_path())
 
+endif
