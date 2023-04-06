@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: sudo apt-get -y install python3-pip ninja-build clang-format
+    - name: Install latest Meson
+      run: pip3 install --user meson
+    - name: Prepare SDK
+      run: wget https://download.panic.com/playdate_sdk/Linux/PlaydateSDK-latest.tar.gz && mkdir ../PDSDK && tar xvf PlaydateSDK-latest.tar.gz --strip-components=1 -C ../PDSDK/
+    - name: Configure build
+      run: export PLAYDATE_SDK_PATH=$(realpath $PWD/../PDSDK); export PATH=$HOME/.local/bin:$PATH; meson setup builddir
+    - name: Tests
+      run: ninja -C builddir test
+    - name: Clang format check
+      run: ninja -C builddir clang-format-check
