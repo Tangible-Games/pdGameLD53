@@ -72,3 +72,7 @@ exe_srcs_cross += files([pd_sdk / 'C_API' / 'buildsupport' / 'setup.c'])
 endif
 
 pdsdk_dep = declare_dependency(include_directories: pdsdk_inc)
+
+# gtest enable
+gtest = subproject('gtest')
+gtest_dep = gtest.get_variable('gtest_main_dep')
