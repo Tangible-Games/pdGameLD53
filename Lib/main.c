@@ -32,4 +32,3 @@ int _kill(int pid, int sig) {
   (void)sig;
   return -1;
 }
-

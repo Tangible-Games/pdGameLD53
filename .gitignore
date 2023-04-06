@@ -1,7 +1,6 @@
 .DS_Store
 build
 build_arm
-pdGameLD53.pdx
-pdGameLD53_arm.pdx
-Source/pdex.bin
-Source/pdex.dylib
+builddir*
+subprojects/packagecache
+subprojects/googletest-*

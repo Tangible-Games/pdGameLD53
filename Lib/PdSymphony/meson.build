@@ -6,6 +6,7 @@ foreach t : tests
         t + '_test',
         files(t + '_test.cpp'),
         include_directories: include_directories('.'),
+        dependencies: [ gtest_dep ],
         native: true)
     test(t + '_test', texe)
 endforeach
