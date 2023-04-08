@@ -23,6 +23,13 @@ class Vector3d {
 
   float operator*(const Vector3d& v) const { return x * v.x + y * v.y + z * v.z; }
 
+  Vector3d Cross(const Vector3d& rhv) const {
+    return Vector3d(
+      y * rhv.z - z * rhv.y,
+      z * rhv.x - x * rhv.z,
+      x * rhv.y - y * rhv.x);
+  }
+
   float GetLengthSq() const { return x * x + y * y + z * z; }
 
   float GetLength() const { return sqrtf(GetLengthSq()); }
