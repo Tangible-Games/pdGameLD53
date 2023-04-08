@@ -1,5 +1,4 @@
-#ifndef __PD_SYMPHONY_MATH_VECTOR_H_
-#define __PD_SYMPHONY_MATH_VECTOR_H_
+#pragma once
 
 #include <math.h>
 
@@ -76,5 +75,3 @@ class Vector2d {
 };
 }  // namespace Math
 }  // namespace PdSymphony
-
-#endif

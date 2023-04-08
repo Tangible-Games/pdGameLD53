@@ -1,5 +1,4 @@
-#ifndef __PD_SYMPHONY_MATH_POINT_H_
-#define __PD_SYMPHONY_MATH_POINT_H_
+#pragma once
 
 #include "vector2d.hpp"
 
@@ -28,5 +27,3 @@ class Point2d {
 };
 }  // namespace Math
 }  // namespace PdSymphony
-
-#endif

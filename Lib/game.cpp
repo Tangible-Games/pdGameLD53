@@ -65,7 +65,9 @@ class Game {
 
     const char* error = 0;
     enemy_sprite_ = playdate_->graphics->loadBitmap("data/nazi.png", &error);
-    if (error) playdate_->system->logToConsole("error: %s", error);
+    if (error) {
+      playdate_->system->logToConsole("error: %s", error);
+    }
     enemy_pos_ = PdSymphony::Math::Point2d(50.0f, 75.0f);
     enemy_radius_ = 5.0f;
     enemy_height_ = 50.0f;
@@ -76,7 +78,7 @@ class Game {
 
     onUpdateView(dt);
 
-    PdSymphony::Math::Segment2d enemy_segment = buildEnemySegment();
+    // PdSymphony::Math::Segment2d enemy_segment = buildEnemySegment();
 
     int screen_width = playdate_->display->getWidth();
     int screen_height = playdate_->display->getHeight();

@@ -1,9 +1,7 @@
+#include "angle.hpp"
 #include "vector2d.hpp"
 
 #include <gtest/gtest.h>
-
-const float Math_Pi = 3.141592653589793f;
-float Math_DegToRad(float a) { return a * (Math_Pi * 0.00555555555555f); }
 
 TEST(Vector2d, PlusMinus) {
   PdSymphony::Math::Vector2d v1(1.0f, 2.0f);
@@ -21,11 +19,11 @@ TEST(Vector2d, PlusMinus) {
 TEST(Vector2d, Rotation) {
   PdSymphony::Math::Vector2d v(0.0f, 1.0f);
 
-  PdSymphony::Math::Vector2d v1 = v.GetRotated(Math_DegToRad(90.0f));
+  PdSymphony::Math::Vector2d v1 = v.GetRotated(PdSymphony::Math::DegToRad(90.0f));
   ASSERT_NEAR(-1.0f, v1.x, 0.001f);
   ASSERT_NEAR(0.0f, v1.y, 0.001f);
 
-  PdSymphony::Math::Vector2d v2 = v.GetRotated(Math_DegToRad(-90.0f));
+  PdSymphony::Math::Vector2d v2 = v.GetRotated(PdSymphony::Math::DegToRad(-90.0f));
   ASSERT_NEAR(1.0f, v2.x, 0.001f);
   ASSERT_NEAR(0.0f, v2.y, 0.001f);
 }
