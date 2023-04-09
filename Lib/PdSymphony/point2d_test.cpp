@@ -18,3 +18,23 @@ TEST(Point2d, PlusMinus) {
   ASSERT_EQ(8.0f, v2.x);
   ASSERT_EQ(11.0f, v2.y);
 }
+
+TEST(Point2d, AreOnLineX) {
+  bool result =
+      PdSymphony::Math::AreOnLine(PdSymphony::Math::Point2d(1.0f, 1.0f),
+                                  PdSymphony::Math::Point2d(3.0f, 2.0f),
+                                  PdSymphony::Math::Point2d(5.0f, 3.0f), 0.01f);
+  ASSERT_TRUE(result);
+
+  result =
+      PdSymphony::Math::AreOnLine(PdSymphony::Math::Point2d(1.0f, 1.0f),
+                                  PdSymphony::Math::Point2d(2.0f, 3.0f),
+                                  PdSymphony::Math::Point2d(3.0f, 5.0f), 0.01f);
+  ASSERT_TRUE(result);
+
+  result =
+      PdSymphony::Math::AreOnLine(PdSymphony::Math::Point2d(1.0f, 1.0f),
+                                  PdSymphony::Math::Point2d(3.0f, 2.1f),
+                                  PdSymphony::Math::Point2d(5.0f, 3.0f), 0.01f);
+  ASSERT_FALSE(result);
+}
