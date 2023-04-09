@@ -3,21 +3,21 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif // __cplusplus
 #include "pd_api.h"
 #ifdef __cplusplus
-}  // extern "C"
-#endif  // __cplusplus
+} // extern "C"
+#endif // __cplusplus
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif // __cplusplus
 
-void* SetupGame(PlaydateAPI* playdate);
-int Update(void* userdata);
+void *SetupGame(PlaydateAPI *playdate);
+int Update(void *userdata);
 
 #ifdef __cplusplus
-}  // extern "C"
-#endif  // __cplusplus
+} // extern "C"
+#endif // __cplusplus
 
 #endif

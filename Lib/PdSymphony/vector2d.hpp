@@ -5,22 +5,22 @@
 namespace PdSymphony {
 namespace Math {
 class Vector2d {
- public:
+public:
   Vector2d() : x(0.0f), y(0.0f) {}
 
   Vector2d(float new_x, float new_y) : x(new_x), y(new_y) {}
 
-  Vector2d operator+(const Vector2d& rhv) const {
+  Vector2d operator+(const Vector2d &rhv) const {
     return Vector2d(x + rhv.x, y + rhv.y);
   }
 
-  Vector2d operator-(const Vector2d& rhv) const {
+  Vector2d operator-(const Vector2d &rhv) const {
     return Vector2d(x - rhv.x, y - rhv.y);
   }
 
   Vector2d operator*(float v) { return Vector2d(x * v, y * v); }
 
-  float operator*(const Vector2d& v) const { return x * v.x + y * v.y; }
+  float operator*(const Vector2d &v) const { return x * v.x + y * v.y; }
 
   float GetLengthSq() const { return x * x + y * y; }
 
@@ -73,5 +73,5 @@ class Vector2d {
   float x;
   float y;
 };
-}  // namespace Math
-}  // namespace PdSymphony
+} // namespace Math
+} // namespace PdSymphony

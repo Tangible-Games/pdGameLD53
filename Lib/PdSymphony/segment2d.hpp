@@ -6,20 +6,20 @@
 namespace PdSymphony {
 namespace Math {
 class Segment2d {
- public:
+public:
   Segment2d() {}
 
-  Segment2d(const Point2d& new_p0, const Point2d new_p1)
+  Segment2d(const Point2d &new_p0, const Point2d new_p1)
       : p0(new_p0), p1(new_p1) {}
 
-  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out) {
+  bool Intersect(const Segment2d &seg1, float eps, Point2d &intersection_out) {
     float u = 0.0f;
     float v = 0.0f;
     return Intersect(seg1, eps, intersection_out, u, v);
   }
 
-  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out,
-                 float& u_out, float t_out) {
+  bool Intersect(const Segment2d &seg1, float eps, Point2d &intersection_out,
+                 float &u_out, float t_out) {
     (void)t_out;
     Vector2d v1 = p1 - p0;
     Vector2d v2 = seg1.p1 - seg1.p0;
@@ -58,5 +58,5 @@ class Segment2d {
   Point2d p0;
   Point2d p1;
 };
-}  // namespace Math
-}  // namespace PdSymphony
+} // namespace Math
+} // namespace PdSymphony

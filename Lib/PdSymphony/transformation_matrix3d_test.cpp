@@ -10,7 +10,8 @@ TEST(TransformationMatrix3d, IdentityMatrix) {
   ASSERT_NEAR(2.0f, p.y, 0.01f);
   ASSERT_NEAR(3.0f, p.z, 0.01f);
 
-  PdSymphony::Math::Vector3d v = m * PdSymphony::Math::Vector3d(1.0f, 2.0f, 3.0f);
+  PdSymphony::Math::Vector3d v =
+      m * PdSymphony::Math::Vector3d(1.0f, 2.0f, 3.0f);
   ASSERT_NEAR(1.0f, v.x, 0.01f);
   ASSERT_NEAR(2.0f, v.y, 0.01f);
   ASSERT_NEAR(3.0f, v.z, 0.01f);
@@ -41,9 +42,11 @@ TEST(TransformationMatrix3d, PerspectiveMatrix) {
   float screen_height = 200.0f;
 
   PdSymphony::Math::TransformationMatrix3d m;
-  m.MakePerspective(/* horizontal_fov_deg= */ 90.0f, screen_width / screen_height, 1.0f, 1000.0f);
+  m.MakePerspective(/* horizontal_fov_deg= */ 90.0f,
+                    screen_width / screen_height, 1.0f, 1000.0f);
 
-  PdSymphony::Math::Point3d p = m * PdSymphony::Math::Point3d(0.0f, 0.0f, -1.0f);
+  PdSymphony::Math::Point3d p =
+      m * PdSymphony::Math::Point3d(0.0f, 0.0f, -1.0f);
   ASSERT_NEAR(0.0f, p.x, 0.01f);
   ASSERT_NEAR(0.0f, p.y, 0.01f);
   ASSERT_NEAR(-1.0f, p.z, 0.01f);
@@ -68,7 +71,8 @@ TEST(TransformationMatrix3d, Multiply) {
   PdSymphony::Math::TransformationMatrix3d tr;
   tr.MakeTranslation(1.0f, 2.0f, 3.0f);
 
-  PdSymphony::Math::Point3d p = (identity * tr) * PdSymphony::Math::Point3d(1.0f, 2.0f, 3.0f);
+  PdSymphony::Math::Point3d p =
+      (identity * tr) * PdSymphony::Math::Point3d(1.0f, 2.0f, 3.0f);
   ASSERT_NEAR(2.0f, p.x, 0.01f);
   ASSERT_NEAR(4.0f, p.y, 0.01f);
   ASSERT_NEAR(6.0f, p.z, 0.01f);

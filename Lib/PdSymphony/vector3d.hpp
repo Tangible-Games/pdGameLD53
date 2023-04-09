@@ -1,33 +1,34 @@
 #pragma once
 
-#include <math.h>
 #include "vector2d.hpp"
+#include <math.h>
 
 namespace PdSymphony {
 namespace Math {
 class Vector3d {
- public:
+public:
   Vector3d() : x(0.0f), y(0.0f), z(0.0f) {}
 
-  Vector3d(float new_x, float new_y, float new_z) : x(new_x), y(new_y), z(new_z) {}
+  Vector3d(float new_x, float new_y, float new_z)
+      : x(new_x), y(new_y), z(new_z) {}
 
-  Vector3d operator+(const Vector3d& rhv) const {
+  Vector3d operator+(const Vector3d &rhv) const {
     return Vector3d(x + rhv.x, y + rhv.y, z + rhv.z);
   }
 
-  Vector3d operator-(const Vector3d& rhv) const {
+  Vector3d operator-(const Vector3d &rhv) const {
     return Vector3d(x - rhv.x, y - rhv.y, z - rhv.z);
   }
 
   Vector3d operator*(float v) { return Vector3d(x * v, y * v, z * v); }
 
-  float operator*(const Vector3d& v) const { return x * v.x + y * v.y + z * v.z; }
+  float operator*(const Vector3d &v) const {
+    return x * v.x + y * v.y + z * v.z;
+  }
 
-  Vector3d Cross(const Vector3d& rhv) const {
-    return Vector3d(
-      y * rhv.z - z * rhv.y,
-      z * rhv.x - x * rhv.z,
-      x * rhv.y - y * rhv.x);
+  Vector3d Cross(const Vector3d &rhv) const {
+    return Vector3d(y * rhv.z - z * rhv.y, z * rhv.x - x * rhv.z,
+                    x * rhv.y - y * rhv.x);
   }
 
   float GetLengthSq() const { return x * x + y * y + z * z; }
@@ -67,5 +68,5 @@ class Vector3d {
   float z;
 #pragma pack(pop)
 };
-}  // namespace Math
-}  // namespace PdSymphony
+} // namespace Math
+} // namespace PdSymphony

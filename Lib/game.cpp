@@ -6,8 +6,8 @@
 #include "PdSymphony/vector2d.hpp"
 
 class Game {
- public:
-  Game(PlaydateAPI* playdate) : playdate_(playdate) { onStart(); }
+public:
+  Game(PlaydateAPI *playdate) : playdate_(playdate) { onStart(); }
 
   int Update() {
     float cur_time = playdate_->system->getElapsedTime();
@@ -19,7 +19,7 @@ class Game {
     return 1;
   }
 
- private:
+private:
   void onStart() {
     playdate_->system->logToConsole("#onStart");
 
@@ -52,9 +52,9 @@ class Game {
     wall_height_ = 60.0f;
 
     screen_angles_cos_ =
-        (float*)playdate_->system->realloc(0, sizeof(float) * screen_width);
+        (float *)playdate_->system->realloc(0, sizeof(float) * screen_width);
     screen_angles_sin_ =
-        (float*)playdate_->system->realloc(0, sizeof(float) * screen_width);
+        (float *)playdate_->system->realloc(0, sizeof(float) * screen_width);
 
     float column_angle = 2.0f * horizontal_half_fov_ / (float)screen_width;
     for (int i = 0; i < screen_width; ++i) {
@@ -63,7 +63,7 @@ class Game {
       screen_angles_sin_[i] = sinf(PdSymphony::Math::DegToRad(angle));
     }
 
-    const char* error = 0;
+    const char *error = 0;
     enemy_sprite_ = playdate_->graphics->loadBitmap("data/nazi.png", &error);
     if (error) {
       playdate_->system->logToConsole("error: %s", error);
@@ -219,7 +219,7 @@ class Game {
         enemy_pos_ + ray_right_norm * enemy_radius_);
   }
 
-  PlaydateAPI* playdate_;
+  PlaydateAPI *playdate_;
   float prev_time_;
 
   PdSymphony::Math::Point2d eye_;
@@ -233,22 +233,22 @@ class Game {
   static const int num_segments_ = 4;
   PdSymphony::Math::Segment2d segments_[num_segments_];
   float wall_height_;
-  float* screen_angles_cos_;
-  float* screen_angles_sin_;
+  float *screen_angles_cos_;
+  float *screen_angles_sin_;
 
-  LCDBitmap* enemy_sprite_;
+  LCDBitmap *enemy_sprite_;
   PdSymphony::Math::Point2d enemy_pos_;
   float enemy_radius_;
   float enemy_height_;
 };
 
-void* SetupGame(PlaydateAPI* playdate) {
+void *SetupGame(PlaydateAPI *playdate) {
   static Game game(playdate);
   playdate->system->logToConsole("SetupGame");
   return &game;
 }
 
-int Update(void* userdata) {
-  Game* game = (Game*)userdata;
+int Update(void *userdata) {
+  Game *game = (Game *)userdata;
   return game->Update();
 }
