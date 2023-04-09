@@ -121,4 +121,15 @@ pd_pdx = custom_target(pd_pdx_dir,
 
 message('cross pdx: ', pd_pdx.full_path())
 
+run_target('upload',
+  command : [python, meson.project_source_root() / 'scripts' / 'pd_ctrl.py', 'install', pd_sdk, pd_pdx.full_path()],
+  depends: pd_pdx)
+
+run_target('run',
+  command : [python, meson.project_source_root() / 'scripts' / 'pd_ctrl.py', 'run', pd_sdk, pd_pdx.full_path()])
+
+run_target('rundbg',
+  command : [python, meson.project_source_root() / 'scripts' / 'pd_ctrl.py', 'rundbg', pd_sdk, pd_pdx.full_path()])
+
+
 endif
