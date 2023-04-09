@@ -5,7 +5,7 @@
 namespace PdSymphony {
 namespace Math {
 class Point3d {
-public:
+ public:
   Point3d() : x(0.0f), y(0.0f), z(0.0f) {}
 
   Point3d(float new_x, float new_y, float new_z)
@@ -30,5 +30,5 @@ public:
   float z;
 #pragma pack(pop)
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony

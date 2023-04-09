@@ -6,7 +6,7 @@
 namespace PdSymphony {
 namespace Math {
 class Segment2d {
-public:
+ public:
   Segment2d() {}
 
   Segment2d(const Point2d &new_p0, const Point2d new_p1)
@@ -58,5 +58,5 @@ public:
   Point2d p0;
   Point2d p1;
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony

@@ -5,7 +5,7 @@
 namespace PdSymphony {
 namespace Math {
 class Vector2d {
-public:
+ public:
   Vector2d() : x(0.0f), y(0.0f) {}
 
   Vector2d(float new_x, float new_y) : x(new_x), y(new_y) {}
@@ -73,5 +73,5 @@ public:
   float x;
   float y;
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony

@@ -5,7 +5,7 @@
 namespace PdSymphony {
 namespace Math {
 class Point2d {
-public:
+ public:
   Point2d() : x(0.0f), y(0.0f) {}
 
   Point2d(float new_x, float new_y) : x(new_x), y(new_y) {}
@@ -25,5 +25,5 @@ public:
   float x;
   float y;
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "vector2d.hpp"
 #include <math.h>
+
+#include "vector2d.hpp"
 
 namespace PdSymphony {
 namespace Math {
 class Vector3d {
-public:
+ public:
   Vector3d() : x(0.0f), y(0.0f), z(0.0f) {}
 
   Vector3d(float new_x, float new_y, float new_z)
@@ -68,5 +69,5 @@ public:
   float z;
 #pragma pack(pop)
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony

@@ -6,7 +6,7 @@
 #include "PdSymphony/vector2d.hpp"
 
 class Game {
-public:
+ public:
   Game(PlaydateAPI *playdate) : playdate_(playdate) { onStart(); }
 
   int Update() {
@@ -19,7 +19,7 @@ public:
     return 1;
   }
 
-private:
+ private:
   void onStart() {
     playdate_->system->logToConsole("#onStart");
 

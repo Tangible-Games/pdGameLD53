@@ -1,7 +1,8 @@
-#include "angle.hpp"
 #include "vector2d.hpp"
 
 #include <gtest/gtest.h>
+
+#include "angle.hpp"
 
 TEST(Vector2d, PlusMinus) {
   PdSymphony::Math::Vector2d v1(1.0f, 2.0f);

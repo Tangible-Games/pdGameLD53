@@ -7,7 +7,7 @@
 namespace PdSymphony {
 namespace Math {
 class TransformationMatrix3d {
-public:
+ public:
   static const int kNumColumns = 4;
   static const int kNumRows = 4;
   static const int kSize = kNumColumns * kNumRows;
@@ -167,7 +167,7 @@ public:
   float m44;
 #pragma pack(pop)
 
-private:
+ private:
   void transform(const float *vec, float w, float *vec_out) const {
     const float *m = &m11;
     vec_out[0] = vec[0] * m[0 * 4 + 0] + vec[1] * m[1 * 4 + 0] +
@@ -178,5 +178,5 @@ private:
                  vec[2] * m[2 * 4 + 2] + w * m[3 * 4 + 2];
   }
 };
-} // namespace Math
-} // namespace PdSymphony
+}  // namespace Math
+}  // namespace PdSymphony
