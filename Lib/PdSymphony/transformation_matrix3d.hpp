@@ -75,7 +75,7 @@ class TransformationMatrix3d {
 
     MakeZero();
     m11 = e;
-    m22 = e / aspect_ratio;
+    m22 = e * aspect_ratio;
     m33 = (near_z + far_z) / (near_z - far_z);
     m34 = -1.0f;
     m43 = 2.0f * near_z * far_z / (near_z - far_z);
