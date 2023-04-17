@@ -2,6 +2,8 @@
 
 #include <math.h>
 
+#include <iostream>
+
 namespace PdSymphony {
 namespace Math {
 class Vector2d {
@@ -10,17 +12,17 @@ class Vector2d {
 
   Vector2d(float new_x, float new_y) : x(new_x), y(new_y) {}
 
-  Vector2d operator+(const Vector2d &rhv) const {
+  Vector2d operator+(const Vector2d& rhv) const {
     return Vector2d(x + rhv.x, y + rhv.y);
   }
 
-  Vector2d operator-(const Vector2d &rhv) const {
+  Vector2d operator-(const Vector2d& rhv) const {
     return Vector2d(x - rhv.x, y - rhv.y);
   }
 
-  Vector2d operator*(float v) { return Vector2d(x * v, y * v); }
+  Vector2d operator*(float v) const { return Vector2d(x * v, y * v); }
 
-  float operator*(const Vector2d &v) const { return x * v.x + y * v.y; }
+  float operator*(const Vector2d& v) const { return x * v.x + y * v.y; }
 
   float GetLengthSq() const { return x * x + y * y; }
 
@@ -68,6 +70,11 @@ class Vector2d {
     Vector2d v(x, y);
     v.Rotate(cos_val, sin_val);
     return v;
+  }
+
+  friend std::ostream& operator<<(std::ostream& os, const Vector2d& p) {
+    os << "Vector2d(x: " << p.x << ", y: " << p.y << ")";
+    return os;
   }
 
   float x;

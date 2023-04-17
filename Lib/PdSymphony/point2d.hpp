@@ -24,6 +24,11 @@ class Point2d {
     return Point2d(x + v.x, y + v.y);
   }
 
+  friend std::ostream& operator<<(std::ostream& os, const Point2d& p) {
+    os << "Point2d(x: " << p.x << ", y: " << p.y << ")";
+    return os;
+  }
+
   float x;
   float y;
 };

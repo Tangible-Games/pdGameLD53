@@ -2,12 +2,18 @@
 
 #include "PdSymphony/angle.hpp"
 #include "PdSymphony/point2d.hpp"
+#include "PdSymphony/ray_casting_projection.hpp"
 #include "PdSymphony/segment2d.hpp"
 #include "PdSymphony/vector2d.hpp"
 
 class Game {
  public:
-  Game(PlaydateAPI *playdate) : playdate_(playdate) { onStart(); }
+  Game(PlaydateAPI *playdate)
+      : playdate_(playdate),
+        ray_casting_proj_(playdate_->display->getWidth(),
+                          playdate_->display->getHeight(), 90.0f) {
+    onStart();
+  }
 
   int Update() {
     float cur_time = playdate_->system->getElapsedTime();
@@ -29,39 +35,52 @@ class Game {
     velocity_ = 100.0f;
     rotate_velocity_deg_ = 270.0f;
 
-    int screen_width = playdate_->display->getWidth();
-    int screen_height = playdate_->display->getHeight();
-    int screen_center_x = screen_width / 2;
-
-    horizontal_half_fov_ = 45.0f;
-    vertical_half_fov_tan_ = (float)screen_height / (float)screen_width;
-
+    float seg_x = -50.0f;
+    float seg_y = 100.0f;
     segments_[0] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(-50.0f, 100.0f),
-                                    PdSymphony::Math::Point2d(50.0f, 100.0f));
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
     segments_[1] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(-50.0f, 100.0f),
-                                    PdSymphony::Math::Point2d(-50.0f, 200.0f));
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
     segments_[2] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(50.0f, 100.0f),
-                                    PdSymphony::Math::Point2d(50.0f, 200.0f));
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
     segments_[3] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(-50.0f, 200.0f),
-                                    PdSymphony::Math::Point2d(50.0f, 200.0f));
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y));
+
+    seg_x = 200.0f;
+    seg_y = 100.0f;
+    segments_[4] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[5] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[6] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[7] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y));
+
+    seg_x = -50.0f;
+    seg_y = 250.0f;
+    segments_[8] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[9] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[10] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[11] =
+        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+                                    PdSymphony::Math::Point2d(seg_x, seg_y));
 
     wall_height_ = 60.0f;
-
-    screen_angles_cos_ =
-        (float *)playdate_->system->realloc(0, sizeof(float) * screen_width);
-    screen_angles_sin_ =
-        (float *)playdate_->system->realloc(0, sizeof(float) * screen_width);
-
-    float column_angle = 2.0f * horizontal_half_fov_ / (float)screen_width;
-    for (int i = 0; i < screen_width; ++i) {
-      float angle = column_angle * (i - screen_center_x);
-      screen_angles_cos_[i] = cosf(PdSymphony::Math::DegToRad(angle));
-      screen_angles_sin_[i] = sinf(PdSymphony::Math::DegToRad(angle));
-    }
 
     const char *error = 0;
     enemy_sprite_ = playdate_->graphics->loadBitmap("data/nazi.png", &error);
@@ -88,20 +107,24 @@ class Game {
     int prev_y1 = 0;
     float prev_d = 0.0f;
 
+    ray_casting_proj_.SetCamera(eye_, wall_height_ / 2.0f, view_dir_);
+
     for (int i = 0; i < screen_width; ++i) {
       PdSymphony::Math::Vector2d ray =
-          view_dir_.GetRotated(screen_angles_cos_[i], screen_angles_sin_[i]);
+          ray_casting_proj_.GetRayWorld(/* ray_index= */ i);
       PdSymphony::Math::Segment2d ray_seg(eye_, eye_ + ray * 1000.0f);
 
       int segment_id = -1;
       float d = 1000.0f;
+      PdSymphony::Math::Point2d intersection;
       for (int seg_i = 0; seg_i < num_segments_; ++seg_i) {
-        PdSymphony::Math::Point2d intersection;
-        if (ray_seg.Intersect(segments_[seg_i], 0.001f, intersection)) {
-          float new_d = (intersection - eye_).GetLength();
+        PdSymphony::Math::Point2d new_intersection;
+        if (ray_seg.Intersect(segments_[seg_i], 0.001f, new_intersection)) {
+          float new_d = (new_intersection - eye_).GetLength();
           if (new_d < d) {
             segment_id = seg_i;
             d = new_d;
+            intersection = new_intersection;
           }
         }
       }
@@ -109,11 +132,12 @@ class Game {
       int y0 = 0;
       int y1 = 0;
       if (segment_id != -1) {
-        float x = (d * vertical_half_fov_tan_) * screen_angles_cos_[i];
-
-        int wall_size_in_px = (int)((float)screen_height * (wall_height_ / x));
-        y0 = (screen_height - wall_size_in_px) / 2;
-        y1 = y0 + wall_size_in_px;
+        PdSymphony::Math::Point2d p0 =
+            ray_casting_proj_.Project(/* ray_index= */ i, d, 0.0f);
+        PdSymphony::Math::Point2d p1 =
+            ray_casting_proj_.Project(/* ray_index= */ i, d, wall_height_);
+        y0 = screen_height / 2 - (int)((float)screen_height * p0.y);
+        y1 = screen_height / 2 - (int)((float)screen_height * p1.y);
       }
 
       if (segment_id != prev_segment_id) {
@@ -203,10 +227,16 @@ class Game {
 
     if (buttons_current == kButtonLeft) {
       view_dir_ = view_dir_.GetRotated(
-          PdSymphony::Math::DegToRad(-rotate_velocity_deg_ * dt));
+          PdSymphony::Math::DegToRad(rotate_velocity_deg_ * dt));
     } else if (buttons_current == kButtonRight) {
       view_dir_ = view_dir_.GetRotated(
-          PdSymphony::Math::DegToRad(rotate_velocity_deg_ * dt));
+          PdSymphony::Math::DegToRad(-rotate_velocity_deg_ * dt));
+    }
+
+    if (buttons_current == kButtonA) {
+      playdate_->system->logToConsole("Eye: (%f, %f), View dir: (%f, %f)",
+                                      (double)eye_.x, (double)eye_.y,
+                                      (double)view_dir_.x, (double)view_dir_.y);
     }
   }
 
@@ -224,17 +254,13 @@ class Game {
 
   PdSymphony::Math::Point2d eye_;
   PdSymphony::Math::Vector2d view_dir_;
+  PdSymphony::Visibility::RayCastingProjection ray_casting_proj_;
   float velocity_;
   float rotate_velocity_deg_;
 
-  float horizontal_half_fov_;
-  float vertical_half_fov_tan_;
-
-  static const int num_segments_ = 4;
+  static const int num_segments_ = 12;
   PdSymphony::Math::Segment2d segments_[num_segments_];
   float wall_height_;
-  float *screen_angles_cos_;
-  float *screen_angles_sin_;
 
   LCDBitmap *enemy_sprite_;
   PdSymphony::Math::Point2d enemy_pos_;

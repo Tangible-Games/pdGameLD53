@@ -1,6 +1,6 @@
 lib_incs = include_directories('.')
 
-tests = ['point2d', 'segment2d', 'vector2d', 'transformation_matrix3d']
+tests = ['point2d', 'segment2d', 'vector2d', 'transformation_matrix3d', 'ray_casting_projection']
 foreach t : tests
     texe = executable(
         t + '_test',
