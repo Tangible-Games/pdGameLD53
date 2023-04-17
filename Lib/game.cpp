@@ -37,48 +37,48 @@ class Game {
 
     float seg_x = -50.0f;
     float seg_y = 100.0f;
-    segments_[0] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
-    segments_[1] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
-    segments_[2] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
-    segments_[3] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y));
+    segments_[0] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[1] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[2] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[3] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y));
 
     seg_x = 200.0f;
     seg_y = 100.0f;
-    segments_[4] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
-    segments_[5] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
-    segments_[6] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
-    segments_[7] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y));
+    segments_[4] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[5] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[6] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[7] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y));
 
     seg_x = -50.0f;
     seg_y = 250.0f;
-    segments_[8] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
-    segments_[9] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
-    segments_[10] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
-                                    PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
-    segments_[11] =
-        PdSymphony::Math::Segment2d(PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
-                                    PdSymphony::Math::Point2d(seg_x, seg_y));
+    segments_[8] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[9] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[10] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[11] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y));
 
     wall_height_ = 60.0f;
 
