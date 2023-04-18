@@ -11,7 +11,7 @@ class Game {
   Game(PlaydateAPI *playdate)
       : playdate_(playdate),
         ray_casting_proj_(playdate_->display->getWidth(),
-                          playdate_->display->getHeight(), 90.0f) {
+                          playdate_->display->getHeight(), 85.0f) {
     onStart();
   }
 
@@ -31,9 +31,13 @@ class Game {
 
     prev_time_ = playdate_->system->getElapsedTime();
     eye_ = PdSymphony::Math::Point2d(0.0f, 49.0f);
+    eye_z_ = 30.0f;
     view_dir_ = PdSymphony::Math::Vector2d(0.0f, 1.0f);
-    velocity_ = 100.0f;
-    rotate_velocity_deg_ = 270.0f;
+    distance_walked_ = 0.0f;
+    eye_dz_ = 0.0f;
+    eye_right_delta_ = 0.0f;
+    velocity_ = 200.0f;
+    rotate_velocity_deg_ = 360.0f;
 
     float seg_x = -50.0f;
     float seg_y = 100.0f;
@@ -50,7 +54,7 @@ class Game {
         PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
         PdSymphony::Math::Point2d(seg_x, seg_y));
 
-    seg_x = 200.0f;
+    seg_x = 250.0f;
     seg_y = 100.0f;
     segments_[4] = PdSymphony::Math::Segment2d(
         PdSymphony::Math::Point2d(seg_x, seg_y),
@@ -66,7 +70,7 @@ class Game {
         PdSymphony::Math::Point2d(seg_x, seg_y));
 
     seg_x = -50.0f;
-    seg_y = 250.0f;
+    seg_y = 350.0f;
     segments_[8] = PdSymphony::Math::Segment2d(
         PdSymphony::Math::Point2d(seg_x, seg_y),
         PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
@@ -77,6 +81,36 @@ class Game {
         PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
         PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
     segments_[11] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y));
+
+    seg_x = -50.0f;
+    seg_y = 600.0f;
+    segments_[12] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[13] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[14] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[15] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y));
+
+    seg_x = 250.0f;
+    seg_y = 600.0f;
+    segments_[16] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y),
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f));
+    segments_[17] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f));
+    segments_[18] = PdSymphony::Math::Segment2d(
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y + 100.0f),
+        PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y));
+    segments_[19] = PdSymphony::Math::Segment2d(
         PdSymphony::Math::Point2d(seg_x + 100.0f, seg_y),
         PdSymphony::Math::Point2d(seg_x, seg_y));
 
@@ -102,17 +136,22 @@ class Game {
     int screen_width = playdate_->display->getWidth();
     int screen_height = playdate_->display->getHeight();
 
+    int screen_half_height = screen_height / 2;
+
     int prev_segment_id = -1;
     int prev_y0 = 0;
     int prev_y1 = 0;
     float prev_d = 0.0f;
 
-    ray_casting_proj_.SetCamera(eye_, wall_height_ / 2.0f, view_dir_);
+    PdSymphony::Math::Vector2d camera_right =
+        view_dir_.GetRotated(PdSymphony::Math::DegToRad(-90.0f));
+    PdSymphony::Math::Point2d eye = eye_ + camera_right * eye_right_delta_;
+    ray_casting_proj_.SetCamera(eye, eye_z_ + eye_dz_, view_dir_);
 
     for (int i = 0; i < screen_width; ++i) {
       PdSymphony::Math::Vector2d ray =
           ray_casting_proj_.GetRayWorld(/* ray_index= */ i);
-      PdSymphony::Math::Segment2d ray_seg(eye_, eye_ + ray * 1000.0f);
+      PdSymphony::Math::Segment2d ray_seg(eye, eye + ray * 1000.0f);
 
       int segment_id = -1;
       float d = 1000.0f;
@@ -120,7 +159,7 @@ class Game {
       for (int seg_i = 0; seg_i < num_segments_; ++seg_i) {
         PdSymphony::Math::Point2d new_intersection;
         if (ray_seg.Intersect(segments_[seg_i], 0.001f, new_intersection)) {
-          float new_d = (new_intersection - eye_).GetLength();
+          float new_d = (new_intersection - eye).GetLength();
           if (new_d < d) {
             segment_id = seg_i;
             d = new_d;
@@ -136,8 +175,8 @@ class Game {
             ray_casting_proj_.Project(/* ray_index= */ i, d, 0.0f);
         PdSymphony::Math::Point2d p1 =
             ray_casting_proj_.Project(/* ray_index= */ i, d, wall_height_);
-        y0 = screen_height / 2 - (int)((float)screen_height * p0.y);
-        y1 = screen_height / 2 - (int)((float)screen_height * p1.y);
+        y0 = screen_half_height - (int)((float)screen_half_height * p0.y);
+        y1 = screen_half_height - (int)((float)screen_half_height * p1.y);
       }
 
       if (segment_id != prev_segment_id) {
@@ -219,25 +258,42 @@ class Game {
     playdate_->system->getButtonState(&buttons_current, &buttons_pushed,
                                       &buttons_released);
 
-    if (buttons_current == kButtonUp) {
+    PdSymphony::Math::Point2d prev_eye = eye_;
+
+    bool strafe = false;
+    if (buttons_current & kButtonA) {
+      strafe = true;
+    }
+    if (strafe) {
+      if (buttons_current & kButtonLeft) {
+        PdSymphony::Math::Vector2d camera_side =
+            view_dir_.GetRotated(PdSymphony::Math::DegToRad(90.0f));
+        eye_ = eye_ + camera_side * velocity_ * dt;
+      } else if (buttons_current & kButtonRight) {
+        PdSymphony::Math::Vector2d camera_side =
+            view_dir_.GetRotated(PdSymphony::Math::DegToRad(-90.0f));
+        eye_ = eye_ + camera_side * velocity_ * dt;
+      }
+    } else {
+      float rotate_angle_deg = 0.0f;
+      if (buttons_current & kButtonLeft) {
+        rotate_angle_deg = rotate_velocity_deg_ * dt;
+      } else if (buttons_current & kButtonRight) {
+        rotate_angle_deg = -rotate_velocity_deg_ * dt;
+      }
+      view_dir_ =
+          view_dir_.GetRotated(PdSymphony::Math::DegToRad(rotate_angle_deg));
+    }
+
+    if (buttons_current & kButtonUp) {
       eye_ = eye_ + view_dir_ * velocity_ * dt;
-    } else if (buttons_current == kButtonDown) {
+    } else if (buttons_current & kButtonDown) {
       eye_ = eye_ - view_dir_ * velocity_ * dt;
     }
 
-    if (buttons_current == kButtonLeft) {
-      view_dir_ = view_dir_.GetRotated(
-          PdSymphony::Math::DegToRad(rotate_velocity_deg_ * dt));
-    } else if (buttons_current == kButtonRight) {
-      view_dir_ = view_dir_.GetRotated(
-          PdSymphony::Math::DegToRad(-rotate_velocity_deg_ * dt));
-    }
-
-    if (buttons_current == kButtonA) {
-      playdate_->system->logToConsole("Eye: (%f, %f), View dir: (%f, %f)",
-                                      (double)eye_.x, (double)eye_.y,
-                                      (double)view_dir_.x, (double)view_dir_.y);
-    }
+    distance_walked_ += (eye_ - prev_eye).GetLength();
+    eye_dz_ = sinf(distance_walked_ / 15.0f) * 2.0f;
+    eye_right_delta_ = sinf(distance_walked_ / 15.0f) * 1.0f;
   }
 
   PdSymphony::Math::Segment2d buildEnemySegment() const {
@@ -253,12 +309,16 @@ class Game {
   float prev_time_;
 
   PdSymphony::Math::Point2d eye_;
+  float eye_z_;
   PdSymphony::Math::Vector2d view_dir_;
+  float distance_walked_;
+  float eye_dz_;
+  float eye_right_delta_;
   PdSymphony::Visibility::RayCastingProjection ray_casting_proj_;
   float velocity_;
   float rotate_velocity_deg_;
 
-  static const int num_segments_ = 12;
+  static const int num_segments_ = 20;
   PdSymphony::Math::Segment2d segments_[num_segments_];
   float wall_height_;
 
