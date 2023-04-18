@@ -23,8 +23,8 @@ class RayCastingProjection {
     screen_height_ = screen_height;
     aspect_ratio_ = (float)screen_width / (float)screen_height;
     horizontal_half_fov_deg_ = horizontal_fov_deg / 2.0f;
-    horizontal_half_fov_tan_ = tanf(Math::DegToRad(horizontal_half_fov_deg_));
-    horizontal_half_fov_tan_inv_ = 1.0f / horizontal_half_fov_tan_;
+    horizontal_half_fov_tan_inv_ =
+        1.0f / tanf(Math::DegToRad(horizontal_half_fov_deg_));
     rebuildRayDeltas();
   }
 
@@ -93,7 +93,6 @@ class RayCastingProjection {
   float screen_height_{240};
   float aspect_ratio_{400.0f / 240.0f};
   float horizontal_half_fov_deg_{45.0f};
-  float horizontal_half_fov_tan_{tanf(Math::DegToRad(45.0f))};
   float horizontal_half_fov_tan_inv_{1.0f / tanf(Math::DegToRad(45.0f))};
   std::vector<Math::Vector2d> rays_;
   std::vector<float> ray_lengths_inv_;
