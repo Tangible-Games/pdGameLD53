@@ -7,6 +7,7 @@ void Asteroid::Draw(const Camera& camera) {
 }
 
 void Asteroid::drawDebug(const Point2d& position) {
-  playdate_->graphics->drawEllipse((int)position.x, (int)position.y, size_,
-                                   size_, 1, 0, 0, kColorBlack);
+  playdate_->graphics->drawEllipse((int)position.x, (int)position.y,
+                                   (int)radius_, (int)radius_, 1, 0, 0,
+                                   kColorBlack);
 }

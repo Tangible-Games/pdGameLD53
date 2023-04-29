@@ -7,8 +7,10 @@
 
 class Asteroid : public SpaceObject {
  public:
-  Asteroid(PlaydateAPI* playdate, size_t size)
-      : playdate_(playdate), size_(size) {}
+  Asteroid(PlaydateAPI* playdate, float radius)
+      : playdate_(playdate), radius_(radius) {}
+
+  float GetRadius() const { return radius_; }
 
   void Update(float dt);
   void Draw(const Camera& camera);
@@ -17,5 +19,5 @@ class Asteroid : public SpaceObject {
   void drawDebug(const Point2d& position);
 
   PlaydateAPI* playdate_{nullptr};
-  size_t size_;
+  float radius_;
 };

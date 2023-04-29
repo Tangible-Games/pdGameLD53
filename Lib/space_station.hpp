@@ -21,6 +21,9 @@ class SpaceStation : public SpaceObject {
   void drawDebug(const Point2d& position);
   void createAsteroids();
 
+  static bool intersectCircles(const Point2d& p1, float r1, const Point2d& p2,
+                               float r2);
+
   PlaydateAPI* playdate_{nullptr};
 
   std::vector<Asteroid> asteroids_;
