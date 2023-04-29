@@ -4,6 +4,7 @@
 #include "camera.hpp"
 #include "space_craft.hpp"
 #include "space_station.hpp"
+#include "stars.hpp"
 
 class Game {
  public:
@@ -11,7 +12,8 @@ class Game {
       : playdate_(playdate),
         camera_(playdate),
         space_craft_(playdate),
-        space_station_(playdate) {
+        space_station_(playdate),
+        stars_(playdate) {
     onStart();
   }
 
@@ -40,11 +42,15 @@ class Game {
 
     space_station_.Update(dt);
 
+    stars_.Update(dt);
+
     space_craft_.Update(dt);
     camera_.SetLookAt(space_craft_.GetPosition());
 
     space_station_.Draw(camera_);
     space_craft_.Draw(camera_);
+
+    stars_.Draw(camera_);
 
     drawLineToStation(camera_);
 
@@ -65,6 +71,7 @@ class Game {
   Camera camera_;
   SpaceCraft space_craft_;
   SpaceStation space_station_;
+  Stars stars_;
 };
 
 void *SetupGame(PlaydateAPI *playdate) {
