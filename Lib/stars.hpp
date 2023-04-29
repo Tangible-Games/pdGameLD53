@@ -1,10 +1,10 @@
 #pragma once
 
-#include <algorithm>
 #include <vector>
 
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
+#include "consts.hpp"
 #include "pd_api.h"
 #include "space_object.hpp"
 
@@ -14,8 +14,7 @@ class Stars : public SpaceObject {
       : playdate_(playdate),
         width_(playdate->display->getWidth()),
         height_(playdate->display->getHeight()) {
-    constexpr int num = 20;
-    for (int i = 0; i < num; ++i) {
+    for (size_t i = 0; i < starsNum; ++i) {
       auto p = Point2d(rand() % width_, rand() % height_);
       stars_.emplace_back(std::move(p));
     }
