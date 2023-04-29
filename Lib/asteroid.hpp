@@ -1,27 +1,21 @@
 #pragma once
 
-#include <vector>
-
 #include "PdSymphony/all_symphony.hpp"
-#include "asteroid.hpp"
 #include "camera.hpp"
 #include "pd_api.h"
 #include "space_object.hpp"
 
-class SpaceStation : public SpaceObject {
+class Asteroid : public SpaceObject {
  public:
-  SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {
-    createAsteroids();
-  }
+  Asteroid(PlaydateAPI* playdate, size_t size)
+      : playdate_(playdate), size_(size) {}
 
   void Update(float dt);
   void Draw(const Camera& camera);
 
  private:
   void drawDebug(const Point2d& position);
-  void createAsteroids();
 
   PlaydateAPI* playdate_{nullptr};
-
-  std::vector<Asteroid> asteroids_;
+  size_t size_;
 };

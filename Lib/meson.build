@@ -5,6 +5,7 @@ exe_srcs += files(
     'game.cpp',
     'space_craft.cpp',
     'space_station.cpp',
+    'asteroid.cpp',
 )
 
 exe_incs += include_directories('.')
