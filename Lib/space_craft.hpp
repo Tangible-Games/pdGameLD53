@@ -8,7 +8,9 @@ using namespace PdSymphony::Math;
 
 class SpaceCraft {
  public:
-  SpaceCraft(PlaydateAPI* playdate) : playdate_(playdate) {}
+  SpaceCraft(PlaydateAPI* playdate)
+      : playdate_(playdate),
+        crank_prev_angle_(playdate->system->getCrankAngle()) {}
 
   void UpdateAndDraw(float dt, const Camera& camera);
 
@@ -23,4 +25,5 @@ class SpaceCraft {
   float rotation_speed_deg_per_sec_{360.0f};
   float acceleration_{100.0f};
   float max_linear_velocity_{1000.0f};
+  float crank_prev_angle_{0.0f};
 };

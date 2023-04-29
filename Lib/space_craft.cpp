@@ -20,7 +20,7 @@ void SpaceCraft::updateInput(float dt) {
     direction_ = direction_.GetRotated(DegToRad(da));
   }
 
-  if (buttons_current & kButtonB) {
+  if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
     velocity_ = velocity_ + direction_ * acceleration_ * dt;
     float v = velocity_.GetLength();
     if (v > max_linear_velocity_) {
@@ -29,6 +29,17 @@ void SpaceCraft::updateInput(float dt) {
   }
 
   position_ = position_ + velocity_ * dt;
+
+  if (!playdate_->system->isCrankDocked()) {
+    float crank_angle = playdate_->system->getCrankAngle();
+    if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {
+      // When crank points towards top edge we assume that spacecraft should
+      // face up.
+      direction_ = Vector2d(0.0f, -1.0f).GetRotated(DegToRad(crank_angle));
+    }
+  }
+
+  crank_prev_angle_ = playdate_->system->getCrankAngle();
 }
 
 void SpaceCraft::drawDebug(const Point2d& position) {
