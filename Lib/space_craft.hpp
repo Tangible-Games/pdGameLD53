@@ -13,10 +13,6 @@ class SpaceCraft : public SpaceObject {
       : playdate_(playdate),
         crank_prev_angle_(playdate->system->getCrankAngle()) {}
 
-  void SetPosition(const Point2d& position) { position_ = position; }
-
-  const Point2d& GetPosition() const { return position_; }
-
   void Update(float dt);
   void Draw(const Camera& camera);
 

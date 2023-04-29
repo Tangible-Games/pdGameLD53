@@ -9,10 +9,6 @@ class SpaceStation : public SpaceObject {
  public:
   SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {}
 
-  void SetPosition(const Point2d& position) { position_ = position; }
-
-  const Point2d& GetPosition() const { return position_; }
-
   void Update(float dt);
   void Draw(const Camera& camera);
 
