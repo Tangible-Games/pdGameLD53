@@ -6,7 +6,8 @@
 
 class Game {
  public:
-  Game(PlaydateAPI *playdate) : playdate_(playdate), camera_(playdate), space_craft_(playdate) {
+  Game(PlaydateAPI *playdate)
+      : playdate_(playdate), camera_(playdate), space_craft_(playdate) {
     onStart();
   }
 

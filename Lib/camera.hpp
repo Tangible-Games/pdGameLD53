@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pd_api.h"
 #include "PdSymphony/all_symphony.hpp"
+#include "pd_api.h"
 
 using namespace PdSymphony::Math;
 
