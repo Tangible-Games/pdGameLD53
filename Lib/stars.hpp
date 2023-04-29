@@ -14,7 +14,7 @@ class Stars : public SpaceObject {
       : playdate_(playdate),
         width_(playdate->display->getWidth()),
         height_(playdate->display->getHeight()) {
-    for (size_t i = 0; i < starsNum; ++i) {
+    for (size_t i = 0; i < kStarsNum; ++i) {
       auto p = Point2d(rand() % width_, rand() % height_);
       stars_.emplace_back(std::move(p));
     }

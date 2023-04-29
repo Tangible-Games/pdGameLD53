@@ -39,10 +39,10 @@ void SpaceCraft::updateInput(float dt) {
   crank_prev_angle_ = playdate_->system->getCrankAngle();
 
   if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
-    velocity_ = velocity_ + direction_ * spaceCraftAcceleration * dt;
+    velocity_ = velocity_ + direction_ * kSpaceCraftAcceleration * dt;
     float v = velocity_.GetLength();
-    if (v > spaceCraftVelocityMax) {
-      velocity_ = velocity_ * (spaceCraftVelocityMax / v);
+    if (v > kSpaceCraftVelocityMax) {
+      velocity_ = velocity_ * (kSpaceCraftVelocityMax / v);
     }
   }
 
