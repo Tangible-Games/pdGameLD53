@@ -47,10 +47,9 @@ class Game {
     space_craft_.Update(dt);
     camera_.SetLookAt(space_craft_.GetPosition());
 
+    stars_.Draw(camera_);
     space_station_.Draw(camera_);
     space_craft_.Draw(camera_);
-
-    stars_.Draw(camera_);
 
     drawLineToStation(camera_);
 
