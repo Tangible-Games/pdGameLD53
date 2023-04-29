@@ -1,7 +1,8 @@
 #include "space_craft.hpp"
 
-void SpaceCraft::UpdateAndDraw(float dt, const Camera& camera) {
-  updateInput(dt);
+void SpaceCraft::Update(float dt) { updateInput(dt); }
+
+void SpaceCraft::Draw(const Camera& camera) {
   drawDebug(camera.ConvertToCameraSpace(position_));
 }
 

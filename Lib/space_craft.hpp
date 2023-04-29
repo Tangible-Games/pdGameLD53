@@ -12,7 +12,12 @@ class SpaceCraft {
       : playdate_(playdate),
         crank_prev_angle_(playdate->system->getCrankAngle()) {}
 
-  void UpdateAndDraw(float dt, const Camera& camera);
+  void SetPosition(const Point2d& position) { position_ = position; }
+
+  const Point2d& GetPosition() const { return position_; }
+
+  void Update(float dt);
+  void Draw(const Camera& camera);
 
  private:
   void updateInput(float dt);

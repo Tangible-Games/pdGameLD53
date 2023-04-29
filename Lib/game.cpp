@@ -25,14 +25,17 @@ class Game {
   void onStart() {
     playdate_->system->logToConsole("#onStart");
 
-    camera_.SetLookAt(Point2d(0.0f, 0.0f));
+    space_craft_.SetPosition(Point2d(0.0f, 0.0f));
+    camera_.SetLookAt(space_craft_.GetPosition());
   }
 
   void onUpdateAndDraw(float dt) {
     (void)dt;
     playdate_->graphics->clear(kColorWhite);
 
-    space_craft_.UpdateAndDraw(dt, camera_);
+    space_craft_.Update(dt);
+    camera_.SetLookAt(space_craft_.GetPosition());
+    space_craft_.Draw(camera_);
 
     playdate_->system->drawFPS(5, 5);
   }
