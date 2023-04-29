@@ -46,7 +46,17 @@ class Game {
     space_station_.Draw(camera_);
     space_craft_.Draw(camera_);
 
+    drawLineToStation(camera_);
+
     playdate_->system->drawFPS(5, 5);
+  }
+
+  void drawLineToStation(const Camera &camera) {
+    Point2d p1 = camera.ConvertToCameraSpace(space_craft_.GetPosition());
+    Point2d p2 = camera.ConvertToCameraSpace(space_station_.GetPosition());
+
+    playdate_->graphics->drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y, 1,
+                                  kColorBlack);
   }
 
   PlaydateAPI *playdate_;
