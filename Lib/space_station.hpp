@@ -17,6 +17,15 @@ class SpaceStation : public SpaceObject {
   void Update(float dt);
   void Draw(const Camera& camera);
 
+  struct CollisionData {
+    bool has_collision{false};
+    bool hits_space_station{false};
+    float move_factor{1.0f};
+  };
+
+  void Collide(const Point2d& p, float r, const Vector2d& move,
+               CollisionData& collision_out) const;
+
  private:
   void drawDebug(const Point2d& position);
   void createAsteroids();

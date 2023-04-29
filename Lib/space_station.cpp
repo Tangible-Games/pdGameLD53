@@ -14,6 +14,14 @@ void SpaceStation::Draw(const Camera& camera) {
                 [&](auto& a) { a.Draw(camera); });
 }
 
+void SpaceStation::Collide(const Point2d& p, float r, const Vector2d& move,
+                           CollisionData& collision_out) const {
+  (void)p;
+  (void)r;
+  (void)move;
+  (void)collision_out;
+}
+
 void SpaceStation::drawDebug(const Point2d& position) {
   playdate_->graphics->drawLine((int)position.x - 30, (int)position.y - 30,
                                 (int)position.x + 30, (int)position.y - 30, 3,

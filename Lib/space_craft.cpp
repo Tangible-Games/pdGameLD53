@@ -1,5 +1,11 @@
 #include "space_craft.hpp"
 
+#include "space_station.hpp"
+
+void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
+  space_station_ = space_station;
+}
+
 void SpaceCraft::Update(float dt) { updateInput(dt); }
 
 void SpaceCraft::Draw(const Camera& camera) {
@@ -21,16 +27,6 @@ void SpaceCraft::updateInput(float dt) {
     direction_ = direction_.GetRotated(DegToRad(da));
   }
 
-  if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
-    velocity_ = velocity_ + direction_ * acceleration_ * dt;
-    float v = velocity_.GetLength();
-    if (v > max_linear_velocity_) {
-      velocity_ = velocity_ * (max_linear_velocity_ / v);
-    }
-  }
-
-  position_ = position_ + velocity_ * dt;
-
   if (!playdate_->system->isCrankDocked()) {
     float crank_angle = playdate_->system->getCrankAngle();
     if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {
@@ -41,6 +37,21 @@ void SpaceCraft::updateInput(float dt) {
   }
 
   crank_prev_angle_ = playdate_->system->getCrankAngle();
+
+  if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
+    velocity_ = velocity_ + direction_ * acceleration_ * dt;
+    float v = velocity_.GetLength();
+    if (v > max_linear_velocity_) {
+      velocity_ = velocity_ * (max_linear_velocity_ / v);
+    }
+  }
+
+  Vector2d move = velocity_ * dt;
+
+  SpaceStation::CollisionData collision;
+  space_station_->Collide(GetPosition(), radius_, move, collision);
+
+  position_ = position_ + velocity_ * dt;
 }
 
 void SpaceCraft::drawDebug(const Point2d& position) {
@@ -54,4 +65,8 @@ void SpaceCraft::drawDebug(const Point2d& position) {
                                 (int)left.y, 3, kColorBlack);
   playdate_->graphics->drawLine((int)left.x, (int)left.y, (int)front.x,
                                 (int)front.y, 3, kColorBlack);
+
+  playdate_->graphics->drawEllipse(
+      (int)(position.x - radius_), (int)(position.y - radius_),
+      (int)(radius_ * 2.0f), (int)(radius_ * 2.0f), 1, 0, 0, kColorBlack);
 }
