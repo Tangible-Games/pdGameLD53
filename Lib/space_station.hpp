@@ -3,8 +3,9 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
 #include "pd_api.h"
+#include "space_object.hpp"
 
-class SpaceStation {
+class SpaceStation : public SpaceObject {
  public:
   SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {}
 
@@ -19,5 +20,4 @@ class SpaceStation {
   void drawDebug(const Point2d& position);
 
   PlaydateAPI* playdate_{nullptr};
-  Point2d position_;
 };
