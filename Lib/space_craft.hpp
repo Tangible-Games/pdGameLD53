@@ -18,5 +18,9 @@ class SpaceCraft {
 
   PlaydateAPI* playdate_{nullptr};
   Point2d position_;
-  Vector2d direction_;
+  Vector2d direction_{0.0f, -1.0f};
+  Vector2d velocity_;
+  float rotation_speed_deg_per_sec_{360.0f};
+  float acceleration_{100.0f};
+  float max_linear_velocity_{1000.0f};
 };
