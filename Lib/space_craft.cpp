@@ -46,14 +46,31 @@ void SpaceCraft::updateInput(float dt) {
     }
   }
 
-  position_ = position_ + velocity_ * dt;
-
   Vector2d move = velocity_ * dt;
+  tryMove(move);
+}
 
-  SpaceStation::CollisionData collision;
-  space_station_->Collide(GetPosition(), radius_, move, collision);
+void SpaceCraft::tryMove(const Vector2d& move) {
+  const auto asteroids = space_station_->GetAsteroids();
 
-  position_ = position_ + velocity_ * dt;
+  position_ = position_ + move;
+
+  Circle space_craft_circle(position_, radius_);
+  for (const auto asteroid : asteroids) {
+    Circle asteroid_circle(asteroid.GetPosition(), asteroid.GetRadius());
+    if (asteroid_circle.Intersect(space_craft_circle)) {
+      Vector2d out = (position_ - asteroid.GetPosition()).GetNormalized();
+      position_ =
+          asteroid.GetPosition() + out * (radius_ + asteroid.GetRadius());
+
+      Vector2d tangent = out.GetRotated(DegToRad(-90.0f));
+
+      float x = out * velocity_;
+      float y = tangent * velocity_;
+      velocity_ =
+          (out * (-x) + tangent * y) * kSpaceAsteroidHitVelocityReduction;
+    }
+  }
 }
 
 void SpaceCraft::drawDebug(const Point2d& position) {

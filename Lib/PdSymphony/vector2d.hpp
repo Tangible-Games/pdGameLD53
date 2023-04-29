@@ -12,6 +12,8 @@ class Vector2d {
 
   Vector2d(float new_x, float new_y) : x(new_x), y(new_y) {}
 
+  Vector2d operator-() const { return Vector2d(-x, -y); }
+
   Vector2d operator+(const Vector2d& rhv) const {
     return Vector2d(x + rhv.x, y + rhv.y);
   }

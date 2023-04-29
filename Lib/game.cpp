@@ -32,6 +32,7 @@ class Game {
   void onStart() {
     playdate_->system->logToConsole("#onStart");
 
+    space_craft_.ResetSpaceStation(&space_station_);
     space_craft_.SetPosition(Point2d(kSpaceCraftPosX, kSpaceCraftPosY));
     space_station_.SetPosition(Point2d(0.0f, 0.0f));
     camera_.SetLookAt(space_craft_.GetPosition());

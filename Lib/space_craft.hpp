@@ -23,6 +23,7 @@ class SpaceCraft : public SpaceObject {
 
  private:
   void updateInput(float dt);
+  void tryMove(const Vector2d& move);
   void drawDebug(const Point2d& position);
 
   PlaydateAPI* playdate_{nullptr};

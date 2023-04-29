@@ -2,6 +2,7 @@
 
 #include "aa_rect2d.hpp"
 #include "angle.hpp"
+#include "circle.hpp"
 #include "point2d.hpp"
 #include "point3d.hpp"
 #include "ray_casting_projection.hpp"

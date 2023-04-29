@@ -14,14 +14,6 @@ void SpaceStation::Draw(const Camera& camera) {
                 [&](auto& a) { a.Draw(camera); });
 }
 
-void SpaceStation::Collide(const Point2d& p, float r, const Vector2d& move,
-                           CollisionData& collision_out) const {
-  (void)p;
-  (void)r;
-  (void)move;
-  (void)collision_out;
-}
-
 void SpaceStation::drawDebug(const Point2d& position) {
   playdate_->graphics->drawLine((int)position.x - kSpaceStationSize / 2,
                                 (int)position.y - kSpaceStationSize / 2,
@@ -61,9 +53,9 @@ void SpaceStation::createAsteroids() {
 
       bool intersects = false;
       for (size_t j = 0; j < asteroids_.size(); ++j) {
-        if (intersectCircles(a.GetPosition(), a.GetRadius(),
-                             asteroids_[j].GetPosition(),
-                             asteroids_[j].GetRadius())) {
+        if (Circle(a.GetPosition(), a.GetRadius())
+                .Intersect(Circle(asteroids_[j].GetPosition(),
+                                  asteroids_[j].GetRadius()))) {
           intersects = true;
           break;
         }
@@ -78,11 +70,32 @@ void SpaceStation::createAsteroids() {
   }
 }
 
-bool SpaceStation::intersectCircles(const Point2d& p1, float r1,
-                                    const Point2d& p2, float r2) {
-  Vector2d v = p2 - p1;
-  if (v.GetLength() > (r1 + r2)) {
+bool SpaceStation::circleCircleCCD(const Point2d& p1, float r1,
+                                   const Vector2d& move, const Point2d& p2,
+                                   float r2, float& move_factor_out) {
+  Vector2d move_norm = move.GetNormalized();
+
+  Vector2d to_circle = p2 - p1;
+
+  float move_proj = to_circle * move_norm;
+  if (move_proj < 0.0f) {
     return false;
   }
+
+  Vector2d v = to_circle - move_norm * move_proj;
+  float d = v.GetLength();
+  if (d > (r1 + r2)) {
+    return false;
+  }
+
+  float m = move_proj - sqrtf((r1 + r2) * (r1 + r2) - d * d);
+
+  float move_length = move.GetLength();
+  if (move_length < m) {
+    return false;
+  }
+
+  move_factor_out = m / move_length;
+
   return true;
 }

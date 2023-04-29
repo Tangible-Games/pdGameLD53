@@ -18,21 +18,15 @@ class SpaceStation : public SpaceObject {
   void Update(float dt);
   void Draw(const Camera& camera);
 
-  struct CollisionData {
-    bool has_collision{false};
-    bool hits_space_station{false};
-    float move_factor{1.0f};
-  };
-
-  void Collide(const Point2d& p, float r, const Vector2d& move,
-               CollisionData& collision_out) const;
+  const std::vector<Asteroid>& GetAsteroids() const { return asteroids_; }
 
  private:
   void drawDebug(const Point2d& position);
   void createAsteroids();
 
-  static bool intersectCircles(const Point2d& p1, float r1, const Point2d& p2,
-                               float r2);
+  static bool circleCircleCCD(const Point2d& p1, float r1, const Vector2d& move,
+                              const Point2d& p2, float r2,
+                              float& move_factor_out);
 
   PlaydateAPI* playdate_{nullptr};
 
