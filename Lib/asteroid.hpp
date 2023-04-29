@@ -2,6 +2,7 @@
 
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
+#include "consts.hpp"
 #include "pd_api.h"
 #include "space_object.hpp"
 

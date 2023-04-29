@@ -22,10 +22,10 @@ void SpaceCraft::updateInput(float dt) {
   }
 
   if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
-    velocity_ = velocity_ + direction_ * acceleration_ * dt;
+    velocity_ = velocity_ + direction_ * spaceCraftAcceleration * dt;
     float v = velocity_.GetLength();
-    if (v > max_linear_velocity_) {
-      velocity_ = velocity_ * (max_linear_velocity_ / v);
+    if (v > spaceCraftVelocityMax) {
+      velocity_ = velocity_ * (spaceCraftVelocityMax / v);
     }
   }
 

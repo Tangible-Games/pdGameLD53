@@ -15,36 +15,44 @@ void SpaceStation::Draw(const Camera& camera) {
 }
 
 void SpaceStation::drawDebug(const Point2d& position) {
-  playdate_->graphics->drawLine((int)position.x - 30, (int)position.y - 30,
-                                (int)position.x + 30, (int)position.y - 30, 3,
+  playdate_->graphics->drawLine((int)position.x - spaceStationSize / 2,
+                                (int)position.y - spaceStationSize / 2,
+                                (int)position.x + spaceStationSize / 2,
+                                (int)position.y - spaceStationSize / 2, 3,
                                 kColorBlack);
-  playdate_->graphics->drawLine((int)position.x + 30, (int)position.y - 30,
-                                (int)position.x + 30, (int)position.y + 30, 3,
+  playdate_->graphics->drawLine((int)position.x + spaceStationSize / 2,
+                                (int)position.y - spaceStationSize / 2,
+                                (int)position.x + spaceStationSize / 2,
+                                (int)position.y + spaceStationSize / 2, 3,
                                 kColorBlack);
-  playdate_->graphics->drawLine((int)position.x + 30, (int)position.y + 30,
-                                (int)position.x - 30, (int)position.y + 30, 3,
+  playdate_->graphics->drawLine((int)position.x + spaceStationSize / 2,
+                                (int)position.y + spaceStationSize / 2,
+                                (int)position.x - spaceStationSize / 2,
+                                (int)position.y + spaceStationSize / 2, 3,
                                 kColorBlack);
-  playdate_->graphics->drawLine((int)position.x - 30, (int)position.y + 30,
-                                (int)position.x - 30, (int)position.y - 30, 3,
+  playdate_->graphics->drawLine((int)position.x - spaceStationSize / 2,
+                                (int)position.y + spaceStationSize / 2,
+                                (int)position.x - spaceStationSize / 2,
+                                (int)position.y - spaceStationSize / 2, 3,
                                 kColorBlack);
 }
 
 void SpaceStation::createAsteroids() {
-  constexpr int num = 300;
-
-  for (int i = 0; i < num; ++i) {
+  for (size_t i = 0; i < asteroidsNum; ++i) {
     // random size 10,20,30
-    float radius = (float)(10 * (1 + rand() % 3));
+    float radius = (float)(asteroidMinSize *
+                           (1 + rand() % asteroidMaxSize / asteroidMinSize));
     Asteroid a(playdate_, radius);
 
-    for (int k = 0; k < 3; ++k) {
+    for (size_t k = 0; k < asteroidInitCollisionCheckNum; ++k) {
       // random possition
-      auto distance = 300 + rand() % 1500;
+      auto distance =
+          asteroidToBaseAreaDistance + rand() % asteroidAreaDistance;
       auto angle = DegToRad(rand() % 360);
       a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
 
       bool intersects = false;
-      for (int j = 0; j < (int)asteroids_.size(); ++j) {
+      for (size_t j = 0; j < asteroids_.size(); ++j) {
         if (intersectCircles(a.GetPosition(), a.GetRadius(),
                              asteroids_[j].GetPosition(),
                              asteroids_[j].GetRadius())) {
