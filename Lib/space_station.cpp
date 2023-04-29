@@ -1,13 +1,17 @@
 #include "space_station.hpp"
 
-void SpaceStation::Update(float dt) { (void)dt; }
+#include <algorithm>
+
+void SpaceStation::Update(float dt) {
+  std::for_each(asteroids_.begin(), asteroids_.end(),
+                [dt](auto& a) { a.Update(dt); });
+}
 
 void SpaceStation::Draw(const Camera& camera) {
   drawDebug(camera.ConvertToCameraSpace(position_));
 
-  for (auto& a : asteroids_) {
-    a.Draw(camera);
-  }
+  std::for_each(asteroids_.begin(), asteroids_.end(),
+                [&](auto& a) { a.Draw(camera); });
 }
 
 void SpaceStation::drawDebug(const Point2d& position) {
