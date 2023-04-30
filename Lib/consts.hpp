@@ -7,7 +7,7 @@
 #include "asteroid_type.hpp"
 #include "game_state.hpp"
 
-constexpr float kSpaceCraftRadius = 34.0f;
+constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
 constexpr float kSpaceCraftPosY = 1000.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
@@ -44,31 +44,31 @@ inline std::vector<AsteroidType> GetAsteroidTypes() {
   return std::vector<AsteroidType>{{
                                        .models{"data/met_01.png"},
                                        .bitmaps{},
-                                       .radius = 62.0f,
+                                       .radius = 61.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_02.png"},
                                        .bitmaps{},
-                                       .radius = 48.0f,
+                                       .radius = 47.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_03.png"},
                                        .bitmaps{},
-                                       .radius = 38.0f,
+                                       .radius = 37.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_04.png"},
                                        .bitmaps{},
-                                       .radius = 23.0f,
+                                       .radius = 22.0f,
                                        .breaks_on_collision = true,
                                    },
                                    {
                                        .models{"data/met_05.png"},
                                        .bitmaps{},
-                                       .radius = 11.0f,
+                                       .radius = 10.0f,
                                        .breaks_on_collision = true,
                                    }};
 }
