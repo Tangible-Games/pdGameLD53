@@ -44,12 +44,20 @@ class SpaceCraft : public SpaceObject {
     return a1 - a2;
   }
 
+  enum class EngineState { IDLE, FORWARD, BACKWARD };
+
+  enum class FieldState { IDLE, ACTIVE };
+
   PlaydateAPI* playdate_{nullptr};
   SpaceStation* space_station_{nullptr};
-  float radius_{20.0f};
+  float radius_{kSpaceCraftRadius};
   Vector2d direction_{0.0f, -1.0f};
   float rotation_speed_deg_per_sec_{0.0f};
   float crank_prev_angle_{0.0f};
 
+  EngineState engine_state_{EngineState::IDLE};
   LCDBitmap* idle_bitmap_{nullptr};
+  FieldState field_state_{FieldState::IDLE};
+  float field_state_time_{0.0f};
+  LCDBitmapTable* field_bitmap_table_{nullptr};
 };

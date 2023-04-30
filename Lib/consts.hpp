@@ -4,6 +4,7 @@
 
 #include "asteroid_type.hpp"
 
+constexpr float kSpaceCraftRadius = 34.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
 constexpr float kSpaceCraftPosY = 100.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
@@ -16,6 +17,8 @@ constexpr float kSpaceCraftAsteroidHitVelocityReduction = 0.1f;
 constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
 constexpr float kSpaceCraftCameraOffset = 50.0f;
 constexpr bool kSpaceCraftCrankControlsRotation = false;
+constexpr float kSpaceCraftFieldAnimationLength = 0.5f;
+constexpr float kSpaceCraftFieldAnimationNumFrames = 5;
 
 constexpr float kSpaceStationSize = 60.0f;
 

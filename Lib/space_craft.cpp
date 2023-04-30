@@ -1,12 +1,22 @@
 #include "space_craft.hpp"
 
+#include "pd_helpers.hpp"
 #include "space_station.hpp"
 
 void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
   space_station_ = space_station;
 }
 
-void SpaceCraft::Update(float dt) { updateInput(dt); }
+void SpaceCraft::Update(float dt) {
+  updateInput(dt);
+
+  if (field_state_ == FieldState::ACTIVE) {
+    field_state_time_ += dt;
+    if (field_state_time_ > kSpaceCraftFieldAnimationLength) {
+      field_state_ = FieldState::IDLE;
+    }
+  }
+}
 
 void SpaceCraft::Draw(const Camera& camera) {
   draw(camera.ConvertToCameraSpace(position_));
@@ -19,7 +29,14 @@ void SpaceCraft::load() {
   const char* error = 0;
   idle_bitmap_ = playdate_->graphics->loadBitmap("data/ship.png", &error);
   if (error) {
-    playdate_->system->logToConsole("Failed to load ship idle, error: %s",
+    playdate_->system->logToConsole("Failed to load ship's idle, error: %s",
+                                    error);
+  }
+
+  field_bitmap_table_ =
+      playdate_->graphics->loadBitmapTable("data/field.gif", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load ship's field, error: %s",
                                     error);
   }
 }
@@ -79,15 +96,21 @@ void SpaceCraft::updateInput(float dt) {
   if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
     velocity_ = velocity_ + direction_ * kSpaceCraftAcceleration * dt;
     update_velocity = true;
+
+    engine_state_ = EngineState::FORWARD;
   } else if ((buttons_current & kButtonA) || (buttons_current & kButtonDown)) {
     velocity_ = velocity_ - direction_ * kSpaceCraftDeceleration * dt;
     update_velocity = true;
+
+    engine_state_ = EngineState::BACKWARD;
   }
   if (update_velocity) {
     float v = velocity_.GetLength();
     if (v > kSpaceCraftVelocityMax) {
       velocity_ = velocity_ * (kSpaceCraftVelocityMax / v);
     }
+  } else {
+    engine_state_ = EngineState::IDLE;
   }
 
   Vector2d move = velocity_ * dt;
@@ -117,6 +140,11 @@ void SpaceCraft::tryMove(const Vector2d& move) {
       rotation_speed_deg_per_sec_ =
           rotation_speed_deg_per_sec_ *
           kSpaceCraftAsteroidHitRotationVelocityReduction;
+
+      if (field_state_ != FieldState::ACTIVE) {
+        field_state_ = FieldState::ACTIVE;
+        field_state_time_ = 0.0f;
+      }
     }
   }
 }
@@ -126,6 +154,13 @@ void SpaceCraft::draw(const Point2d& position) {
   playdate_->graphics->drawRotatedBitmap(idle_bitmap_, (int)position.x,
                                          (int)position.y, RadToDeg(angle), 0.5f,
                                          0.5f, 1.0f, 1.0f);
+
+  if (field_state_ == FieldState::ACTIVE) {
+    LCDBitmap* field_bitmap = SelectFrame(
+        playdate_, field_bitmap_table_, kSpaceCraftFieldAnimationLength,
+        kSpaceCraftFieldAnimationNumFrames, field_state_time_);
+    DrawBitmapCentered(playdate_, field_bitmap, position);
+  }
 }
 
 void SpaceCraft::drawDebug(const Point2d& position) {

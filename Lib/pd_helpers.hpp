@@ -18,3 +18,15 @@ inline void DrawBitmapCentered(PlaydateAPI* playdate, LCDBitmap* bitmap,
   int y = (int)center.y - bitmap_height / 2;
   playdate->graphics->drawBitmap(bitmap, x, y, kBitmapUnflipped);
 }
+
+inline LCDBitmap* SelectFrame(PlaydateAPI* playdate,
+                              LCDBitmapTable* bitmap_table,
+                              float animation_length, float num_frames,
+                              float running_time) {
+  float frame_time = animation_length / (float)num_frames;
+  if (running_time > animation_length) {
+    running_time = animation_length;
+  }
+  int index = (int)(running_time / frame_time);
+  return playdate->graphics->getTableBitmap(bitmap_table, index);
+}
