@@ -21,7 +21,15 @@ constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
 constexpr float kSpaceCraftCameraOffset = 50.0f;
 constexpr bool kSpaceCraftCrankControlsRotation = false;
 constexpr float kSpaceCraftFieldAnimationLength = 0.5f;
-constexpr float kSpaceCraftFieldAnimationNumFrames = 5;
+constexpr int kSpaceCraftFieldAnimationNumFrames = 5;
+constexpr float kSpaceCraftForwardAnimationLength = 0.25f;
+constexpr int kSpaceCraftForwardAnimationNumFrames = 6;
+constexpr int kSpaceCraftForwardAnimationSeqStart = 2;
+constexpr int kSpaceCraftForwardAnimationSeqLength = 3;
+constexpr int kSpaceCraftFlareUpAnimationSeqStart = 0;
+constexpr int kSpaceCraftFlareUpAnimationSeqLength = 2;
+constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
+constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 
 constexpr float kSpaceStationSize = 60.0f;
 

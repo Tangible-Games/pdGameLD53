@@ -44,7 +44,9 @@ class SpaceCraft : public SpaceObject {
     return a1 - a2;
   }
 
-  enum class EngineState { IDLE, FORWARD, BACKWARD };
+  enum class EngineState { IDLE, FLARE_UP, FORWARD, BACKWARD };
+
+  enum class RotationState { IDLE, LEFT, RIGHT };
 
   enum class FieldState { IDLE, ACTIVE };
 
@@ -56,7 +58,16 @@ class SpaceCraft : public SpaceObject {
   float crank_prev_angle_{0.0f};
 
   EngineState engine_state_{EngineState::IDLE};
+  EngineState next_engine_state_{EngineState::IDLE};
+  float engine_state_time_{0.0f};
   LCDBitmap* idle_bitmap_{nullptr};
+  LCDBitmapTable* forward_bitmap_table_{nullptr};
+  LCDBitmapTable* engine_left_up_bitmap_table_{nullptr};
+  LCDBitmapTable* engine_left_down_bitmap_table_{nullptr};
+  LCDBitmapTable* engine_right_up_bitmap_table_{nullptr};
+  LCDBitmapTable* engine_right_down_bitmap_table_{nullptr};
+  RotationState rotation_state_{RotationState::IDLE};
+  float rotation_state_time_{0.0f};
   FieldState field_state_{FieldState::IDLE};
   float field_state_time_{0.0f};
   LCDBitmapTable* field_bitmap_table_{nullptr};

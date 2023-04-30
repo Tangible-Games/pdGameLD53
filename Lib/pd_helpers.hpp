@@ -21,7 +21,7 @@ inline void DrawBitmapCentered(PlaydateAPI* playdate, LCDBitmap* bitmap,
 
 inline LCDBitmap* SelectFrame(PlaydateAPI* playdate,
                               LCDBitmapTable* bitmap_table,
-                              float animation_length, float num_frames,
+                              float animation_length, int num_frames,
                               float running_time) {
   float frame_time = animation_length / (float)num_frames;
   if (running_time > animation_length) {
@@ -29,4 +29,42 @@ inline LCDBitmap* SelectFrame(PlaydateAPI* playdate,
   }
   int index = (int)(running_time / frame_time);
   return playdate->graphics->getTableBitmap(bitmap_table, index);
+}
+
+inline LCDBitmap* SelectFrameLooped(PlaydateAPI* playdate,
+                                    LCDBitmapTable* bitmap_table,
+                                    float animation_length, int num_frames,
+                                    float running_time) {
+  float frame_time = animation_length / (float)num_frames;
+  while (running_time > animation_length) {
+    running_time -= animation_length;
+  }
+  int index = (int)(running_time / frame_time);
+  return playdate->graphics->getTableBitmap(bitmap_table, index);
+}
+
+inline LCDBitmap* SelectFrameFromSequence(PlaydateAPI* playdate,
+                                          LCDBitmapTable* bitmap_table,
+                                          float animation_length,
+                                          int num_frames, int seq_start,
+                                          int seq_length, float running_time) {
+  float frame_time = animation_length / (float)num_frames;
+  float loop_time = frame_time * seq_length;
+  if (running_time > loop_time) {
+    running_time = loop_time;
+  }
+  int index = (int)(running_time / frame_time);
+  return playdate->graphics->getTableBitmap(bitmap_table, seq_start + index);
+}
+
+inline LCDBitmap* SelectFrameFromSequenceLooped(
+    PlaydateAPI* playdate, LCDBitmapTable* bitmap_table, float animation_length,
+    int num_frames, int seq_start, int seq_length, float running_time) {
+  float frame_time = animation_length / (float)num_frames;
+  float loop_time = frame_time * seq_length;
+  while (running_time > loop_time) {
+    running_time -= loop_time;
+  }
+  int index = (int)(running_time / frame_time);
+  return playdate->graphics->getTableBitmap(bitmap_table, seq_start + index);
 }
