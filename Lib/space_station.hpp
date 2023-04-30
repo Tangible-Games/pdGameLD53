@@ -11,7 +11,8 @@
 
 class SpaceStation : public SpaceObject {
  public:
-  SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {
+  SpaceStation(PlaydateAPI* playdate)
+      : playdate_(playdate), asteroid_types_(GetAsteroidTypes()) {
     createAsteroids();
   }
 
@@ -30,5 +31,6 @@ class SpaceStation : public SpaceObject {
 
   PlaydateAPI* playdate_{nullptr};
 
+  const std::vector<AsteroidType> asteroid_types_;
   std::vector<Asteroid> asteroids_;
 };
