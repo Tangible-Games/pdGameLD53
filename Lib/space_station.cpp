@@ -39,10 +39,7 @@ void SpaceStation::drawDebug(const Point2d& position) {
 
 void SpaceStation::createAsteroids() {
   for (size_t i = 0; i < kAsteroidsNum; ++i) {
-    // random size 10,20,30
-    float radius = (float)(kAsteroidMinSize *
-                           (1 + rand() % kAsteroidMaxSize / kAsteroidMinSize));
-    Asteroid a(playdate_, radius);
+    Asteroid a(playdate_, asteroid_types_[0]);
 
     for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
       // random possition

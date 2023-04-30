@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PdSymphony/all_symphony.hpp"
+#include "asteroid_type.hpp"
 #include "camera.hpp"
 #include "consts.hpp"
 #include "pd_api.h"
@@ -8,14 +9,10 @@
 
 class Asteroid : public SpaceObject {
  public:
-  struct AsteroidType {
-    std::vector<const char*> models;
-  };
+  Asteroid(PlaydateAPI* playdate, const AsteroidType& type)
+      : playdate_(playdate), type_(&type) {}
 
-  Asteroid(PlaydateAPI* playdate, float radius)
-      : playdate_(playdate), radius_(radius) {}
-
-  float GetRadius() const { return radius_; }
+  float GetRadius() const { return type_->radius; }
 
   void Update(float dt);
   void Draw(const Camera& camera);
@@ -24,5 +21,5 @@ class Asteroid : public SpaceObject {
   void drawDebug(const Point2d& position);
 
   PlaydateAPI* playdate_{nullptr};
-  float radius_;
+  const AsteroidType* type_{nullptr};
 };
