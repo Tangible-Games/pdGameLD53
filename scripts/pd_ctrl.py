@@ -214,7 +214,7 @@ def install(pd_sdk, game_dir):
     drive_unmount()
 
 
-def run(pd_sdk, game_dir, debug = False):
+def run(pd_sdk, game_dir, debug = False, stats = False):
     pid = device_pid()
     if pid != PID_SERIAL:
         sys.exit(ERROR_STR + 'Unable to find Playdate device in serial mode')
@@ -234,9 +234,19 @@ def run(pd_sdk, game_dir, debug = False):
                 print(dbg_out.strip().decode('UTF-8'))
         except KeyboardInterrupt:
             sys.exit()
+    if stats is not None:
+        try:
+            while True:
+                mount_out = cmd_run([pd_sdk + '/bin/pdutil', tty_dev, 'stats'], 'Unable to run stats')
+                print(mount_out.strip().decode('UTF-8'))
+                print('----')
+                time.sleep(1)
+        except KeyboardInterrupt:
+            sys.exit()
+
 
 def usage():
-    print('Usage: {} <install|run|rundbg> <pd_sdk> <game_dir>'.format(sys.argv[0]))
+    print('Usage: {} <install|run|rundbg|runstats> <pd_sdk> <game_dir>'.format(sys.argv[0]))
 
 if __name__ == "__main__":
     if len(sys.argv) == 4:
@@ -246,6 +256,8 @@ if __name__ == "__main__":
             run(sys.argv[2], sys.argv[3])
         elif sys.argv[1] == 'rundbg':
             run(sys.argv[2], sys.argv[3], True)
+        elif sys.argv[1] == 'runstats':
+            run(sys.argv[2], sys.argv[3], stats=True)
         else:
             usage()
     else:

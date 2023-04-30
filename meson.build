@@ -131,5 +131,8 @@ run_target('run',
 run_target('rundbg',
   command : [python, meson.project_source_root() / 'scripts' / 'pd_ctrl.py', 'rundbg', pd_sdk, pd_pdx.full_path()])
 
+run_target('runstats',
+  command : [python, meson.project_source_root() / 'scripts' / 'pd_ctrl.py', 'runstats', pd_sdk, pd_pdx.full_path()])
+
 
 endif
