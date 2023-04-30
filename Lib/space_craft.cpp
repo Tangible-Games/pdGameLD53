@@ -62,7 +62,7 @@ void SpaceCraft::updateInput(float dt) {
   direction_ =
       direction_.GetRotated(DegToRad(rotation_speed_deg_per_sec_ * dt));
 
-  if (crank_controls_rotation_) {
+  if (kSpaceCraftCrankControlsRotation) {
     if (!playdate_->system->isCrankDocked()) {
       float crank_angle = playdate_->system->getCrankAngle();
       if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {
@@ -75,8 +75,15 @@ void SpaceCraft::updateInput(float dt) {
 
   crank_prev_angle_ = playdate_->system->getCrankAngle();
 
+  bool update_velocity = false;
   if ((buttons_current & kButtonB) || (buttons_current & kButtonUp)) {
     velocity_ = velocity_ + direction_ * kSpaceCraftAcceleration * dt;
+    update_velocity = true;
+  } else if ((buttons_current & kButtonA) || (buttons_current & kButtonDown)) {
+    velocity_ = velocity_ - direction_ * kSpaceCraftDeceleration * dt;
+    update_velocity = true;
+  }
+  if (update_velocity) {
     float v = velocity_.GetLength();
     if (v > kSpaceCraftVelocityMax) {
       velocity_ = velocity_ * (kSpaceCraftVelocityMax / v);

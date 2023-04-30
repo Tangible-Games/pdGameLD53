@@ -49,7 +49,6 @@ class SpaceCraft : public SpaceObject {
   float radius_{20.0f};
   Vector2d direction_{0.0f, -1.0f};
   float rotation_speed_deg_per_sec_{0.0f};
-  const bool crank_controls_rotation_{false};
   float crank_prev_angle_{0.0f};
 
   LCDBitmap* idle_bitmap_{nullptr};
