@@ -11,8 +11,8 @@ inline void DrawBitmapCentered(PlaydateAPI* playdate, LCDBitmap* bitmap,
   uint8_t* bitmap_mask = 0;
   uint8_t* bitmap_data = 0;
   playdate->graphics->getBitmapData(bitmap, &bitmap_width, &bitmap_height,
-                                     &bitmap_row_bytes, &bitmap_mask,
-                                     &bitmap_data);
+                                    &bitmap_row_bytes, &bitmap_mask,
+                                    &bitmap_data);
 
   int x = (int)center.x - bitmap_width / 2;
   int y = (int)center.y - bitmap_height / 2;
