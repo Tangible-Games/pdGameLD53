@@ -19,6 +19,10 @@ class Camera {
     return screen_half_sizes_ + (p - look_at_);
   }
 
+  Point2d ConvertToCameraSpace(const Point2d& p, const Point2d& look_at) const {
+    return screen_half_sizes_ + (p - look_at);
+  }
+
  private:
   int screen_width_{0};
   int screen_height_{0};

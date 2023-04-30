@@ -2,8 +2,12 @@
 
 #include <stddef.h>
 
-#include "asteroid_type.hpp"
+#include <array>
 
+#include "asteroid_type.hpp"
+#include "game_state.hpp"
+
+constexpr float kSpaceCraftRadius = 34.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
 constexpr float kSpaceCraftPosY = 1000.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
@@ -16,6 +20,16 @@ constexpr float kSpaceCraftAsteroidHitVelocityReduction = 0.1f;
 constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
 constexpr float kSpaceCraftCameraOffset = 50.0f;
 constexpr bool kSpaceCraftCrankControlsRotation = false;
+constexpr float kSpaceCraftFieldAnimationLength = 0.5f;
+constexpr int kSpaceCraftFieldAnimationNumFrames = 5;
+constexpr float kSpaceCraftForwardAnimationLength = 0.25f;
+constexpr int kSpaceCraftForwardAnimationNumFrames = 6;
+constexpr int kSpaceCraftForwardAnimationSeqStart = 2;
+constexpr int kSpaceCraftForwardAnimationSeqLength = 3;
+constexpr int kSpaceCraftFlareUpAnimationSeqStart = 0;
+constexpr int kSpaceCraftFlareUpAnimationSeqLength = 2;
+constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
+constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 
 constexpr float kSpaceStationSize = 60.0f;
 
@@ -64,3 +78,8 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 
 constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
+
+constexpr size_t kStationsNum = 5;
+const std::array<Point2d, kStationsNum> kStationPos = {
+    Point2d(0, 0), Point2d(2 * 1000, 2 * 1000), Point2d(-2 * 1000, 4 * 1000),
+    Point2d(-4 * 1000, -3 * 1000), Point2d(3 * 1000, 1 * 1000)};

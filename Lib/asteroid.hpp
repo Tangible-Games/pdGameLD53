@@ -9,8 +9,12 @@
 
 class Asteroid : public SpaceObject {
  public:
+  Asteroid() {}
+
   Asteroid(PlaydateAPI* playdate, const AsteroidType& type)
-      : playdate_(playdate), type_(&type) {}
+      : playdate_(playdate), type_(&type) {
+    bitmap_index_ = rand() % type_->bitmaps.size();
+  }
 
   float GetRadius() const { return type_->radius; }
 
@@ -23,4 +27,5 @@ class Asteroid : public SpaceObject {
 
   PlaydateAPI* playdate_{nullptr};
   const AsteroidType* type_{nullptr};
+  int bitmap_index_{0};
 };

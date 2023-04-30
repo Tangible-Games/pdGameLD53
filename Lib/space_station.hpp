@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <array>
 
 #include "PdSymphony/all_symphony.hpp"
 #include "asteroid.hpp"
@@ -16,13 +16,19 @@ class SpaceStation : public SpaceObject {
       load(playdate_);
       loaded = true;
     }
+  }
+
+  void Generate(uint32_t seed) {
+    srand(seed);
     createAsteroids();
   }
 
   void Update(float dt);
   void Draw(const Camera& camera);
 
-  const std::vector<Asteroid>& GetAsteroids() const { return asteroids_; }
+  const std::array<Asteroid, kAsteroidsNum>& GetAsteroids() const {
+    return asteroids_;
+  }
 
  private:
   static void load(PlaydateAPI* playdate);
@@ -37,5 +43,5 @@ class SpaceStation : public SpaceObject {
 
   static bool loaded;
   static std::vector<AsteroidType> asteroid_types_;
-  std::vector<Asteroid> asteroids_;
+  std::array<Asteroid, kAsteroidsNum> asteroids_;
 };

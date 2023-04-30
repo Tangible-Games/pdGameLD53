@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <array>
 
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
@@ -13,11 +13,13 @@ class Stars : public SpaceObject {
   Stars(PlaydateAPI* playdate)
       : playdate_(playdate),
         width_(playdate->display->getWidth()),
-        height_(playdate->display->getHeight()) {
-    for (size_t i = 0; i < kStarsNum; ++i) {
+        height_(playdate->display->getHeight()) {}
+
+  void Generate(uint32_t seed) {
+    srand(seed);
+    for (auto& s : stars_) {
       auto p = Point2d(rand() % width_, rand() % height_);
-      Star s(p, rand() % 4 + 1);
-      stars_.emplace_back(std::move(s));
+      s = Star(p, rand() % 4 + 1);
     }
   }
 
@@ -39,5 +41,5 @@ class Stars : public SpaceObject {
   PlaydateAPI* playdate_{nullptr};
   int width_;
   int height_;
-  std::vector<Star> stars_;
+  std::array<Star, kStarsNum> stars_;
 };
