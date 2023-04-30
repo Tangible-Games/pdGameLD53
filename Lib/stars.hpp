@@ -30,8 +30,7 @@ class Stars : public SpaceObject {
   struct Star {
     Star() = default;
 
-    Star(const Point2d& new_p, int new_size) : p(new_p), size(new_size) {
-    }
+    Star(const Point2d& new_p, int new_size) : p(new_p), size(new_size) {}
 
     Point2d p;
     int size{1};
