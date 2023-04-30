@@ -206,9 +206,12 @@ class Game {
         break;
     }
     if (out) {
+      playdate_->graphics->pushContext(nullptr);
+      playdate_->graphics->setDrawMode(kDrawModeInverted);
       playdate_->graphics->drawText(out, strlen(out), kASCIIEncoding,
                                     playdate_->display->getWidth() / 2 - 100,
                                     1);
+      playdate_->graphics->popContext();
     }
   }
 
