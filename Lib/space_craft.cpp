@@ -189,12 +189,23 @@ void SpaceCraft::updateInput(float dt) {
 }
 
 void SpaceCraft::tryMove(const Vector2d& move) {
-  const auto asteroids = space_station_->GetAsteroids();
+  const auto& asteroids = space_station_->GetAsteroids();
+  const SpatialBin2d<int>& asteroids_spatial_bin =
+      space_station_->GetAsteroidsSpatialBin();
 
   position_ = position_ + move;
 
   Circle space_craft_circle(position_, radius_);
-  for (const auto asteroid : asteroids) {
+
+  std::vector<int> broad_phase;
+  asteroids_spatial_bin.Query(
+      position_,
+      Vector2d(radius_ + kSpaceCraftCollisionBroadPhaseMargin,
+               radius_ + kSpaceCraftCollisionBroadPhaseMargin),
+      broad_phase);
+  for (int to_check_i = 0; to_check_i < (int)broad_phase.size(); ++to_check_i) {
+    const auto& asteroid = asteroids[broad_phase[to_check_i]];
+
     Circle asteroid_circle(asteroid.GetPosition(), asteroid.GetRadius());
     if (asteroid_circle.Intersect(space_craft_circle)) {
       Vector2d out = (position_ - asteroid.GetPosition()).GetNormalized();
@@ -223,7 +234,7 @@ void SpaceCraft::tryMove(const Vector2d& move) {
 void SpaceCraft::draw(const Point2d& position) {
   float angle = getAngleBetween(direction_, Vector2d(0.0f, -1.0f));
 
-  LCDBitmap* engine_bitmap = nullptr;
+  LCDBitmap* engine_bitmap = idle_bitmap_;
   LCDBitmap* small_engine_bitmap1 = nullptr;
   LCDBitmap* small_engine_bitmap2 = nullptr;
   LCDBitmap* small_engine_bitmap3 = nullptr;

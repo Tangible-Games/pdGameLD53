@@ -57,7 +57,10 @@ void SpaceStation::load(PlaydateAPI* playdate) {
 }
 
 void SpaceStation::createAsteroids() {
-  for (auto& a : asteroids_) {
+  asteroids_spatial_bin_.Clear();
+
+  for (int i = 0; i < (int)asteroids_.size(); ++i) {
+    Asteroid& a = asteroids_[i];
     a = Asteroid(playdate_, asteroid_types_[rand() % asteroid_types_.size()]);
 
     for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
@@ -68,10 +71,16 @@ void SpaceStation::createAsteroids() {
       a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
 
       bool intersects = false;
-      for (size_t j = 0; j < asteroids_.size(); ++j) {
+
+      std::vector<int> broad_phase;
+      asteroids_spatial_bin_.Query(
+          a.GetPosition(), Vector2d(a.GetRadius(), a.GetRadius()), broad_phase);
+      for (int to_check_i = 0; to_check_i < (int)broad_phase.size();
+           ++to_check_i) {
         if (Circle(a.GetPosition(), a.GetRadius())
-                .Intersect(Circle(asteroids_[j].GetPosition(),
-                                  asteroids_[j].GetRadius()))) {
+                .Intersect(
+                    Circle(asteroids_[broad_phase[to_check_i]].GetPosition(),
+                           asteroids_[broad_phase[to_check_i]].GetRadius()))) {
           intersects = true;
           break;
         }
@@ -81,7 +90,14 @@ void SpaceStation::createAsteroids() {
         break;
       }
     }
+
+    asteroids_spatial_bin_.Add(a.GetPosition(),
+                               Vector2d(a.GetRadius(), a.GetRadius()), i);
   }
+
+  playdate_->system->logToConsole(
+      "Spatial bins hashes collision: %i",
+      asteroids_spatial_bin_.GetMaxHashesCollision());
 }
 
 bool SpaceStation::circleCircleCCD(const Point2d& p1, float r1,

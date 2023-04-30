@@ -77,7 +77,6 @@ class Game {
   }
 
   void onUpdateAndDraw(float dt) {
-    (void)dt;
     playdate_->graphics->clear(kColorBlack);
 
     space_station_.Update(dt);

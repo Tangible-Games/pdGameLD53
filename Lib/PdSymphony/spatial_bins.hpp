@@ -1,158 +1,99 @@
 #pragma once
 
+#include <stddef.h>
+
 #include "point2d.hpp"
 #include "vector2d.hpp"
 
 namespace PdSymphony {
 namespace Collision {
 template <typename ObjectType>
-class SpatialBinsBase {
+class SpatialBin2d {
  public:
-  void Remove(const ObjectType& object) {
-    auto object_it = objects_.find(object);
-    if (object_it != objects_.end()) {
-      const auto& bins = (*object_it).second.bins;
-      for (auto it = bins.begin(); it != bins.end(); ++it) {
-        auto binIt = bins_.find((*it));
-        if (binIt != bins_.end()) {
-          (*binIt).second.objects.erase(object);
-          if ((*binIt).second.objects.empty()) bins_.erase(binIt);
-        }
-      }
+  SpatialBin2d() { buckets_.resize(1024); }
 
-      objects_.erase(object_it);
+  SpatialBin2d(float cell_width, float cell_height, int num_buckets)
+      : cell_width_(cell_width), cell_height_(cell_height) {
+    buckets_.resize(num_buckets);
+  }
+
+  void Clear() {
+    for (int i = 0; i < (int)buckets_.size(); ++i) {
+      buckets_[i].objects.clear();
     }
   }
 
- protected:
-  typedef unsigned int HashType;
-
-  void clear() {
-    bins_.clear();
-    objects_.clear();
-  }
-
-  void add(HashType spatial_hash, const ObjectType& object) {
-    auto bin_pair = bins_.insert(std::make_pair(spatial_hash, Bin()));
-    (*bin_pair.first).second.objects.insert(object);
-
-    auto object_pair =
-        objects_.insert(std::make_pair(object, InternalObject()));
-    (*object_pair.first).second.bins.insert(spatial_hash);
-  }
-
-  void add(const std::vector<HashType>& spatial_hashes,
+  void Add(const Math::Point2d& center, const Math::Vector2d& half_sizes,
            const ObjectType& object) {
-    for (size_t i = 0; i < spatial_hashes.size(); ++i) {
-      add(spatial_hashes[i], object);
+    std::vector<uint32_t> buckets_hashes = getBucketsHashes(center, half_sizes);
+    for (int i = 0; i < (int)buckets_hashes.size(); ++i) {
+      int index = (int)(buckets_hashes[i] % buckets_.size());
+      buckets_[index].objects.push_back(object);
     }
   }
 
-  std::set<ObjectType> query(
-      const std::vector<HashType>& spatial_hashes) const {
-    std::set<ObjectType> result;
+  void Query(const Math::Point2d& center, const Math::Vector2d& half_sizes,
+             std::vector<ObjectType>& result_out) const {
+    result_out.clear();
 
-    for (size_t i = 0; i < spatial_hashes.size(); ++i) {
-      const HashType& spatial_hash = spatial_hashes[i];
-
-      auto binIt = bins_.find(spatial_hash);
-      if (binIt != bins_.end()) {
-        const auto& objects = (*binIt).second.objects;
-        for (auto object_it = objects.begin(); object_it != objects.end();
-             ++object_it) {
-          result.insert((*object_it));
-        }
+    std::vector<uint32_t> buckets_hashes = getBucketsHashes(center, half_sizes);
+    for (int i = 0; i < (int)buckets_hashes.size(); ++i) {
+      int index = (int)(buckets_hashes[i] % buckets_.size());
+      for (int j = 0; j < (int)buckets_[index].objects.size(); ++j) {
+        result_out.push_back(buckets_[index].objects[j]);
       }
     }
+  }
 
+  int GetMaxHashesCollision() const {
+    int result = 0;
+    for (int i = 0; i < (int)buckets_.size(); ++i) {
+      if (result < (int)buckets_[i].objects.size()) {
+        result = (int)buckets_[i].objects.size();
+      }
+    }
     return result;
   }
 
-  static HashType hash(int i, int j) {
-    unsigned int result = hashLy((unsigned char*)&i, sizeof(int));
+ private:
+  static uint32_t hash(int i, int j) {
+    uint32_t result = hashLy((unsigned char*)&i, sizeof(int));
     result = hashLy((unsigned char*)&j, sizeof(int), result);
     return result;
   }
 
-  static HashType hash(int i, int j, int k) {
-    unsigned int result = hashLy((unsigned char*)&i, sizeof(int));
-    result = hashLy((unsigned char*)&j, sizeof(int), result);
-    result = hashLy((unsigned char*)&k, sizeof(int), result);
-    return result;
-  }
-
-  static unsigned int hashLy(const unsigned char* str, size_t length,
-                             unsigned int start = 0) {
-    unsigned int result = start;
+  static uint32_t hashLy(const unsigned char* str, size_t length,
+                         uint32_t start = 0) {
+    uint32_t result = start;
     for (size_t i = 0; i < length; ++i) {
       result = (result * 1664525) + (*str) + 1013904223;
     }
     return result;
   }
 
- private:
-  struct Bin {
-    std::set<ObjectType> objects;
-  };
-
-  struct InternalObject {
-    std::set<HashType> bins;
-  };
-
-  typedef std::unordered_map<HashType, Bin> Bins;
-  typedef std::unordered_map<ObjectType, InternalObject> Objects;
-
-  // spatial_hash->Bin
-  Bins bins_;
-  // object->InternalObject
-  Objects objects_;
-};
-
-template <typename Type>
-class SpatialBin2d : public SpatialBinBase<ObjectType> {
- public:
-  SpatialBin2d() = default;
-
-  SpatialBin2d(float cell_width, float cell_height)
-      : cell_width_(cell_width), cell_height_(cell_height) {}
-
-  void Clear() { SpatialBinBase<ObjectType>::clear(); }
-
-  void Add(const Point2d& center, const Vector2d& half_sizes,
-           const Type& object) {
-    SpatialBinBase<ObjectType>::add(getBins(center, halfSizes), object);
-  }
-
-  std::set<ObjectType> Query(const Point2d& center,
-                             const Vector2d& half_sizes) const {
-    return SpatialBinBase<ObjectType>::query(getBins(center, half_sizes));
-  }
-
- private:
-  std::vector<typename SpatialBinBase<ObjectType>::HashType> getBins(
-      const Point2d& center, const Vector2d& half_sizes) const {
-    std::vector<typename SpatialBinBase<ObjectType>::HashType> result;
+  std::vector<uint32_t> getBucketsHashes(
+      const Math::Point2d& center, const Math::Vector2d& half_sizes) const {
+    std::vector<uint32_t> result;
 
     int i_begin = 0;
     int i_end = 0;
     int j_begin = 0;
     int j_end = 0;
-    rectCovers(center, half_sizes, cell_width_, cell_height_, i_begin, i_end,
-               j_begin, j_end);
+    rectCovers(center, half_sizes, i_begin, i_end, j_begin, j_end);
 
     result.reserve((i_end - i_begin) * (j_end - j_begin));
     for (int j = j_begin; j < j_end; ++j) {
       for (int i = i_begin; i < i_end; ++i) {
-        result.push_back(symSpatialBin<Type>::hash(i, j));
+        result.push_back(hash(i, j));
       }
     }
 
     return result;
   }
 
-  rectCovers(const Point2d& center, const Vector2d& half_sizes, cell_width,
-             cell_height, int& i_begin_out, int& i_end_out, int& j_begin_out,
-             int& j_end_out) {
+  void rectCovers(const Math::Point2d& center, const Math::Vector2d& half_sizes,
+                  int& i_begin_out, int& i_end_out, int& j_begin_out,
+                  int& j_end_out) const {
     i_begin_out = 0;
     i_end_out = 0;
     j_begin_out = 0;
@@ -160,24 +101,29 @@ class SpatialBin2d : public SpatialBinBase<ObjectType> {
 
     float left = center.x - half_sizes.x;
     float right = center.x + half_sizes.x;
-    xBeginOut = fDiv(left, cell_width);
-    xEndOut = fDiv(right, cell_width) + 1;
+    i_begin_out = fDiv(left, cell_width_);
+    i_end_out = fDiv(right, cell_width_) + 1;
 
     float top = center.y + half_sizes.y;
     float bottom = center.y - half_sizes.y;
-    yBeginOut = fDiv(bottom, cell_height);
-    yEndOut = fDiv(top, cell_height) + 1;
+    j_begin_out = fDiv(bottom, cell_height_);
+    j_end_out = fDiv(top, cell_height_) + 1;
   }
 
-  int fDiv(float a, float b) {
+  static int fDiv(float a, float b) {
     if (a < 0.0f) {
       return (int)(a / b) - 1;
     }
     return (int)(a / b);
   }
 
+  struct Bucket {
+    std::vector<ObjectType> objects;
+  };
+
   float cell_width_{1.0f};
   float cell_height_{1.0f};
+  std::vector<Bucket> buckets_;
 };
 }  // namespace Collision
 }  // namespace PdSymphony

@@ -9,6 +9,8 @@
 #include "pd_api.h"
 #include "space_object.hpp"
 
+using namespace PdSymphony::Collision;
+
 class SpaceStation : public SpaceObject {
  public:
   SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {
@@ -30,6 +32,10 @@ class SpaceStation : public SpaceObject {
     return asteroids_;
   }
 
+  const SpatialBin2d<int>& GetAsteroidsSpatialBin() const {
+    return asteroids_spatial_bin_;
+  }
+
  private:
   static void load(PlaydateAPI* playdate);
   void drawDebug(const Point2d& position);
@@ -44,4 +50,7 @@ class SpaceStation : public SpaceObject {
   static bool loaded;
   static std::vector<AsteroidType> asteroid_types_;
   std::array<Asteroid, kAsteroidsNum> asteroids_;
+  SpatialBin2d<int> asteroids_spatial_bin_{kAsteroidsSpatialBinsCellSize,
+                                           kAsteroidsSpatialBinsCellSize,
+                                           kAsteroidsSpatialBinsSize};
 };

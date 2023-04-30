@@ -30,15 +30,16 @@ constexpr int kSpaceCraftFlareUpAnimationSeqStart = 0;
 constexpr int kSpaceCraftFlareUpAnimationSeqLength = 2;
 constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
 constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
+constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 
 constexpr float kSpaceStationSize = 60.0f;
 
 constexpr size_t kAsteroidsNum = 700;
-constexpr size_t kAsteroidMinSize = 10;
-constexpr size_t kAsteroidMaxSize = 30;
 constexpr size_t kAsteroidToBaseAreaDistance = 200;
 constexpr size_t kAsteroidAreaDistance = 3000;
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
+constexpr float kAsteroidsSpatialBinsCellSize = 50.0f;
+constexpr int kAsteroidsSpatialBinsSize = 1024;
 
 inline std::vector<AsteroidType> GetAsteroidTypes() {
   return std::vector<AsteroidType>{{
