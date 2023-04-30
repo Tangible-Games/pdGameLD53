@@ -18,6 +18,7 @@ class Asteroid : public SpaceObject {
   void Draw(const Camera& camera);
 
  private:
+  void draw(const Point2d& position);
   void drawDebug(const Point2d& position);
 
   PlaydateAPI* playdate_{nullptr};

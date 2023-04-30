@@ -11,8 +11,11 @@
 
 class SpaceStation : public SpaceObject {
  public:
-  SpaceStation(PlaydateAPI* playdate)
-      : playdate_(playdate), asteroid_types_(GetAsteroidTypes()) {
+  SpaceStation(PlaydateAPI* playdate) : playdate_(playdate) {
+    if (!loaded) {
+      load(playdate_);
+      loaded = true;
+    }
     createAsteroids();
   }
 
@@ -22,6 +25,7 @@ class SpaceStation : public SpaceObject {
   const std::vector<Asteroid>& GetAsteroids() const { return asteroids_; }
 
  private:
+  static void load(PlaydateAPI* playdate);
   void drawDebug(const Point2d& position);
   void createAsteroids();
 
@@ -31,6 +35,7 @@ class SpaceStation : public SpaceObject {
 
   PlaydateAPI* playdate_{nullptr};
 
-  const std::vector<AsteroidType> asteroid_types_;
+  static bool loaded;
+  static std::vector<AsteroidType> asteroid_types_;
   std::vector<Asteroid> asteroids_;
 };

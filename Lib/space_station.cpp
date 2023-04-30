@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+bool SpaceStation::loaded = false;
+std::vector<AsteroidType> SpaceStation::asteroid_types_;
+
 void SpaceStation::Update(float dt) {
   std::for_each(asteroids_.begin(), asteroids_.end(),
                 [dt](auto& a) { a.Update(dt); });
@@ -37,9 +40,25 @@ void SpaceStation::drawDebug(const Point2d& position) {
                                 kColorWhite);
 }
 
+void SpaceStation::load(PlaydateAPI* playdate) {
+  asteroid_types_ = GetAsteroidTypes();
+  for (auto& asteroid_type : asteroid_types_) {
+    asteroid_type.bitmaps.resize(asteroid_type.models.size());
+    for (int i = 0; i < (int)asteroid_type.models.size(); ++i) {
+      const char* error = 0;
+      asteroid_type.bitmaps[i] =
+          playdate->graphics->loadBitmap(asteroid_type.models[i], &error);
+      if (error) {
+        playdate->system->logToConsole("Failed to load asteroid, error: %s",
+                                       error);
+      }
+    }
+  }
+}
+
 void SpaceStation::createAsteroids() {
   for (size_t i = 0; i < kAsteroidsNum; ++i) {
-    Asteroid a(playdate_, asteroid_types_[0]);
+    Asteroid a(playdate_, asteroid_types_[rand() % asteroid_types_.size()]);
 
     for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
       // random possition
