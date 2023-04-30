@@ -57,7 +57,7 @@ void SpaceStation::load(PlaydateAPI* playdate) {
 }
 
 void SpaceStation::createAsteroids() {
-  for (auto &a : asteroids_) {
+  for (auto& a : asteroids_) {
     a = Asteroid(playdate_, asteroid_types_[rand() % asteroid_types_.size()]);
 
     for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {

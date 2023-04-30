@@ -17,7 +17,7 @@ class Stars : public SpaceObject {
 
   void Generate(uint32_t seed) {
     srand(seed);
-    for (auto &s : stars_) {
+    for (auto& s : stars_) {
       auto p = Point2d(rand() % width_, rand() % height_);
       s = Star(p, rand() % 4 + 1);
     }

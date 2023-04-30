@@ -213,7 +213,6 @@ class Game {
     }
   }
 
-
   void setupCamera() {
     Vector2d to_station_norm =
         (space_station_.GetPosition() - space_craft_.GetPosition())
@@ -238,7 +237,6 @@ class Game {
   SpaceStation space_station_;
   Stars stars_;
 
-
   std::array<StationArea, kStationsNum> stations_;
   // current state
   size_t space_station_cur_{0};
@@ -250,7 +248,6 @@ class Game {
     READY_TO_JUMP,
     JUMP,
   } target_state_{TargetState::NONE};
-
 };
 
 void *SetupGame(PlaydateAPI *playdate) {

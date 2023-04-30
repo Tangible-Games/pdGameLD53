@@ -26,7 +26,9 @@ class SpaceStation : public SpaceObject {
   void Update(float dt);
   void Draw(const Camera& camera);
 
-  const std::array<Asteroid, kAsteroidsNum>& GetAsteroids() const { return asteroids_; }
+  const std::array<Asteroid, kAsteroidsNum>& GetAsteroids() const {
+    return asteroids_;
+  }
 
  private:
   static void load(PlaydateAPI* playdate);
