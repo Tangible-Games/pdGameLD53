@@ -251,9 +251,13 @@ class Game {
   } target_state_{TargetState::NONE};
 };
 
+static int test = 0;
+static void __attribute__((constructor)) test_constructor(void) { test = 1234; }
+
 void *SetupGame(PlaydateAPI *playdate) {
   static Game game(playdate);
   playdate->system->logToConsole("#SetupGame");
+  playdate->system->logToConsole("test: %d", test);
   return &game;
 }
 
