@@ -59,6 +59,7 @@ add_project_arguments('-fno-rtti', language: ['cpp'])
 add_project_arguments('-fno-use-cxa-atexit', language: ['cpp'])
 add_project_arguments('-fno-threadsafe-statics', language: ['cpp'])
 add_project_arguments('-fms-extensions', language: ['cpp'])
+add_project_arguments('-fsingle-precision-constant', language: ['c', 'cpp'])
 
 pdsdk_link_args = [
     '-T@0@'.format(meson.current_source_dir() / 'link_map.ld'),
