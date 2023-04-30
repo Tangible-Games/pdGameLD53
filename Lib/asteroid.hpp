@@ -8,6 +8,10 @@
 
 class Asteroid : public SpaceObject {
  public:
+  struct AsteroidType {
+    std::vector<const char*> models;
+  };
+
   Asteroid(PlaydateAPI* playdate, float radius)
       : playdate_(playdate), radius_(radius) {}
 

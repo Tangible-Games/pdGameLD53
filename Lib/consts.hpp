@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include "asteroid_type.hpp"
+
 constexpr float kSpaceCraftPosX = 0.0f;
 constexpr float kSpaceCraftPosY = 100.0f;
 constexpr float kSpaceCraftAcceleration = 100.0f;
@@ -10,6 +12,7 @@ constexpr float kSpaceCraftRotationAcceleration = 100.0f;  // Deg
 constexpr float kSpaceCraftRotationSpeedMax = 100.0f;      // Deg
 constexpr float kSpaceCraftRotationDeceleration = 100.0f;  // Deg
 constexpr float kSpaceAsteroidHitVelocityReduction = 0.25f;
+constexpr float kSpaceAsteroidHitRotationVelocityReduction = 0.25f;
 
 constexpr float kSpaceStationSize = 60.0f;
 
@@ -19,6 +22,14 @@ constexpr size_t kAsteroidMaxSize = 30;
 constexpr size_t kAsteroidToBaseAreaDistance = 300;
 constexpr size_t kAsteroidAreaDistance = 2000;
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
+
+inline std::vector<AsteroidType> GetAsteroidTypes() {
+  return std::vector<AsteroidType>{{
+      .models{"data/met_01.png"},
+      .radius = 10.0f,
+      .breaks_on_collision = true,
+  }};
+}
 
 constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;

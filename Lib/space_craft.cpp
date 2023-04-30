@@ -60,12 +60,14 @@ void SpaceCraft::updateInput(float dt) {
   direction_ =
       direction_.GetRotated(DegToRad(rotation_speed_deg_per_sec_ * dt));
 
-  if (!playdate_->system->isCrankDocked()) {
-    float crank_angle = playdate_->system->getCrankAngle();
-    if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {
-      // When crank points towards top edge we assume that spacecraft should
-      // face up.
-      direction_ = Vector2d(0.0f, -1.0f).GetRotated(DegToRad(crank_angle));
+  if (crank_controls_rotation_) {
+    if (!playdate_->system->isCrankDocked()) {
+      float crank_angle = playdate_->system->getCrankAngle();
+      if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {
+        // When crank points towards top edge we assume that spacecraft should
+        // face up.
+        direction_ = Vector2d(0.0f, -1.0f).GetRotated(DegToRad(crank_angle));
+      }
     }
   }
 
@@ -102,6 +104,9 @@ void SpaceCraft::tryMove(const Vector2d& move) {
       float y = tangent * velocity_;
       velocity_ =
           (out * (-x) + tangent * y) * kSpaceAsteroidHitVelocityReduction;
+
+      rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ *
+                                    kSpaceAsteroidHitRotationVelocityReduction;
     }
   }
 }
