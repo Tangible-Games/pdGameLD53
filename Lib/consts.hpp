@@ -38,7 +38,7 @@ constexpr size_t kAsteroidsNum = 700;
 constexpr size_t kAsteroidToBaseAreaDistance = 200;
 constexpr size_t kAsteroidAreaDistance = 3000;
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
-constexpr float kAsteroidsSpatialBinsCellSize = 50.0f;
+constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
 constexpr int kAsteroidsSpatialBinsSize = 1024;
 
 inline std::vector<AsteroidType> GetAsteroidTypes() {

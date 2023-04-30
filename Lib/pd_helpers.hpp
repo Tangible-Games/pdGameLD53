@@ -28,6 +28,9 @@ inline LCDBitmap* SelectFrame(PlaydateAPI* playdate,
     running_time = animation_length;
   }
   int index = (int)(running_time / frame_time);
+  if (index > num_frames - 1) {
+    index = num_frames - 1;
+  }
   return playdate->graphics->getTableBitmap(bitmap_table, index);
 }
 
@@ -40,6 +43,9 @@ inline LCDBitmap* SelectFrameLooped(PlaydateAPI* playdate,
     running_time -= animation_length;
   }
   int index = (int)(running_time / frame_time);
+  if (index > num_frames - 1) {
+    index = num_frames - 1;
+  }
   return playdate->graphics->getTableBitmap(bitmap_table, index);
 }
 
@@ -54,6 +60,9 @@ inline LCDBitmap* SelectFrameFromSequence(PlaydateAPI* playdate,
     running_time = loop_time;
   }
   int index = (int)(running_time / frame_time);
+  if (index > num_frames - 1) {
+    index = num_frames - 1;
+  }
   return playdate->graphics->getTableBitmap(bitmap_table, seq_start + index);
 }
 
@@ -66,5 +75,8 @@ inline LCDBitmap* SelectFrameFromSequenceLooped(
     running_time -= loop_time;
   }
   int index = (int)(running_time / frame_time);
+  if (index > num_frames - 1) {
+    index = num_frames - 1;
+  }
   return playdate->graphics->getTableBitmap(bitmap_table, seq_start + index);
 }

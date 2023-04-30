@@ -203,8 +203,10 @@ void SpaceCraft::tryMove(const Vector2d& move) {
       Vector2d(radius_ + kSpaceCraftCollisionBroadPhaseMargin,
                radius_ + kSpaceCraftCollisionBroadPhaseMargin),
       broad_phase);
-  for (int to_check_i = 0; to_check_i < (int)broad_phase.size(); ++to_check_i) {
-    const auto& asteroid = asteroids[broad_phase[to_check_i]];
+  for (int broad_phase_i = 0; broad_phase_i < (int)broad_phase.size();
+       ++broad_phase_i) {
+    // for (const auto asteroid : asteroids) {
+    const auto& asteroid = asteroids[broad_phase[broad_phase_i]];
 
     Circle asteroid_circle(asteroid.GetPosition(), asteroid.GetRadius());
     if (asteroid_circle.Intersect(space_craft_circle)) {

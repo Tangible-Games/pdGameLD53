@@ -40,7 +40,19 @@ class SpatialBin2d {
     for (int i = 0; i < (int)buckets_hashes.size(); ++i) {
       int index = (int)(buckets_hashes[i] % buckets_.size());
       for (int j = 0; j < (int)buckets_[index].objects.size(); ++j) {
-        result_out.push_back(buckets_[index].objects[j]);
+        const ObjectType& object = buckets_[index].objects[j];
+
+        bool already_in_result = false;
+        for (int k = 0; k < (int)result_out.size(); ++k) {
+          if (object == result_out[k]) {
+            already_in_result = true;
+            break;
+          }
+        }
+
+        if (!already_in_result) {
+          result_out.push_back(buckets_[index].objects[j]);
+        }
       }
     }
   }
@@ -104,8 +116,8 @@ class SpatialBin2d {
     i_begin_out = fDiv(left, cell_width_);
     i_end_out = fDiv(right, cell_width_) + 1;
 
-    float top = center.y + half_sizes.y;
     float bottom = center.y - half_sizes.y;
+    float top = center.y + half_sizes.y;
     j_begin_out = fDiv(bottom, cell_height_);
     j_end_out = fDiv(top, cell_height_) + 1;
   }
