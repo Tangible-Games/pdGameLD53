@@ -7,7 +7,7 @@ constexpr float kSpaceCraftPosY = 100.0f;
 constexpr float kSpaceCraftAcceleration = 100.0f;
 constexpr float kSpaceCraftVelocityMax = 1000.0f;
 constexpr float kSpaceCraftRotationAcceleration = 100.0f;  // Deg
-constexpr float kSpaceCraftRotationSpeedMax = 100.0f;  // Deg
+constexpr float kSpaceCraftRotationSpeedMax = 100.0f;      // Deg
 constexpr float kSpaceCraftRotationDeceleration = 100.0f;  // Deg
 constexpr float kSpaceAsteroidHitVelocityReduction = 0.25f;
 
