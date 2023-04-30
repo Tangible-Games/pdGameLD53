@@ -9,7 +9,17 @@ void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
 void SpaceCraft::Update(float dt) { updateInput(dt); }
 
 void SpaceCraft::Draw(const Camera& camera) {
-  drawDebug(camera.ConvertToCameraSpace(position_));
+  draw(camera.ConvertToCameraSpace(position_));
+  // drawDebug(camera.ConvertToCameraSpace(position_));
+}
+
+void SpaceCraft::load() {
+  const char* error = 0;
+  idle_bitmap_ = playdate_->graphics->loadBitmap("data/ship.png", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load ship idle, error: %s",
+                                    error);
+  }
 }
 
 void SpaceCraft::updateInput(float dt) {
@@ -73,19 +83,26 @@ void SpaceCraft::tryMove(const Vector2d& move) {
   }
 }
 
+void SpaceCraft::draw(const Point2d& position) {
+  float angle = getAngleBetween(direction_, Vector2d(0.0f, -1.0f));
+  playdate_->graphics->drawRotatedBitmap(idle_bitmap_, (int)position.x,
+                                         (int)position.y, RadToDeg(angle), 0.5f,
+                                         0.5f, 1.0f, 1.0f);
+}
+
 void SpaceCraft::drawDebug(const Point2d& position) {
   Point2d front = position + direction_ * 20.0f;
   Vector2d right_direction = direction_.GetRotated(DegToRad(-90.0f));
   Point2d right = position + right_direction * 10.0f - direction_ * 20.0f;
   Point2d left = position - right_direction * 10.0f - direction_ * 20.0f;
   playdate_->graphics->drawLine((int)front.x, (int)front.y, (int)right.x,
-                                (int)right.y, 3, kColorBlack);
+                                (int)right.y, 3, kColorWhite);
   playdate_->graphics->drawLine((int)right.x, (int)right.y, (int)left.x,
-                                (int)left.y, 3, kColorBlack);
+                                (int)left.y, 3, kColorWhite);
   playdate_->graphics->drawLine((int)left.x, (int)left.y, (int)front.x,
-                                (int)front.y, 3, kColorBlack);
+                                (int)front.y, 3, kColorWhite);
 
   playdate_->graphics->drawEllipse(
       (int)(position.x - radius_), (int)(position.y - radius_),
-      (int)(radius_ * 2.0f), (int)(radius_ * 2.0f), 1, 0, 0, kColorBlack);
+      (int)(radius_ * 2.0f), (int)(radius_ * 2.0f), 1, 0, 0, kColorWhite);
 }

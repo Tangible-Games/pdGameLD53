@@ -40,7 +40,7 @@ class Game {
 
   void onUpdateAndDraw(float dt) {
     (void)dt;
-    playdate_->graphics->clear(kColorWhite);
+    playdate_->graphics->clear(kColorBlack);
 
     space_station_.Update(dt);
 
@@ -63,7 +63,7 @@ class Game {
     Point2d p2 = camera.ConvertToCameraSpace(space_station_.GetPosition());
 
     playdate_->graphics->drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y, 1,
-                                  kColorBlack);
+                                  kColorWhite);
   }
 
   PlaydateAPI *playdate_;

@@ -19,22 +19,22 @@ void SpaceStation::drawDebug(const Point2d& position) {
                                 (int)position.y - kSpaceStationSize / 2,
                                 (int)position.x + kSpaceStationSize / 2,
                                 (int)position.y - kSpaceStationSize / 2, 3,
-                                kColorBlack);
+                                kColorWhite);
   playdate_->graphics->drawLine((int)position.x + kSpaceStationSize / 2,
                                 (int)position.y - kSpaceStationSize / 2,
                                 (int)position.x + kSpaceStationSize / 2,
                                 (int)position.y + kSpaceStationSize / 2, 3,
-                                kColorBlack);
+                                kColorWhite);
   playdate_->graphics->drawLine((int)position.x + kSpaceStationSize / 2,
                                 (int)position.y + kSpaceStationSize / 2,
                                 (int)position.x - kSpaceStationSize / 2,
                                 (int)position.y + kSpaceStationSize / 2, 3,
-                                kColorBlack);
+                                kColorWhite);
   playdate_->graphics->drawLine((int)position.x - kSpaceStationSize / 2,
                                 (int)position.y + kSpaceStationSize / 2,
                                 (int)position.x - kSpaceStationSize / 2,
                                 (int)position.y - kSpaceStationSize / 2, 3,
-                                kColorBlack);
+                                kColorWhite);
 }
 
 void SpaceStation::createAsteroids() {
