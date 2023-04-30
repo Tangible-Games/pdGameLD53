@@ -35,7 +35,12 @@ class Game {
     float accelX, accelY, accelZ;
     playdate_->system->getAccelerometer(&accelX, &accelY, &accelZ);
     float batPercent = playdate_->system->getBatteryPercentage();
-    return currentTime ^ ((int32_t)accelX * 17) ^ ((int32_t)accelY * 13) ^ ((int32_t)accelZ * 23) ^ ((int32_t)batPercent * 19);
+    uint32_t seed = currentTime;
+    seed ^= ((uint32_t)(accelX * 17));
+    seed ^= ((uint32_t)(accelY * 13));
+    seed ^= ((uint32_t)(accelZ * 23));
+    seed ^= ((uint32_t)(batPercent * 19));
+    return seed;
   }
 
   void onStart() {
