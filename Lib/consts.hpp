@@ -5,7 +5,7 @@
 #include "asteroid_type.hpp"
 
 constexpr float kSpaceCraftPosX = 0.0f;
-constexpr float kSpaceCraftPosY = 100.0f;
+constexpr float kSpaceCraftPosY = 1000.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
 constexpr float kSpaceCraftRotationAcceleration = 360.0f;  // Deg
