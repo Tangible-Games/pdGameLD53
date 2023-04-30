@@ -32,8 +32,21 @@ class Game {
 
  private:
   uint32_t getSeed() {
-    // TODO: use accelerometer???
-    return playdate_->system->getCurrentTimeMilliseconds();
+    uint32_t currentTime = playdate_->system->getCurrentTimeMilliseconds();
+    // enable accelerometer
+    playdate_->system->setPeripheralsEnabled(kAccelerometer);
+    // Get accelerometer data
+    float accelX, accelY, accelZ;
+    playdate_->system->getAccelerometer(&accelX, &accelY, &accelZ);
+    // disable accelerometer
+    playdate_->system->setPeripheralsEnabled(kNone);
+    float batPercent = playdate_->system->getBatteryPercentage();
+    uint32_t seed = currentTime;
+    seed ^= ((uint32_t)(accelX * 17));
+    seed ^= ((uint32_t)(accelY * 13));
+    seed ^= ((uint32_t)(accelZ * 23));
+    seed ^= ((uint32_t)(batPercent * 19));
+    return seed;
   }
 
   void onStart() {
