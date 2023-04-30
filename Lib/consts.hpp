@@ -26,26 +26,31 @@ constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 inline std::vector<AsteroidType> GetAsteroidTypes() {
   return std::vector<AsteroidType>{{
                                        .models{"data/met_01.png"},
+                                       .bitmaps{},
                                        .radius = 62.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_02.png"},
+                                       .bitmaps{},
                                        .radius = 48.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_03.png"},
+                                       .bitmaps{},
                                        .radius = 38.0f,
                                        .breaks_on_collision = false,
                                    },
                                    {
                                        .models{"data/met_04.png"},
+                                       .bitmaps{},
                                        .radius = 23.0f,
                                        .breaks_on_collision = true,
                                    },
                                    {
                                        .models{"data/met_05.png"},
+                                       .bitmaps{},
                                        .radius = 11.0f,
                                        .breaks_on_collision = true,
                                    }};
