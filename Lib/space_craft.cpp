@@ -105,10 +105,11 @@ void SpaceCraft::tryMove(const Vector2d& move) {
       float x = out * velocity_;
       float y = tangent * velocity_;
       velocity_ =
-          (out * (-x) + tangent * y) * kSpaceAsteroidHitVelocityReduction;
+          (out * (-x) + tangent * y) * kSpaceCraftAsteroidHitVelocityReduction;
 
-      rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ *
-                                    kSpaceAsteroidHitRotationVelocityReduction;
+      rotation_speed_deg_per_sec_ =
+          rotation_speed_deg_per_sec_ *
+          kSpaceCraftAsteroidHitRotationVelocityReduction;
     }
   }
 }

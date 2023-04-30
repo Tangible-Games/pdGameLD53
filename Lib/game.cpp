@@ -47,7 +47,7 @@ class Game {
     stars_.Update(dt);
 
     space_craft_.Update(dt);
-    camera_.SetLookAt(space_craft_.GetPosition());
+    setupCamera();
 
     stars_.Draw(camera_);
     space_station_.Draw(camera_);
@@ -56,6 +56,14 @@ class Game {
     drawLineToStation(camera_);
 
     playdate_->system->drawFPS(5, 5);
+  }
+
+  void setupCamera() {
+    Vector2d to_station_norm =
+        (space_station_.GetPosition() - space_craft_.GetPosition())
+            .GetNormalized();
+    camera_.SetLookAt(space_craft_.GetPosition() +
+                      to_station_norm * kSpaceCraftCameraOffset);
   }
 
   void drawLineToStation(const Camera &camera) {
