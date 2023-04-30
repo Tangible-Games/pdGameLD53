@@ -2,8 +2,15 @@
 
 #include <algorithm>
 
+#include "static_random_generator.hpp"
+
 bool SpaceStation::loaded = false;
 std::vector<AsteroidType> SpaceStation::asteroid_types_;
+
+void SpaceStation::Generate(const StationArea& station_area) {
+  StaticRandomGenerator::get().SetSeed(station_area.seed);
+  createAsteroids(station_area);
+}
 
 void SpaceStation::Update(float dt) {
   std::for_each(asteroids_.begin(), asteroids_.end(),
@@ -79,9 +86,10 @@ void SpaceStation::createAsteroids(const StationArea& station_area) {
       for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
         // random position
         auto distance = station_area.asteroids_to_base_distance +
-                        ((float)rand() / (float)RAND_MAX) *
+                        ((float)StaticRandomGenerator::get().NextValue() /
+                         (float)StaticRandomGenerator::get().MaxValue()) *
                             station_area.asteroids_area_distance;
-        auto angle = DegToRad(rand() % 360);
+        auto angle = DegToRad(StaticRandomGenerator::get().NextValue() % 360);
         a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
 
         bool intersects = false;

@@ -1,12 +1,13 @@
 subdir('PdSymphony')
 
 exe_srcs += files(
-    'main.c',
+    'asteroid.cpp',
     'game.cpp',
+    'main.c',
     'space_craft.cpp',
     'space_station.cpp',
-    'asteroid.cpp',
     'stars.cpp',
+    'static_random_generator.cpp',
 )
 
 exe_incs += include_directories('.')

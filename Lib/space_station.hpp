@@ -20,10 +20,7 @@ class SpaceStation : public SpaceObject {
     }
   }
 
-  void Generate(const StationArea& station_area) {
-    srand(station_area.seed);
-    createAsteroids(station_area);
-  }
+  void Generate(const StationArea& station_area);
 
   void Update(float dt);
   void Draw(const Camera& camera);

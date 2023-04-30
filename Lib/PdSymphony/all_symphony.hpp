@@ -5,6 +5,7 @@
 #include "circle.hpp"
 #include "point2d.hpp"
 #include "point3d.hpp"
+#include "random_generator.hpp"
 #include "ray_casting_projection.hpp"
 #include "segment2d.hpp"
 #include "spatial_bins.hpp"
