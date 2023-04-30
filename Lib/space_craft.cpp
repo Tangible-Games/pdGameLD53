@@ -10,7 +10,9 @@ void SpaceCraft::Update(float dt) { updateInput(dt); }
 
 void SpaceCraft::Draw(const Camera& camera) {
   draw(camera.ConvertToCameraSpace(position_));
-  // drawDebug(camera.ConvertToCameraSpace(position_));
+  if (kDrawDebugSpaceCraft) {
+    drawDebug(camera.ConvertToCameraSpace(position_));
+  }
 }
 
 void SpaceCraft::load() {

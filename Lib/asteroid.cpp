@@ -4,7 +4,9 @@ void Asteroid::Update(float dt) { (void)dt; }
 
 void Asteroid::Draw(const Camera& camera) {
   draw(camera.ConvertToCameraSpace(position_));
-  drawDebug(camera.ConvertToCameraSpace(position_));
+  if (kDrawDebugAsteroids) {
+    drawDebug(camera.ConvertToCameraSpace(position_));
+  }
 }
 
 void Asteroid::draw(const Point2d& position) {

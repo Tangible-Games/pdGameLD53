@@ -53,3 +53,6 @@ inline std::vector<AsteroidType> GetAsteroidTypes() {
 
 constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;
+
+constexpr bool kDrawDebugAsteroids = false;
+constexpr bool kDrawDebugSpaceCraft = false;
