@@ -62,7 +62,7 @@ void SpaceCraft::updateInput(float dt) {
   direction_ =
       direction_.GetRotated(DegToRad(rotation_speed_deg_per_sec_ * dt));
 
-  if (crank_controls_rotation_) {
+  if (kSpaceCraftCrankControlsRotation) {
     if (!playdate_->system->isCrankDocked()) {
       float crank_angle = playdate_->system->getCrankAngle();
       if (fabs(crank_angle - crank_prev_angle_) > 0.1f) {

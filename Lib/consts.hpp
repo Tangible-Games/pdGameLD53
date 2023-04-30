@@ -15,6 +15,7 @@ constexpr float kSpaceCraftRotationDeceleration = 180.0f;  // Deg
 constexpr float kSpaceCraftAsteroidHitVelocityReduction = 0.1f;
 constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
 constexpr float kSpaceCraftCameraOffset = 50.0f;
+constexpr bool kSpaceCraftCrankControlsRotation = false;
 
 constexpr float kSpaceStationSize = 60.0f;
 
