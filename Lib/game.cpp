@@ -39,12 +39,6 @@ class Game {
 
     space_station_cur_ = 0;
     space_station_target_ = 0;
-    size_t idx = 0;
-    std::for_each(stations_.begin(), stations_.end(), [&](auto &s) {
-      s.pos = kStationPos[idx++];
-      s.seed = getSeed();
-    });
-
     space_station_.SetPosition(Point2d(0.0f, 0.0f));
     space_craft_.SetPosition(Point2d(kSpaceCraftPosX, kSpaceCraftPosY));
 
@@ -53,16 +47,16 @@ class Game {
 
   void onUpdateArea(uint32_t idx) {
     playdate_->system->logToConsole("#onUpdateArea %d", idx);
-    auto &seed = stations_[idx].seed;
-    space_station_.Generate(seed);
-    stars_.Generate(seed);
+    space_station_.Generate(kStations[idx]);
+    stars_.Generate(kStations[idx].seed);
     space_craft_.ResetSpaceStation(&space_station_);
 
     if (space_station_cur_ != space_station_target_) {
-      Vector2d s = stations_[space_station_cur_].pos -
-                   stations_[space_station_target_].pos;
+      Vector2d s = kStations[space_station_cur_].pos -
+                   kStations[space_station_target_].pos;
       s = s.GetNormalized() *
-          (kAsteroidAreaDistance + kAsteroidToBaseAreaDistance);
+          (kStations[space_station_cur_].asteroids_to_base_distance +
+           kStations[space_station_cur_].asteroids_area_distance);
 
       playdate_->system->logToConsole("#onUpdateArea new pos %d, %d", (int)s.x,
                                       (int)s.y);
@@ -104,8 +98,8 @@ class Game {
   void setDebugTarget() {
     // random station from list
     space_station_target_ =
-        (space_station_cur_ + 1 + (rand() % (stations_.size() - 1))) %
-        stations_.size();
+        (space_station_cur_ + 1 + (rand() % (kStations.size() - 1))) %
+        kStations.size();
     playdate_->system->logToConsole("setDebugTarget %d", space_station_target_);
   }
 
@@ -134,13 +128,15 @@ class Game {
         break;
       case TargetState::SET:
         if (craft_to_station >
-            kAsteroidToBaseAreaDistance + kAsteroidAreaDistance) {
+            kStations[space_station_cur_].asteroids_to_base_distance +
+                kStations[space_station_cur_].asteroids_area_distance) {
           target_state_ = TargetState::READY_TO_JUMP;
         }
         break;
       case TargetState::READY_TO_JUMP:
         if (craft_to_station <
-            kAsteroidToBaseAreaDistance + kAsteroidAreaDistance) {
+            kStations[space_station_cur_].asteroids_to_base_distance +
+                kStations[space_station_cur_].asteroids_area_distance) {
           target_state_ = TargetState::SET;
         } else if (buttons_current & kButtonA) {
           target_state_ = TargetState::JUMP;
@@ -163,11 +159,11 @@ class Game {
         break;
       case TargetState::SET: {
         Point2d p1 =
-            camera_.ConvertToCameraSpace(stations_[space_station_cur_].pos,
-                                         stations_[space_station_cur_].pos);
+            camera_.ConvertToCameraSpace(kStations[space_station_cur_].pos,
+                                         kStations[space_station_cur_].pos);
         Point2d p2 =
-            camera_.ConvertToCameraSpace(stations_[space_station_target_].pos,
-                                         stations_[space_station_cur_].pos);
+            camera_.ConvertToCameraSpace(kStations[space_station_target_].pos,
+                                         kStations[space_station_cur_].pos);
         Segment2d s{p1, p2};
         Point2d intersect;
         Vector2d direction{0, 0};
@@ -239,7 +235,6 @@ class Game {
   SpaceStation space_station_;
   Stars stars_;
 
-  std::array<StationArea, kStationsNum> stations_;
   // current state
   size_t space_station_cur_{0};
   size_t space_station_target_{0};

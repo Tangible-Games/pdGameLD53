@@ -20,17 +20,15 @@ class SpaceStation : public SpaceObject {
     }
   }
 
-  void Generate(uint32_t seed) {
-    srand(seed);
-    createAsteroids();
+  void Generate(const StationArea& station_area) {
+    srand(station_area.seed);
+    createAsteroids(station_area);
   }
 
   void Update(float dt);
   void Draw(const Camera& camera);
 
-  const std::array<Asteroid, kAsteroidsNum>& GetAsteroids() const {
-    return asteroids_;
-  }
+  const std::vector<Asteroid>& GetAsteroids() const { return asteroids_; }
 
   const SpatialBin2d<int>& GetAsteroidsSpatialBin() const {
     return asteroids_spatial_bin_;
@@ -39,7 +37,7 @@ class SpaceStation : public SpaceObject {
  private:
   static void load(PlaydateAPI* playdate);
   void drawDebug(const Point2d& position);
-  void createAsteroids();
+  void createAsteroids(const StationArea& station_area);
 
   static bool circleCircleCCD(const Point2d& p1, float r1, const Vector2d& move,
                               const Point2d& p2, float r2,
@@ -49,7 +47,7 @@ class SpaceStation : public SpaceObject {
 
   static bool loaded;
   static std::vector<AsteroidType> asteroid_types_;
-  std::array<Asteroid, kAsteroidsNum> asteroids_;
+  std::vector<Asteroid> asteroids_;
   SpatialBin2d<int> asteroids_spatial_bin_{kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsSize};

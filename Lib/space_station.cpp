@@ -56,43 +56,62 @@ void SpaceStation::load(PlaydateAPI* playdate) {
   }
 }
 
-void SpaceStation::createAsteroids() {
+void SpaceStation::createAsteroids(const StationArea& station_area) {
   asteroids_spatial_bin_.Clear();
 
-  for (int i = 0; i < (int)asteroids_.size(); ++i) {
-    Asteroid& a = asteroids_[i];
-    a = Asteroid(playdate_, asteroid_types_[rand() % asteroid_types_.size()]);
+  int total_num_asteroids = 0;
+  for (int i = 0; i < (int)station_area.num_asteroids.size(); ++i) {
+    total_num_asteroids += station_area.num_asteroids[i];
+  }
 
-    for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
-      // random possition
-      auto distance =
-          kAsteroidToBaseAreaDistance + rand() % kAsteroidAreaDistance;
-      auto angle = DegToRad(rand() % 360);
-      a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
+  playdate_->system->logToConsole("Num asteroids created: %i",
+                                  total_num_asteroids);
 
-      bool intersects = false;
+  asteroids_.resize(total_num_asteroids);
 
-      std::vector<int> broad_phase;
-      asteroids_spatial_bin_.Query(
-          a.GetPosition(), Vector2d(a.GetRadius(), a.GetRadius()), broad_phase);
-      for (int to_check_i = 0; to_check_i < (int)broad_phase.size();
-           ++to_check_i) {
-        if (Circle(a.GetPosition(), a.GetRadius())
-                .Intersect(
-                    Circle(asteroids_[broad_phase[to_check_i]].GetPosition(),
-                           asteroids_[broad_phase[to_check_i]].GetRadius()))) {
-          intersects = true;
+  int asteroid_index = 0;
+  for (int type_i = 0; type_i < (int)asteroid_types_.size(); ++type_i) {
+    for (int i = 0; i < station_area.num_asteroids[type_i]; ++i) {
+      Asteroid& a = asteroids_[asteroid_index];
+
+      a = Asteroid(playdate_, asteroid_types_[type_i]);
+
+      for (size_t k = 0; k < kAsteroidInitCollisionCheckNum; ++k) {
+        // random position
+        auto distance = station_area.asteroids_to_base_distance +
+                        ((float)rand() / (float)RAND_MAX) *
+                            station_area.asteroids_area_distance;
+        auto angle = DegToRad(rand() % 360);
+        a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
+
+        bool intersects = false;
+
+        std::vector<int> broad_phase;
+        asteroids_spatial_bin_.Query(a.GetPosition(),
+                                     Vector2d(a.GetRadius(), a.GetRadius()),
+                                     broad_phase);
+        for (int to_check_i = 0; to_check_i < (int)broad_phase.size();
+             ++to_check_i) {
+          if (Circle(a.GetPosition(), a.GetRadius())
+                  .Intersect(Circle(
+                      asteroids_[broad_phase[to_check_i]].GetPosition(),
+                      asteroids_[broad_phase[to_check_i]].GetRadius()))) {
+            intersects = true;
+            break;
+          }
+        }
+
+        if (!intersects) {
           break;
         }
       }
 
-      if (!intersects) {
-        break;
-      }
-    }
+      asteroids_spatial_bin_.Add(a.GetPosition(),
+                                 Vector2d(a.GetRadius(), a.GetRadius()),
+                                 asteroid_index);
 
-    asteroids_spatial_bin_.Add(a.GetPosition(),
-                               Vector2d(a.GetRadius(), a.GetRadius()), i);
+      ++asteroid_index;
+    }
   }
 
   playdate_->system->logToConsole(

@@ -34,9 +34,6 @@ constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 
 constexpr float kSpaceStationSize = 60.0f;
 
-constexpr size_t kAsteroidsNum = 700;
-constexpr size_t kAsteroidToBaseAreaDistance = 200;
-constexpr size_t kAsteroidAreaDistance = 3000;
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
 constexpr int kAsteroidsSpatialBinsSize = 1024;
@@ -81,6 +78,74 @@ constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
 
 constexpr size_t kStationsNum = 5;
-const std::array<Point2d, kStationsNum> kStationPos = {
-    Point2d(0, 0), Point2d(2 * 1000, 2 * 1000), Point2d(-2 * 1000, 4 * 1000),
-    Point2d(-4 * 1000, -3 * 1000), Point2d(3 * 1000, 1 * 1000)};
+const std::array<StationArea, kStationsNum> kStations = {
+    StationArea{
+        .pos = Point2d(0, 0),
+        .seed = 13124125,
+        .name{"Station 1"},
+        .num_asteroids =
+            {
+                50,
+                100,
+                150,
+                400,
+            },
+        .asteroids_to_base_distance = 200.0f,
+        .asteroids_area_distance = 3000.0f,
+    },
+    StationArea{
+        .pos = Point2d(2 * 1000, 2 * 1000),
+        .seed = 89127634,
+        .name{"Station 2"},
+        .num_asteroids =
+            {
+                50,
+                100,
+                150,
+                400,
+            },
+        .asteroids_to_base_distance = 200.0f,
+        .asteroids_area_distance = 3000.0f,
+    },
+    StationArea{
+        .pos = Point2d(-2 * 1000, 4 * 1000),
+        .seed = 12847312,
+        .name{"Station 3"},
+        .num_asteroids =
+            {
+                50,
+                100,
+                150,
+                400,
+            },
+        .asteroids_to_base_distance = 200.0f,
+        .asteroids_area_distance = 3000.0f,
+    },
+    StationArea{
+        .pos = Point2d(-4 * 1000, -3 * 1000),
+        .seed = 23098412,
+        .name{"Station 4"},
+        .num_asteroids =
+            {
+                50,
+                100,
+                150,
+                400,
+            },
+        .asteroids_to_base_distance = 200.0f,
+        .asteroids_area_distance = 3000.0f,
+    },
+    StationArea{
+        .pos = Point2d(3 * 1000, 1 * 1000),
+        .seed = 98214186,
+        .name{"Station 5"},
+        .num_asteroids =
+            {
+                50,
+                100,
+                150,
+                400,
+            },
+        .asteroids_to_base_distance = 200.0f,
+        .asteroids_area_distance = 3000.0f,
+    }};
