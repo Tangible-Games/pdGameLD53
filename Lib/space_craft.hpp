@@ -48,7 +48,7 @@ class SpaceCraft : public SpaceObject {
   SpaceStation* space_station_{nullptr};
   float radius_{20.0f};
   Vector2d direction_{0.0f, -1.0f};
-  const float rotation_speed_deg_per_sec_{360.0f};
+  float rotation_speed_deg_per_sec_{0.0f};
   float crank_prev_angle_{0.0f};
 
   LCDBitmap* idle_bitmap_{nullptr};

@@ -30,12 +30,30 @@ void SpaceCraft::updateInput(float dt) {
                                     &buttons_released);
 
   if (buttons_current & kButtonLeft) {
-    float da = -rotation_speed_deg_per_sec_ * dt;
-    direction_ = direction_.GetRotated(DegToRad(da));
+    rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ - kSpaceCraftRotationAcceleration * dt;
+    if (rotation_speed_deg_per_sec_ < -kSpaceCraftRotationSpeedMax) {
+      rotation_speed_deg_per_sec_ = -kSpaceCraftRotationSpeedMax;
+    }
   } else if (buttons_current & kButtonRight) {
-    float da = rotation_speed_deg_per_sec_ * dt;
-    direction_ = direction_.GetRotated(DegToRad(da));
+    rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ + kSpaceCraftRotationAcceleration * dt;
+    if (rotation_speed_deg_per_sec_ > kSpaceCraftRotationSpeedMax) {
+      rotation_speed_deg_per_sec_ = kSpaceCraftRotationSpeedMax;
+    }
+  } else {
+    if (rotation_speed_deg_per_sec_ < 0.0f) {
+      rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ + kSpaceCraftRotationDeceleration * dt;
+      if (rotation_speed_deg_per_sec_ > 0.0f) {
+        rotation_speed_deg_per_sec_ = 0.0f;
+      }
+    } else if (rotation_speed_deg_per_sec_ > 0.0f) {
+      rotation_speed_deg_per_sec_ = rotation_speed_deg_per_sec_ - kSpaceCraftRotationDeceleration * dt;
+      if (rotation_speed_deg_per_sec_ < 0.0f) {
+        rotation_speed_deg_per_sec_ = 0.0f;
+      }
+    }
   }
+
+  direction_ = direction_.GetRotated(DegToRad(rotation_speed_deg_per_sec_ * dt));
 
   if (!playdate_->system->isCrankDocked()) {
     float crank_angle = playdate_->system->getCrankAngle();
