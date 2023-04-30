@@ -2,7 +2,10 @@
 
 #include <stddef.h>
 
+#include <array>
+
 #include "asteroid_type.hpp"
+#include "game_state.hpp"
 
 constexpr float kSpaceCraftRadius = 34.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
@@ -67,3 +70,8 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 
 constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
+
+constexpr size_t kStationsNum = 5;
+const std::array<Point2d, kStationsNum> kStationPos = {
+    Point2d(0, 0), Point2d(2 * 1000, 2 * 1000), Point2d(-2 * 1000, 4 * 1000),
+    Point2d(-4 * 1000, -3 * 1000), Point2d(3 * 1000, 1 * 1000)};

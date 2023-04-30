@@ -9,6 +9,8 @@
 
 class Asteroid : public SpaceObject {
  public:
+  Asteroid() {}
+
   Asteroid(PlaydateAPI* playdate, const AsteroidType& type)
       : playdate_(playdate), type_(&type) {
     bitmap_index_ = rand() % type_->bitmaps.size();
