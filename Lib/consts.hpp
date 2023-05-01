@@ -106,26 +106,27 @@ inline std::vector<StationArea> GetStations() {
           StationArea{
               .pos = Point2d(2 * 1000, 2 * 1000),
               .seed = 89127634,
-              .name{"Station 2"},
-              .desc{"Sehr gut station"},
+              .name{"Infinity Junction"},
+              .desc{"Needless to say, there are quite a few\nworlds connected via this station.\nMaybe your homeworld is one of them?"},
               .num_asteroids =
                   {
                       50,
                       100,
-                      150,
-                      400,
+                      100,
+                      200,
+                      50,
                   },
               .asteroids_to_base_distance = 200.0f,
-              .asteroids_area_distance = 3000.0f,
-              .jump_distance = 3300.0f,
+              .asteroids_area_distance = 2000.0f,
+              .jump_distance = 2300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
           StationArea{
               .pos = Point2d(-2 * 1000, 4 * 1000),
               .seed = 12847312,
-              .name{"Station 3"},
-              .desc{"Sehr gut station"},
+              .name{"Celestial Crossroads"},
+              .desc{"Enigmatic name and stale tasteless beer.\nSadly, there is nothing more here.\nA trading outpost with a meager population\nof 172 as of today. Wait, 171."},
               .num_asteroids =
                   {
                       50,
