@@ -8,9 +8,10 @@ void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
 }
 
 void SpaceCraft::Update(float dt) {
-  if (state_ != State::ALIGNING) {
+  if (state_ == State::IN_GAME) {
     updateInput(dt);
     updateMove(dt);
+  } else if (state_ == State::PARKED) {
   } else {
     updateAligning(dt);
   }
@@ -200,7 +201,8 @@ void SpaceCraft::updateAligning(float dt) {
   state_time_ += dt;
   float t = state_time_;
   if (state_time_ > kSpaceStationAlignTimeout) {
-    state_ = State::IN_GAME;
+    playdate_->system->logToConsole("Switching to state: PARKED");
+    state_ = State::PARKED;
     state_time_ = 0.0f;
     t = kSpaceStationAlignTimeout;
   }

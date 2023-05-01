@@ -10,6 +10,8 @@ std::vector<AsteroidType> SpaceStation::asteroid_types_;
 LCDBitmapTable* SpaceStation::station_bitmap_table_ = nullptr;
 
 void SpaceStation::Generate(const StationArea& station_area) {
+  playdate_->system->logToConsole("#SpaceStation::Generate");
+
   StaticRandomGenerator::get().SetSeed(station_area.seed);
   createAsteroids(station_area);
 

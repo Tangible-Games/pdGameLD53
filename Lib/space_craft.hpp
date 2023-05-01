@@ -28,6 +28,7 @@ class SpaceCraft : public SpaceObject {
   float GetSpeed() const { return velocity_.GetLength(); }
 
   void StartAligning(const Point2d& align_to) {
+    playdate_->system->logToConsole("Switching to state: ALIGNING");
     state_ = State::ALIGNING;
     state_time_ = 0.0f;
     align_from_ = GetPosition();
@@ -61,7 +62,7 @@ class SpaceCraft : public SpaceObject {
     return a1 - a2;
   }
 
-  enum class State { IN_GAME, ALIGNING };
+  enum class State { IN_GAME, ALIGNING, PARKED };
 
   enum class EngineState { IDLE, FLARE_UP, FORWARD, BACKWARD };
 

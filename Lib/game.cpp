@@ -149,8 +149,7 @@ class Game {
       case TargetState::ALIGN_IN_DOCK: {
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationAlignTimeout) {
-          setDebugTarget();
-          target_state_ = TargetState::SET;
+          target_state_ = TargetState::DOCKING;
           target_state_time_ = 0.0f;
         }
       } break;
@@ -210,6 +209,9 @@ class Game {
                          stations_[space_station_cur_].pos)
                             .GetNormalized();
       offset_factor = kSpaceCraftToStationCameraOffset;
+    } else if (target_state_ == TargetState::ALIGN_IN_DOCK ||
+               target_state_ == TargetState::DOCKING) {
+      camera_.SetLookAt(space_craft_.GetPosition());
     } else {
       Vector2d to_station =
           space_station_.GetPosition() - space_craft_.GetPosition();
@@ -281,6 +283,7 @@ class Game {
     NONE,
     READY_TO_DOCK,
     ALIGN_IN_DOCK,
+    DOCKING,
     SET,
     READY_TO_JUMP,
     JUMP,
