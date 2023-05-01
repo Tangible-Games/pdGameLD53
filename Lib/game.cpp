@@ -5,6 +5,7 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
 #include "consts.hpp"
+#include "fonts.hpp"
 #include "pd_helpers.hpp"
 #include "space_craft.hpp"
 #include "space_station.hpp"
@@ -67,15 +68,7 @@ class Game {
       playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
     }
 
-    // Load all fonts from consts.hpp kFontDataPath
-    for (int i = 0; i < kFontLast; i++) {
-      error = nullptr;
-      fonts_[i] = playdate_->graphics->loadFont(kFontDataPath[i], &error);
-      if (error) {
-        playdate_->system->logToConsole("Failed to load font, error: %s",
-                                        error);
-      }
-    }
+    Fonts::instance().loadFonts(playdate_);
 
     game_interface_.Load();
 
@@ -209,7 +202,8 @@ class Game {
         break;
     }
     if (out) {
-      playdate_->graphics->setFont(fonts_[kFontBoldOutlined]);
+      playdate_->graphics->setFont(
+          Fonts::instance().use(FontName::kFontBoldOutlined));
       playdate_->graphics->drawText(out, strlen(out), kASCIIEncoding,
                                     playdate_->display->getWidth() / 2 - 100,
                                     1);
@@ -327,8 +321,6 @@ class Game {
   LCDBitmapTable *arrow_bitmap_table_{nullptr};
 
   UiGameInterface game_interface_;
-
-  std::array<LCDFont *, kFontLast> fonts_;
 
   float running_time_{0.0f};
 };

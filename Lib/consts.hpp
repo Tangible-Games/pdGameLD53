@@ -158,7 +158,7 @@ constexpr float kUiArrowAnimationLength = 1.6f;
 constexpr int kUiClockAnimationNumFrames = 16;
 constexpr float kUiClockAnimationLength = 1.0f;
 
-enum {
+enum FontName {
   kFontBold = 0,
   kFontBoldOutlined,
   kFontLast,
