@@ -85,9 +85,9 @@ inline std::vector<StationArea> GetStations() {
               .num_asteroids =
                   {
                       50,
-                      0,
+                      100,
                       150,
-                      0,
+                      400,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
