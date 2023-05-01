@@ -1144,7 +1144,7 @@ constexpr float kSoundFadingDelta = 0.1f;
 
 enum MusicSample { kMusicMain = 0, kMusicMax };
 constexpr const char* kMusicDataPath[] = {
-    /* [kMain] = */ "data/sounds/szegvari__space-bar-ambient.mp3",
+    /* [kMain] = */ "data/sounds/main_music.mp3",
 };
 
 constexpr bool kDrawDebugAsteroids = false;
