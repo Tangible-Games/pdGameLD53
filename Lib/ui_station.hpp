@@ -22,11 +22,14 @@ class UiStation {
   void ShowMissions() { mode_ = Mode::MISSIONS; }
 
  private:
-  enum class Mode { MISSIONS };
+  enum class Mode { IDLE, MISSIONS };
 
   PlaydateAPI* playdate_{nullptr};
   LCDBitmap* job_card_{nullptr};
-  Mode mode_{Mode::MISSIONS};
+  LCDBitmap* dot_1_{nullptr};
+  LCDBitmap* dot_2_{nullptr};
+  LCDBitmap* dot_3_{nullptr};
+  Mode mode_{Mode::IDLE};
   int cur_mission_{0};
   std::vector<MissionDesc> missions_;
 };

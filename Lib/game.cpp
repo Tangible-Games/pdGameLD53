@@ -352,6 +352,9 @@ class Game {
       result[i].difficulty = stations_[station_index].difficulty;
     }
 
+    playdate_->system->logToConsole("Number of missions generated: %i",
+                                    result.size());
+
     return result;
   }
 
