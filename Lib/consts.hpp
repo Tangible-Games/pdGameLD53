@@ -144,6 +144,109 @@ inline std::vector<StationArea> GetStations() {
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
+          
+          StationArea{
+              .pos = Point2d(-8 * 1000, 6 * 1000),
+              .seed = 48120593,
+              .name{"Falcon's Flight"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
+          StationArea{
+              .pos = Point2d(10 * 1000, -9 * 1000),
+              .seed = 37291048,
+              .name{"Tardis Terminal"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
+          StationArea{
+              .pos = Point2d(-6 * 1000, 5 * 1000),
+              .seed = 28619075,
+              .name{"Gallifrey Gateway"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
+          StationArea{
+              .pos = Point2d(3 * 1000, -1 * 1000),
+              .seed = 12938407,
+              .name{"Stark Spaceport"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
+          StationArea{
+              .pos = Point2d(9 * 1000, 8 * 1000),
+              .seed = 54298103,
+              .name{"Gotham Galactica"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
+          StationArea{
+              .pos = Point2d(4 * 1000, -7 * 1000),
+              .seed = 94057281,
+              .name{"Metropolis Metastation"},
+              .num_asteroids =
+                  {
+                      50,
+                      100,
+                      150,
+                      400,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+
           StationArea{
               .pos = Point2d(3 * 1000, 1 * 1000),
               .seed = 98214186,
