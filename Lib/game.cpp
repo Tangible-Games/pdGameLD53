@@ -253,18 +253,16 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         }
         break;
       case TargetState::READY_TO_JUMP:
-<<<<<<< HEAD
         if (craft_to_station < stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::SET;
         } else if (buttons_current & kButtonA) {
           target_state_ = TargetState::JUMP;
-=======
-        // no way back from here
-        game_interface_.SetReadyToJump(true);
-        // old way to jump
-        if (buttons_current & kButtonA) {
+          // no way back from here
+          game_interface_.SetReadyToJump(true);
+          // old way to jump
+          if (buttons_current & kButtonA) {
             target_state_ = TargetState::JUMP;
->>>>>>> dd63b5f1a3ecb80c7a2e401c5c23506f3c54634b
+          }
         }
         break;
       case TargetState::JUMP:
