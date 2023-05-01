@@ -156,3 +156,14 @@ inline std::vector<StationArea> GetStations() {
 
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
+
+enum {
+    kFontBold = 0,
+    kFontBoldOutlined,
+    kFontLast,
+};
+constexpr const char* kFontDataPath[] = {
+    // Source dir contains fnt(s) files and build system convert them to pft files
+    /* [kFontBold] = */ "data/fonts/Nontendo-Bold.pft",
+    /* [kFontBoldOutlined] =  */"data/fonts/Nontendo-Bold-Outlined.pft",
+};
