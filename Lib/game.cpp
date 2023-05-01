@@ -50,6 +50,8 @@ class Game {
     Sounds::instance().setup(playdate_);
     Sounds::instance().loadSounds();
 
+    Sounds::instance().playMusic(kMusicMain);
+
     game_interface_.Load();
     ui_station_.Load();
 
