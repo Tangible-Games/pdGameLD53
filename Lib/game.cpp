@@ -65,10 +65,10 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
           "Failed to load docking animation, error: %s", error);
     }
 
-    current_mission_ = -1;
-
     game_interface_.SetTimeVisibility(false);
     game_interface_.SetCrateHealthVisibility(false);
+
+    current_mission_ = -1;
 
     onUpdateArea(0);
   }
@@ -160,6 +160,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
                                       &buttons_released);
 
     if (current_mission_ != -1) {
+      total_delivery_time_ += dt;
       if (delivery_time_ > 0.0f) {
         delivery_time_ -= (dt * kSpaceCraftDeliveryTimeFactor);
         if (delivery_time_ < 0.0f) {
@@ -204,9 +205,36 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         if (target_state_time_ > kSpaceStationDockingAnimationLength) {
           GenMissions(space_station_cur_, missions_to_select_,
                       missions_to_select_indices_);
+          if (current_mission_ != -1) {
+            float money_factor = 1.0f;
+            if (missions_[current_mission_].time_limit_sec > 0.0f) {
+              if (total_delivery_time_ >
+                  missions_[current_mission_].time_limit_sec) {
+                money_factor *= kSpaceCraftDeliveryOutOfTimeFactor;
+              }
+            }
+
+            float cargo_health_percent = 100.0f;
+            if (missions_[current_mission_].cargo_durability > 0) {
+              cargo_health_percent =
+                  cargo_health_ / missions_[current_mission_].cargo_durability *
+                  100.0f;
+              money_factor *= (cargo_health_percent / 100.0f);
+            }
+
+            int money = (int)(missions_[current_mission_].price * money_factor);
+            ui_station_.SetDelivery(missions_[current_mission_],
+                                    total_delivery_time_, cargo_health_percent,
+                                    money);
+            money_ += money;
+          }
           ui_station_.SetStation(stations_[space_station_cur_], money_);
           ui_station_.SetMissions(missions_to_select_);
-          ui_station_.ShowStationInfo();
+          if (current_mission_ != -1) {
+            ui_station_.ShowDelivery();
+          } else {
+            ui_station_.ShowStationInfo();
+          }
 
           target_state_ = TargetState::STATION;
           target_state_time_ = kSpaceStationDockingAnimationLength;
@@ -398,7 +426,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     if (target_state_ == TargetState::STATION) {
       current_mission_ = missions_to_select_indices_[mission_index];
-      const MissionDesc &mission = missions_to_select_[current_mission_];
+      const MissionDesc &mission = missions_to_select_[mission_index];
 
       playdate_->system->logToConsole("Mission: %i, %s", current_mission_,
                                       mission.name.c_str());
@@ -409,6 +437,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
           stations_[space_station_target_].name.c_str());
 
       delivery_time_ = mission.time_limit_sec;
+      total_delivery_time_ = 0.0f;
       cargo_health_ = mission.cargo_durability;
 
       if (mission.cargo_durability > 0) {
@@ -460,6 +489,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   int current_mission_{-1};
   float cargo_health_{0.0f};
   float delivery_time_{0.0f};
+  float total_delivery_time_{0.0f};
   std::vector<MissionDesc> missions_to_select_;
   std::vector<int> missions_to_select_indices_;
 

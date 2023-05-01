@@ -9,6 +9,13 @@
 void UiStation::Load() {
   const char* error = nullptr;
 
+  mission_results_ =
+      playdate_->graphics->loadBitmap("data/mission_results.png", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load mission results, error: %s",
+                                    error);
+  }
+
   station_screen_ =
       playdate_->graphics->loadBitmap("data/station_screen.png", &error);
   if (error) {
@@ -71,7 +78,9 @@ void UiStation::Update(float dt) {
   is_a_pressed_ = (buttons_current & kButtonA);
 
   if (buttons_released & kButtonA) {
-    if (mode_ == Mode::STATION_INFO) {
+    if (mode_ == Mode::DELIVERY) {
+      mode_ = Mode::STATION_INFO;
+    } else if (mode_ == Mode::STATION_INFO) {
       mode_ = Mode::MISSIONS;
     } else if (mode_ == Mode::MISSIONS) {
       callback_->OnSelectMission(cur_mission_);
@@ -83,7 +92,57 @@ void UiStation::Draw() {
   int screen_width = playdate_->display->getWidth();
   int screen_height = playdate_->display->getHeight();
 
-  if (mode_ == Mode::STATION_INFO) {
+  if (mode_ == Mode::DELIVERY) {
+    playdate_->graphics->drawBitmap(mission_results_, 0, 0, kBitmapUnflipped);
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
+
+    if (delivery_.time_limit_sec > 0.0f) {
+      int seconds = (int)delivery_.time_limit_sec;
+      int minutes = seconds / 60;
+      seconds = seconds % 60;
+
+      {
+        std::ostringstream ss;
+        ss << std::setw(2) << std::setfill('0') << minutes << ":"
+           << std::setw(2) << std::setfill('0') << seconds;
+
+        playdate_->graphics->drawText(ss.str().data(), ss.str().size(),
+                                      kASCIIEncoding, 106, 112);
+      }
+
+      seconds = (int)result_delivery_time_;
+      minutes = seconds / 60;
+      seconds = seconds % 60;
+
+      {
+        std::ostringstream ss;
+        ss << std::setw(2) << std::setfill('0') << minutes << ":"
+           << std::setw(2) << std::setfill('0') << seconds;
+
+        playdate_->graphics->drawText(ss.str().data(), ss.str().size(),
+                                      kASCIIEncoding, 226, 112);
+      }
+    }
+
+    if (delivery_.cargo_durability > 0) {
+      std::string text = "100%";
+      playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
+                                    106, 139);
+
+      text = std::to_string((int)result_crate_health_percent_) + "%";
+      playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
+                                    226, 139);
+    }
+
+    std::string text = std::to_string(delivery_.price);
+    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding, 106,
+                                  165);
+
+    text = std::to_string(result_money_);
+    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding, 226,
+                                  165);
+  } else if (mode_ == Mode::STATION_INFO) {
     playdate_->graphics->drawBitmap(station_screen_, 0, 0, kBitmapUnflipped);
 
     playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold2x));
@@ -162,7 +221,8 @@ void UiStation::Draw() {
         kBitmapUnflipped);
   }
 
-  if (mode_ == Mode::STATION_INFO || mode_ == Mode::MISSIONS) {
+  if (mode_ == Mode::DELIVERY || mode_ == Mode::STATION_INFO ||
+      mode_ == Mode::MISSIONS) {
     LCDBitmap* a_button_bitmap = a_button_;
     if (is_a_pressed_) {
       a_button_bitmap = a_button_pressed_;

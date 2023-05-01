@@ -34,6 +34,7 @@ constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 constexpr float kSpaceCraftCollisionImpactToDamageBase = 10.0f;
 constexpr float kSpaceCraftCollisionImpactToDamageRatio = 0.25f;
 constexpr float kSpaceCraftDeliveryTimeFactor = 2.0f;
+constexpr float kSpaceCraftDeliveryOutOfTimeFactor = 0.5f;
 
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
@@ -87,6 +88,26 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(0, 0),
               .seed = 13124125,
               .name{"Central Station"},
+              .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, "
+                    "businessmen and diplomats just\nlove visiting. Feel at "
+                    "home here and\nmake sure to come back once in a while"},
+              .num_asteroids =
+                  {
+                      0,
+                      10,
+                      1,
+                      4,
+                  },
+              .asteroids_to_base_distance = 200.0f,
+              .asteroids_area_distance = 1500.0f,
+              .jump_distance = 1800.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+          StationArea{
+              .pos = Point2d(2 * 1000, 2 * 1000),
+              .seed = 13124125,
+              .name{"Central Station 2"},
               .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, "
                     "businessmen and diplomats just\nlove visiting. Feel at "
                     "home here and\nmake sure to come back once in a while"},
