@@ -6,6 +6,7 @@
 
 #include "asteroid_type.hpp"
 #include "game_state.hpp"
+#include "mission_desc.hpp"
 
 constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
@@ -73,13 +74,6 @@ inline std::vector<AsteroidType> GetAsteroidTypes() {
                                        .breaks_on_collision = true,
                                    }};
 }
-
-constexpr size_t kStarsNum = 20;
-constexpr float kStarsVelocitySlowDown = 100.0f;
-
-constexpr bool kDrawDebugAsteroids = false;
-constexpr bool kDrawDebugSpaceCraft = false;
-constexpr bool kDrawDebugStation = false;
 
 inline std::vector<StationArea> GetStations() {
   return {StationArea{
@@ -154,6 +148,15 @@ inline std::vector<StationArea> GetStations() {
           }};
 }
 
+inline std::vector<MissionDesc> GetMissions() {
+  return {
+    MissionDesc{}
+  };
+}
+
+constexpr size_t kStarsNum = 20;
+constexpr float kStarsVelocitySlowDown = 100.0f;
+
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
 
@@ -168,3 +171,7 @@ constexpr const char* kFontDataPath[] = {
     /* [kFontBold] = */ "data/fonts/Nontendo-Bold.pft",
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
 };
+
+constexpr bool kDrawDebugAsteroids = false;
+constexpr bool kDrawDebugSpaceCraft = false;
+constexpr bool kDrawDebugStation = false;

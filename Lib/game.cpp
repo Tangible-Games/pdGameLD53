@@ -9,6 +9,7 @@
 #include "space_craft.hpp"
 #include "space_station.hpp"
 #include "stars.hpp"
+#include "ui_game_interface.hpp"
 
 class Game {
  public:
@@ -75,6 +76,8 @@ class Game {
       }
     }
 
+    game_interface_.Load();
+
     onUpdateArea(0);
   }
 
@@ -123,6 +126,8 @@ class Game {
     space_craft_.Draw(camera_);
 
     drawArrowToStation(camera_);
+
+    game_interface_.Draw();
 
     playdate_->system->drawFPS(5, 5);
 
@@ -318,6 +323,8 @@ class Game {
   } target_state_{TargetState::NONE};
 
   LCDBitmapTable *arrow_bitmap_table_{nullptr};
+
+  UiGameInterface game_interface_;
 
   std::array<LCDFont *, kFontLast> fonts_;
 
