@@ -45,7 +45,8 @@ class Sounds {
 
   void playMusic(MusicSample sample) {
     // playdate_->system->logToConsole("play music: %d", sample);
-    if (music_player_ && playdate_->sound->fileplayer->isPlaying(music_player_)) {
+    if (music_player_ &&
+        playdate_->sound->fileplayer->isPlaying(music_player_)) {
       if (music_current_ == sample) {
         return;
       } else {
@@ -59,7 +60,7 @@ class Sounds {
       }
     }
     playdate_->sound->fileplayer->loadIntoPlayer(music_player_,
-                                                  kMusicDataPath[sample]);
+                                                 kMusicDataPath[sample]);
     music_current_ = sample;
 
     playdate_->sound->fileplayer->play(music_player_, 0);

@@ -65,6 +65,13 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
           "Failed to load docking animation, error: %s", error);
     }
 
+    hyper_jump_bitmap_table_ =
+        playdate_->graphics->loadBitmapTable("data/cut-hpr.gif", &error);
+    if (error) {
+      playdate_->system->logToConsole(
+          "Failed to load docking animation, error: %s", error);
+    }
+
     game_interface_.SetTimeVisibility(false);
     game_interface_.SetCrateHealthVisibility(false);
 
@@ -132,13 +139,18 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     if (target_state_ == TargetState::DOCKING) {
       stars_.Draw(camera_);
-      LCDBitmap *bitmap = SelectFrameLooped(
+      LCDBitmap *bitmap = SelectFrame(
           playdate_, docking_bitmap_table_, kSpaceStationDockingAnimationLength,
           kSpaceStationDockingAnimationNumFrames, target_state_time_);
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else if (target_state_ == TargetState::STATION) {
       ui_station_.Draw();
+    } else if (target_state_ == TargetState::JUMP_ANIMATION) {
+      LCDBitmap *bitmap = SelectFrame(playdate_, hyper_jump_bitmap_table_, 1.5f,
+                                      8, target_state_time_);
+
+      playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else {
       stars_.Draw(camera_);
       space_station_.Draw(camera_);
@@ -288,9 +300,18 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         target_state_time_ += dt;
         if (target_state_time_ > 3.0f) {
           target_state_time_ = 0.0f;
-          target_state_ = TargetState::JUMP;
+          target_state_ = TargetState::JUMP_ANIMATION;
 
           stars_.SetVelocityRatio(kStarsVelocitySlowDown);
+
+          playdate_->system->logToConsole("Switch to state: JUMP_ANIMATION");
+        }
+        break;
+      case TargetState::JUMP_ANIMATION:
+        target_state_time_ += dt;
+        if (target_state_time_ > 1.5f) {
+          target_state_time_ = 0.0f;
+          target_state_ = TargetState::JUMP;
 
           playdate_->system->logToConsole("Switch to state: JUMP");
         }
@@ -521,6 +542,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   UiStation ui_station_;
 
   LCDBitmapTable *docking_bitmap_table_{nullptr};
+  LCDBitmapTable *hyper_jump_bitmap_table_{nullptr};
 
   float running_time_{0.0f};
 };

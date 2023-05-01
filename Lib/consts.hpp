@@ -10,7 +10,7 @@
 
 constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
-constexpr float kSpaceCraftPosY = 200.0f;
+constexpr float kSpaceCraftPosY = 1200.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
 constexpr float kSpaceCraftDeceleration = 20.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
@@ -106,7 +106,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 1500.0f,
-              .jump_distance = 400.0f,
+              .jump_distance = 1800.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
