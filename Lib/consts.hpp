@@ -33,7 +33,7 @@ constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 constexpr float kSpaceCraftCollisionImpactToDamageBase = 10.0f;
 constexpr float kSpaceCraftCollisionImpactToDamageRatio = 0.25f;
-constexpr float kSpaceCraftDeliveryTimeFactor = 2.0f;
+constexpr float kSpaceCraftDeliveryTimeFactor = 1.0f;
 
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
@@ -474,8 +474,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Imported Space Coffee Beans"},
               .desc{"Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts "
                     "rejoice!"},
-              .time_limit_str{"2 minutes"},
-              .time_limit_sec = 120.0f,
+              .time_limit_str{"3 minutes"},
+              .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 600,
               .price_str{"5.000"},
@@ -490,8 +490,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Urgent Holographic Pizza Delivery"},
               .desc{"50 pizzas, 5 toppings each.\nPiping hot & ready to "
                     "eat.\nGet it there before it gets cold!"},
-              .time_limit_str{"3 minutes"},
-              .time_limit_sec = 180.0f,
+              .time_limit_str{"4 minutes"},
+              .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 600,
               .price_str{"3.500"},
@@ -522,8 +522,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Live Band Equipment Haul"},
               .desc{"Drum set, guitars, lights.\nSetup tonight's concert.\nNo "
                     "scratches, please!"},
-              .time_limit_str{"4 minutes"},
-              .time_limit_sec = 240.0f,
+              .time_limit_str{"5 minutes"},
+              .time_limit_sec = 300.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 700,
               .price_str{"4.000"},
@@ -538,8 +538,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Alien Diplomat Transport"},
               .desc{"High-ranking official going to Galactic\nsummit. Ensure a "
                     "smooth journey.\nSafety is a priority."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 500,
               .price_str{"21.000"},
@@ -570,8 +570,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Zero-G Sports Gear Shipment"},
               .desc{"Basketballs, soccer balls.\nSpace sports "
                     "enthusiasts!\nDeliver on time."},
-              .time_limit_str{"3 minutes"},
-              .time_limit_sec = 180.0f,
+              .time_limit_str{"4 minutes"},
+              .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 900,
               .price_str{"3.500"},
@@ -602,8 +602,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Interstellar Energy Drinks"},
               .desc{"1000 cans, various flavors.\nQuench the galaxy's "
                     "thirst.\nBe the speed of light!"},
-              .time_limit_str{"2 minutes"},
-              .time_limit_sec = 120.0f,
+              .time_limit_str{"3 minutes"},
+              .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 750,
               .price_str{"5.500"},
@@ -618,7 +618,7 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Alien Floral Bouquets"},
               .desc{"Exotic blooms from afar.\nBring color to the "
                     "stars.\nFragile and rare."},
-              .time_limit_str{"1 minute"},
+              .time_limit_str{"2 minutes"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"ultra fragile"},
               .cargo_durability = 10,
@@ -634,8 +634,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Fresh Moon Cheese Delivery"},
               .desc{"Aged to perfection.\nTaste buds will thank you.\nDon't "
                     "drop the cheese!"},
-              .time_limit_str{"3 minutes"},
-              .time_limit_sec = 180.0f,
+              .time_limit_str{"4 minutes"},
+              .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 400,
               .price_str{"6.000"},
@@ -650,8 +650,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Rocket Fuel Tanker Job"},
               .desc{"Highly flammable cargo.\nSteady hands required.\nProceed "
                     "with caution."},
-              .time_limit_str{"2 minutes"},
-              .time_limit_sec = 120.0f,
+              .time_limit_str{"3 minutes"},
+              .time_limit_sec = 180.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 100,
               .price_str{"20.000"},
@@ -681,8 +681,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Alien Craft Beer Delivery"},
               .desc{"100 barrels, best brews.\nKeep the cargo secure.\nBeer "
                     "enthusiasts await."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 500,
               .price_str{"19.000"},
@@ -729,8 +729,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Xenobiology Research Data"},
               .desc{"Critical findings onboard.\nScientific breakthroughs.\nNo "
                     "time to waste!"},
-              .time_limit_str{"1 minute"},
-              .time_limit_sec = 60.0f,
+              .time_limit_str{"2 minutes"},
+              .time_limit_sec = 120.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 10000,
               .price_str{"20.000"},
@@ -745,8 +745,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Robotic Chef Delivery"},
               .desc{"Culinary droids, 5 units.\nReady to cook up a "
                     "storm.\nHandle with care."},
-              .time_limit_str{"2 minutes"},
-              .time_limit_sec = 120.0f,
+              .time_limit_str{"3 minutes"},
+              .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 800,
               .price_str{"4.000"},
@@ -793,8 +793,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Wedding Dress from Earth"},
               .desc{"Elegant, delicate gown.\nA bride's dream come "
                     "true.\nPreserve the magic."},
-              .time_limit_str{"3 minutes"},
-              .time_limit_sec = 180.0f,
+              .time_limit_str{"4 minutes"},
+              .time_limit_sec = 240.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 100,
               .price_str{"15.000"},
@@ -809,8 +809,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Alien Luxury Perfume Shipment"},
               .desc{"Exquisite scents of cosmos.\nBottle the essence of "
                     "stars.\nFragile glass bottles."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 200,
               .price_str{"20.000"},
@@ -841,8 +841,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Extraterrestrial Textbooks"},
               .desc{"Knowledge for young minds.\nExpand their "
                     "horizons.\nDeliver on time."},
-              .time_limit_str{"4 minutes"},
-              .time_limit_sec = 240.0f,
+              .time_limit_str{"5 minutes"},
+              .time_limit_sec = 300.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 600,
               .price_str{"5.500"},
@@ -857,8 +857,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Top Secret Spy Gadgets"},
               .desc{"Cutting-edge technology.\nFor your eyes only.\nKeep it "
                     "under wraps."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 300,
               .price_str{"21.000"},
@@ -873,8 +873,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Organic Space Vegetable Run"},
               .desc{"Nutritious and delicious.\nFresh from the farm.\nKeep "
                     "them crisp."},
-              .time_limit_str{"2 minutes"},
-              .time_limit_sec = 120.0f,
+              .time_limit_str{"3 minutes"},
+              .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 900,
               .price_str{"3.500"},
@@ -905,8 +905,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Rare Space Animal Transport"},
               .desc{"Exotic, endangered species.\nHandle with love and "
                     "care.\nSafe travels required."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 100,
               .price_str{"25.000"},
@@ -1001,8 +1001,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Cryogenically Frozen Foods"},
               .desc{"Tasty treats, icy cold.\nPreserve the freshness.\nSpeedy "
                     "delivery needed."},
-              .time_limit_str{"5 minutes"},
-              .time_limit_sec = 300.0f,
+              .time_limit_str{"6 minutes"},
+              .time_limit_sec = 360.0f,
               .cargo_durability_str{"durable"},
               .cargo_durability = 400,
               .price_str{"12.000"},
@@ -1049,8 +1049,8 @@ inline std::vector<MissionDesc> GetMissions() {
               .name{"Radioactive Isotope Samples"},
               .desc{"Hazardous materials.\nHandle with extreme care.\nSafety "
                     "first, always."},
-              .time_limit_str{"4 minutes"},
-              .time_limit_sec = 240.0f,
+              .time_limit_str{"5 minutes"},
+              .time_limit_sec = 300.0f,
               .cargo_durability_str{"fragile"},
               .cargo_durability = 200,
               .price_str{"22.000"},
