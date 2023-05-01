@@ -87,7 +87,9 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(0, 0),
               .seed = 13124125,
               .name{"Central Station"},
-              .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, businessmen and diplomats just\nlove visiting. Feel at home here and\nmake sure to come back once in a while"},
+              .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, "
+                    "businessmen and diplomats just\nlove visiting. Feel at "
+                    "home here and\nmake sure to come back once in a while"},
               .num_asteroids =
                   {
                       0,
@@ -141,10 +143,11 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-4 * 1000, -3 * 1000),
               .seed = 23098412,
               .name{"Big Rock"},
-              .desc{"Lovers of big rocks live here.\nArtists, sculptors, businessmen\nYou into big rocks yourself?"},
+              .desc{"Lovers of big rocks live here.\nArtists, sculptors, "
+                    "businessmen\nYou into big rocks yourself?"},
               .num_asteroids =
                   {
-                      400,  
+                      400,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
@@ -157,7 +160,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-8 * 1000, 6 * 1000),
               .seed = 48120593,
               .name{"Falcon's Flight"},
-              .desc{"A bustling hub for smugglers,\nexplorers, and pilots with a\nneed for speed."},
+              .desc{"A bustling hub for smugglers,\nexplorers, and pilots with "
+                    "a\nneed for speed."},
               .num_asteroids =
                   {
                       100,
@@ -176,7 +180,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(10 * 1000, -9 * 1000),
               .seed = 37291048,
               .name{"Gagarin's Gate"},
-              .desc{"Honoring the first human in\nspace, this station celebrates\nspace exploration history."},
+              .desc{"Honoring the first human in\nspace, this station "
+                    "celebrates\nspace exploration history."},
               .num_asteroids =
                   {
                       0,
@@ -196,7 +201,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-6 * 1000, 5 * 1000),
               .seed = 28619075,
               .name{"Interstellar Inn"},
-              .desc{"A cozy rest stop for weary\ncosmic travelers, offering\nwarm beds and hot meals."},
+              .desc{"A cozy rest stop for weary\ncosmic travelers, "
+                    "offering\nwarm beds and hot meals."},
               .num_asteroids =
                   {
                       50,
@@ -215,7 +221,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(3 * 1000, -1 * 1000),
               .seed = 12938407,
               .name{"Tardis Terminal"},
-              .desc{"A hub for time travelers and\nDoctor Who fans. Catch a ride\nthrough space and time!"},
+              .desc{"A hub for time travelers and\nDoctor Who fans. Catch a "
+                    "ride\nthrough space and time!"},
               .num_asteroids =
                   {
                       50,
@@ -235,7 +242,9 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(9 * 1000, 8 * 1000),
               .seed = 54298103,
               .name{"Gotham Galactica"},
-              .desc{"The only interesting thing about\nthis crime-ridden hole in the end\nof nowhere is the bat-like light\n shining on the nearby asteroids."},
+              .desc{"The only interesting thing about\nthis crime-ridden hole "
+                    "in the end\nof nowhere is the bat-like light\n shining on "
+                    "the nearby asteroids."},
               .num_asteroids =
                   {
                       50,
@@ -254,7 +263,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(4 * 1000, -7 * 1000),
               .seed = 94057281,
               .name{"Asgard Anchorage"},
-              .desc{"Viking heritage and Norse\nmythology enthusiasts unite.\nWelcome to Valhalla!"},
+              .desc{"Viking heritage and Norse\nmythology enthusiasts "
+                    "unite.\nWelcome to Valhalla!"},
               .num_asteroids =
                   {
                       50,
@@ -273,7 +283,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-5 * 1000, -4 * 1000),
               .seed = 93210487,
               .name{"Deneb Dock"},
-              .desc{"Star gazers and astronomers\nflock to this station for its\namazing views of Deneb."},
+              .desc{"Star gazers and astronomers\nflock to this station for "
+                    "its\namazing views of Deneb."},
               .num_asteroids =
                   {
                       100,
@@ -293,7 +304,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(1 * 1000, -1 * 1000),
               .seed = 28193740,
               .name{"Eridani Enclave"},
-              .desc{"A scientific hub, researching\nthe Eridani star system and its\npotential for life."},
+              .desc{"A scientific hub, researching\nthe Eridani star system "
+                    "and its\npotential for life."},
               .num_asteroids =
                   {
                       200,
@@ -313,7 +325,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(6 * 1000, 8 * 1000),
               .seed = 71628934,
               .name{"Fomalhaut Fort"},
-              .desc{"A fortified station at the edge\nof the Fomalhaut system,\nprotecting its secrets."},
+              .desc{"A fortified station at the edge\nof the Fomalhaut "
+                    "system,\nprotecting its secrets."},
               .num_asteroids =
                   {
                       100,
@@ -333,7 +346,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(7 * 1000, -3 * 1000),
               .seed = 85213047,
               .name{"Gacrux Gateway"},
-              .desc{"This gateway serves as a\nlaunchpad for expeditions to\nthe Gacrux star."},
+              .desc{"This gateway serves as a\nlaunchpad for expeditions "
+                    "to\nthe Gacrux star."},
               .num_asteroids =
                   {
                       50,
@@ -353,7 +367,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(8 * 1000, 2 * 1000),
               .seed = 17903482,
               .name{"Martian Metropolis"},
-              .desc{"A thriving city on Mars,\nshowcasing human\ningenuity and persistence."},
+              .desc{"A thriving city on Mars,\nshowcasing human\ningenuity and "
+                    "persistence."},
               .num_asteroids =
                   {
                       50,
@@ -373,7 +388,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(2 * 1000, 3 * 1000),
               .seed = 37819420,
               .name{"Neptunian Nook"},
-              .desc{"A chilly station on the edge\nof the solar system, for those\nwho enjoy the cold."},
+              .desc{"A chilly station on the edge\nof the solar system, for "
+                    "those\nwho enjoy the cold."},
               .num_asteroids =
                   {
                       50,
@@ -393,7 +409,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-3 * 1000, 5 * 1000),
               .seed = 92183074,
               .name{"Orion's Observatory"},
-              .desc{"A space station with stunning\nviews of the Orion Nebula and\nits star-forming regions."},
+              .desc{"A space station with stunning\nviews of the Orion Nebula "
+                    "and\nits star-forming regions."},
               .num_asteroids =
                   {
                       50,
@@ -413,7 +430,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(10 * 1000, 6 * 1000),
               .seed = 23819045,
               .name{"Jovian Junction"},
-              .desc{"A hub for gas giant\nenthusiasts and researchers,\nexploring Jupiter-like worlds."},
+              .desc{"A hub for gas giant\nenthusiasts and "
+                    "researchers,\nexploring Jupiter-like worlds."},
               .num_asteroids =
                   {
                       50,
@@ -433,7 +451,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-1 * 1000, -6 * 1000),
               .seed = 49628103,
               .name{"Odin's Outpost"},
-              .desc{"Wise and mighty warriors gather\nat this station, seeking Odin's\ncounsel and mead."},
+              .desc{"Wise and mighty warriors gather\nat this station, seeking "
+                    "Odin's\ncounsel and mead."},
               .num_asteroids =
                   {
                       100,
@@ -469,7 +488,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Urgent Holographic Pizza Delivery"},
-              .desc{"50 pizzas, 5 toppings each.\nPiping hot & ready to eat.\nGet it there before it gets cold!"},
+              .desc{"50 pizzas, 5 toppings each.\nPiping hot & ready to "
+                    "eat.\nGet it there before it gets cold!"},
               .time_limit_str{"3 minutes"},
               .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
@@ -484,7 +504,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Enigmatic Alien Artifact"},
-              .desc{"Precious, mysterious item.\nHandle with care.\nDestination unknown."},
+              .desc{"Precious, mysterious item.\nHandle with "
+                    "care.\nDestination unknown."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -496,10 +517,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },          
+          },
           MissionDesc{
               .name{"Live Band Equipment Haul"},
-              .desc{"Drum set, guitars, lights.\nSetup tonight's concert.\nNo scratches, please!"},
+              .desc{"Drum set, guitars, lights.\nSetup tonight's concert.\nNo "
+                    "scratches, please!"},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
@@ -514,7 +536,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Alien Diplomat Transport"},
-              .desc{"High-ranking official going to Galactic\nsummit. Ensure a smooth journey.\nSafety is a priority."},
+              .desc{"High-ranking official going to Galactic\nsummit. Ensure a "
+                    "smooth journey.\nSafety is a priority."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"durable"},
@@ -529,7 +552,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Rare Space Gemstone Cargo"},
-              .desc{"Sparkling beauties within.\nDeliver without a hitch.\nJewelers await."},
+              .desc{"Sparkling beauties within.\nDeliver without a "
+                    "hitch.\nJewelers await."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -544,7 +568,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Zero-G Sports Gear Shipment"},
-              .desc{"Basketballs, soccer balls.\nSpace sports enthusiasts!\nDeliver on time."},
+              .desc{"Basketballs, soccer balls.\nSpace sports "
+                    "enthusiasts!\nDeliver on time."},
               .time_limit_str{"3 minutes"},
               .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
@@ -559,7 +584,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Wormhole Map Collection"},
-              .desc{"Ancient, delicate scrolls.\nLost knowledge to be found.\nHandle with great care."},
+              .desc{"Ancient, delicate scrolls.\nLost knowledge to be "
+                    "found.\nHandle with great care."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -574,7 +600,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Interstellar Energy Drinks"},
-              .desc{"1000 cans, various flavors.\nQuench the galaxy's thirst.\nBe the speed of light!"},
+              .desc{"1000 cans, various flavors.\nQuench the galaxy's "
+                    "thirst.\nBe the speed of light!"},
               .time_limit_str{"2 minutes"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"durable"},
@@ -589,7 +616,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Alien Floral Bouquets"},
-              .desc{"Exotic blooms from afar.\nBring color to the stars.\nFragile and rare."},
+              .desc{"Exotic blooms from afar.\nBring color to the "
+                    "stars.\nFragile and rare."},
               .time_limit_str{"1 minute"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"ultra fragile"},
@@ -604,7 +632,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Fresh Moon Cheese Delivery"},
-              .desc{"Aged to perfection.\nTaste buds will thank you.\nDon't drop the cheese!"},
+              .desc{"Aged to perfection.\nTaste buds will thank you.\nDon't "
+                    "drop the cheese!"},
               .time_limit_str{"3 minutes"},
               .time_limit_sec = 180.0f,
               .cargo_durability_str{"durable"},
@@ -619,7 +648,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Rocket Fuel Tanker Job"},
-              .desc{"Highly flammable cargo.\nSteady hands required.\nProceed with caution."},
+              .desc{"Highly flammable cargo.\nSteady hands required.\nProceed "
+                    "with caution."},
               .time_limit_str{"2 minutes"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"fragile"},
@@ -634,7 +664,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Space Fashion Show Attire"},
-              .desc{"Trendy outfits from Earth.\nDress the stars, literally.\nHandle with care."},
+              .desc{"Trendy outfits from Earth.\nDress the stars, "
+                    "literally.\nHandle with care."},
               .time_limit_str{"no limit"},
               .cargo_durability_str{"durable"},
               .cargo_durability = 200,
@@ -648,7 +679,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Alien Craft Beer Delivery"},
-              .desc{"100 barrels, best brews.\nKeep the cargo secure.\nBeer enthusiasts await."},
+              .desc{"100 barrels, best brews.\nKeep the cargo secure.\nBeer "
+                    "enthusiasts await."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"durable"},
@@ -663,7 +695,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Space Mining Tools Shipment"},
-              .desc{"Drills, lasers, explosives.\nEssential gear for miners.\nDeliver in one piece."},
+              .desc{"Drills, lasers, explosives.\nEssential gear for "
+                    "miners.\nDeliver in one piece."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -678,7 +711,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Vintage Sci-Fi Movie Props"},
-              .desc{"Classic cinema history.\nPreserve the memories.\nTreat them gently."},
+              .desc{"Classic cinema history.\nPreserve the memories.\nTreat "
+                    "them gently."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -693,7 +727,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Xenobiology Research Data"},
-              .desc{"Critical findings onboard.\nScientific breakthroughs.\nNo time to waste!"},
+              .desc{"Critical findings onboard.\nScientific breakthroughs.\nNo "
+                    "time to waste!"},
               .time_limit_str{"1 minute"},
               .time_limit_sec = 60.0f,
               .cargo_durability_str{"durable"},
@@ -708,7 +743,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Robotic Chef Delivery"},
-              .desc{"Culinary droids, 5 units.\nReady to cook up a storm.\nHandle with care."},
+              .desc{"Culinary droids, 5 units.\nReady to cook up a "
+                    "storm.\nHandle with care."},
               .time_limit_str{"2 minutes"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"durable"},
@@ -723,7 +759,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Luxury Space Yacht Parts"},
-              .desc{"Deluxe, high-quality parts.\nCelestial cruisers await.\nNo scratches allowed."},
+              .desc{"Deluxe, high-quality parts.\nCelestial cruisers "
+                    "await.\nNo scratches allowed."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -738,7 +775,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Black Hole Exploration Kit"},
-              .desc{"Advanced scientific gear.\nUnlock the mysteries.\nHandle with precision."},
+              .desc{"Advanced scientific gear.\nUnlock the mysteries.\nHandle "
+                    "with precision."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -753,7 +791,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Wedding Dress from Earth"},
-              .desc{"Elegant, delicate gown.\nA bride's dream come true.\nPreserve the magic."},
+              .desc{"Elegant, delicate gown.\nA bride's dream come "
+                    "true.\nPreserve the magic."},
               .time_limit_str{"3 minutes"},
               .time_limit_sec = 180.0f,
               .cargo_durability_str{"fragile"},
@@ -768,7 +807,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Alien Luxury Perfume Shipment"},
-              .desc{"Exquisite scents of cosmos.\nBottle the essence of stars.\nFragile glass bottles."},
+              .desc{"Exquisite scents of cosmos.\nBottle the essence of "
+                    "stars.\nFragile glass bottles."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"fragile"},
@@ -783,7 +823,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Alien Art Installation Pieces"},
-              .desc{"Cosmic sculptures, paintings.\nDeliver beauty and awe.\nTreat with reverence."},
+              .desc{"Cosmic sculptures, paintings.\nDeliver beauty and "
+                    "awe.\nTreat with reverence."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -798,7 +839,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Extraterrestrial Textbooks"},
-              .desc{"Knowledge for young minds.\nExpand their horizons.\nDeliver on time."},
+              .desc{"Knowledge for young minds.\nExpand their "
+                    "horizons.\nDeliver on time."},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
@@ -813,7 +855,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Top Secret Spy Gadgets"},
-              .desc{"Cutting-edge technology.\nFor your eyes only.\nKeep it under wraps."},
+              .desc{"Cutting-edge technology.\nFor your eyes only.\nKeep it "
+                    "under wraps."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"fragile"},
@@ -828,7 +871,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Organic Space Vegetable Run"},
-              .desc{"Nutritious and delicious.\nFresh from the farm.\nKeep them crisp."},
+              .desc{"Nutritious and delicious.\nFresh from the farm.\nKeep "
+                    "them crisp."},
               .time_limit_str{"2 minutes"},
               .time_limit_sec = 120.0f,
               .cargo_durability_str{"durable"},
@@ -843,7 +887,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Holographic Home Décor"},
-              .desc{"Futuristic furnishings.\nUpgrade living spaces.\nKeep them in top shape."},
+              .desc{"Futuristic furnishings.\nUpgrade living spaces.\nKeep "
+                    "them in top shape."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -858,7 +903,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Rare Space Animal Transport"},
-              .desc{"Exotic, endangered species.\nHandle with love and care.\nSafe travels required."},
+              .desc{"Exotic, endangered species.\nHandle with love and "
+                    "care.\nSafe travels required."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"fragile"},
@@ -873,7 +919,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Classified Research Samples"},
-              .desc{"Top-secret biological data.\nExtreme caution advised.\nNo questions asked."},
+              .desc{"Top-secret biological data.\nExtreme caution advised.\nNo "
+                    "questions asked."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -888,7 +935,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Unstable Quark Containers"},
-              .desc{"Highly sensitive cargo.\nPrecision handling needed.\nProceed with caution."},
+              .desc{"Highly sensitive cargo.\nPrecision handling "
+                    "needed.\nProceed with caution."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"ultra fragile"},
@@ -903,7 +951,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Self-Replicating Nanobots"},
-              .desc{"Advanced robotics tech.\nInfinite possibilities.\nContain with care."},
+              .desc{"Advanced robotics tech.\nInfinite possibilities.\nContain "
+                    "with care."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"fragile"},
@@ -918,7 +967,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Space Opera Sheet Music"},
-              .desc{"Symphonies of the stars.\nTransport the sound of space.\nKeep it in tune."},
+              .desc{"Symphonies of the stars.\nTransport the sound of "
+                    "space.\nKeep it in tune."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -930,10 +980,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },       
+          },
           MissionDesc{
               .name{"Designer Spacesuits Shipment"},
-              .desc{"Fashion meets function.\nMake a statement in space.\nCareful with the fabrics."},
+              .desc{"Fashion meets function.\nMake a statement in "
+                    "space.\nCareful with the fabrics."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -948,7 +999,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Cryogenically Frozen Foods"},
-              .desc{"Tasty treats, icy cold.\nPreserve the freshness.\nSpeedy delivery needed."},
+              .desc{"Tasty treats, icy cold.\nPreserve the freshness.\nSpeedy "
+                    "delivery needed."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 300.0f,
               .cargo_durability_str{"durable"},
@@ -960,10 +1012,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },       
+          },
           MissionDesc{
               .name{"Martian Microbrew Kegs"},
-              .desc{"Bold flavors from Mars.\nQuench the thirst of many.\nKeep it cold and steady."},
+              .desc{"Bold flavors from Mars.\nQuench the thirst of many.\nKeep "
+                    "it cold and steady."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -975,10 +1028,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },       
+          },
           MissionDesc{
               .name{"FTL Engine Blueprints"},
-              .desc{"Cutting-edge schematics.\nRevolutionize space travel.\nKeep them secure."},
+              .desc{"Cutting-edge schematics.\nRevolutionize space "
+                    "travel.\nKeep them secure."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -990,10 +1044,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },       
+          },
           MissionDesc{
               .name{"Radioactive Isotope Samples"},
-              .desc{"Hazardous materials.\nHandle with extreme care.\nSafety first, always."},
+              .desc{"Hazardous materials.\nHandle with extreme care.\nSafety "
+                    "first, always."},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"fragile"},
@@ -1005,10 +1060,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },       
+          },
           MissionDesc{
               .name{"Intergalactic Poetry Books"},
-              .desc{"Verse from across the cosmos.\nInspire the imagination.\nDeliver the muse."},
+              .desc{"Verse from across the cosmos.\nInspire the "
+                    "imagination.\nDeliver the muse."},
               .time_limit_str{"no limit"},
               .time_limit_sec = 0.0f,
               .cargo_durability_str{"durable"},
@@ -1020,10 +1076,11 @@ inline std::vector<MissionDesc> GetMissions() {
               .destination_index = -1,
               .difficulty_str{"moderate"},
               .difficulty = 1,
-          },           
+          },
           MissionDesc{
               .name{"Diplomatic Peace Offerings"},
-              .desc{"Gifts for alien leaders.\nForge new alliances.\nTreat with respect."},
+              .desc{"Gifts for alien leaders.\nForge new alliances.\nTreat "
+                    "with respect."},
               .time_limit_str{"5 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},

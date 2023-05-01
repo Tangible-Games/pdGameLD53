@@ -330,6 +330,9 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   void GenMissions(int current_station_index,
                    std::vector<MissionDesc> &missions_out,
                    std::vector<int> &missions_indices_out) const {
+    missions_out.clear();
+    missions_indices_out.clear();
+
     std::vector<bool> taken;
     taken.resize(missions_.size());
 
