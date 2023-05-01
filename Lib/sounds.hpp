@@ -45,20 +45,23 @@ class Sounds {
 
   void playMusic(MusicSample sample) {
     // playdate_->system->logToConsole("play music: %d", sample);
+    if (music_player_ && playdate_->sound->fileplayer->isPlaying(music_player_)) {
+      if (music_current_ == sample) {
+        return;
+      } else {
+        stopMusic();
+      }
+    }
     if (!music_player_) {
       music_player_ = playdate_->sound->fileplayer->newPlayer();
+      if (!music_player_) {
+        return;
+      }
     }
-    if (!music_player_) {
-      return;
-    }
-    if (playdate_->sound->fileplayer->isPlaying(music_player_)) {
-      playdate_->sound->fileplayer->stop(music_player_);
-    }
-    if (music_current_ != sample) {
-      playdate_->sound->fileplayer->loadIntoPlayer(music_player_,
-                                                   kMusicDataPath[sample]);
-      music_current_ = sample;
-    }
+    playdate_->sound->fileplayer->loadIntoPlayer(music_player_,
+                                                  kMusicDataPath[sample]);
+    music_current_ = sample;
+
     playdate_->sound->fileplayer->play(music_player_, 0);
   }
 
@@ -66,6 +69,8 @@ class Sounds {
     if (music_player_ &&
         playdate_->sound->fileplayer->isPlaying(music_player_)) {
       playdate_->sound->fileplayer->stop(music_player_);
+      playdate_->sound->fileplayer->freePlayer(music_player_);
+      music_player_ = nullptr;
     }
   }
 
