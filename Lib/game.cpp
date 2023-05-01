@@ -50,7 +50,7 @@ class Game {
 
     game_interface_.Load();
 
-    const char* error = nullptr;
+    const char *error = nullptr;
 
     docking_bitmap_table_ =
         playdate_->graphics->loadBitmapTable("data/cut-prkng.gif", &error);
