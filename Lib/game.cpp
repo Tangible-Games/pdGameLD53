@@ -80,19 +80,16 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     stars_.Generate(stations_[idx].seed);
     space_craft_.ResetSpaceStation(&space_station_);
 
-    space_craft_.Start();
-
     if (space_station_cur_ != space_station_target_) {
       Vector2d s = stations_[space_station_cur_].pos -
                    stations_[space_station_target_].pos;
-      s = s.GetNormalized() *
-          (stations_[space_station_cur_].asteroids_to_base_distance +
-           stations_[space_station_cur_].asteroids_area_distance);
+      Vector2d start_direction = (-s).GetNormalized();
+      s = s.GetNormalized() * stations_[space_station_target_].jump_distance;
 
       playdate_->system->logToConsole("#onUpdateArea new pos %d, %d", (int)s.x,
                                       (int)s.y);
 
-      space_craft_.SetPosition(Point2d(s.x, s.y));
+      space_craft_.Start(Point2d(s.x, s.y), start_direction);
     }
     space_craft_.SetVelocity(Vector2d(0, 0));
 
@@ -243,16 +240,12 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       case TargetState::STATION:
         break;
       case TargetState::SET:
-        if (craft_to_station >
-            stations_[space_station_cur_].asteroids_to_base_distance +
-                stations_[space_station_cur_].asteroids_area_distance) {
+        if (craft_to_station > stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::READY_TO_JUMP;
         }
         break;
       case TargetState::READY_TO_JUMP:
-        if (craft_to_station <
-            stations_[space_station_cur_].asteroids_to_base_distance +
-                stations_[space_station_cur_].asteroids_area_distance) {
+        if (craft_to_station < stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::SET;
         } else if (buttons_current & kButtonA) {
           target_state_ = TargetState::JUMP;
@@ -455,7 +448,13 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
       target_state_ = TargetState::SET;
 
-      space_craft_.Start();
+      Vector2d to_next_station_norm = (stations_[space_station_target_].pos -
+                                       stations_[space_station_cur_].pos)
+                                          .GetNormalized();
+      Point2d start_pos = space_station_.GetPosition() +
+                          to_next_station_norm * kSpaceStationTakeOffRadius;
+
+      space_craft_.Start(start_pos, to_next_station_norm);
     }
   }
 
