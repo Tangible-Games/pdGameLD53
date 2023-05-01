@@ -203,18 +203,27 @@ class Game {
 
   void setupCamera() {
     Vector2d to_station_norm;
+    float offset_factor = 1.0f;
     if (target_state_ == TargetState::SET ||
         target_state_ == TargetState::READY_TO_JUMP) {
       to_station_norm = (stations_[space_station_target_].pos -
                          stations_[space_station_cur_].pos)
                             .GetNormalized();
+      offset_factor = kSpaceCraftToStationCameraOffset;
     } else {
-      to_station_norm =
-          (space_station_.GetPosition() - space_craft_.GetPosition())
-              .GetNormalized();
+      Vector2d to_station =
+          space_station_.GetPosition() - space_craft_.GetPosition();
+      to_station_norm = to_station.GetNormalized();
+
+      float d = to_station.GetLength();
+      if (d > kSpaceCraftToStationCameraOffsetRadius) {
+        d = kSpaceCraftToStationCameraOffsetRadius;
+      }
+      offset_factor = (d / kSpaceCraftToStationCameraOffsetRadius) *
+                      kSpaceCraftToStationCameraOffset;
     }
     camera_.SetLookAt(space_craft_.GetPosition() +
-                      to_station_norm * kSpaceCraftCameraOffset);
+                      to_station_norm * offset_factor);
   }
 
   void drawArrowToStation(const Camera &camera) {
@@ -227,6 +236,8 @@ class Game {
     Point2d ship_in_camera =
         camera.ConvertToCameraSpace(space_craft_.GetPosition());
 
+    bool is_visible = true;
+
     Vector2d ray_dir(0.0f, -1.0f);
     if (target_state_ == TargetState::SET ||
         target_state_ == TargetState::READY_TO_JUMP) {
@@ -237,38 +248,44 @@ class Game {
       Point2d station_in_camera =
           camera.ConvertToCameraSpace(space_station_.GetPosition());
       ray_dir = (station_in_camera - ship_in_camera).GetNormalized();
+
+      if (screen_rect.IsPointInside(station_in_camera)) {
+        is_visible = false;
+      }
     }
 
-    AARect2d::FromInsideIntersection intersection;
-    screen_rect.IntersectRayFromInside(ship_in_camera, ray_dir, intersection);
+    if (is_visible) {
+      AARect2d::FromInsideIntersection intersection;
+      screen_rect.IntersectRayFromInside(ship_in_camera, ray_dir, intersection);
 
-    LCDBitmap *bitmap = SelectFrameLooped(
-        playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
-        kUiArrowAnimationNumFrames, running_time_);
+      LCDBitmap *bitmap = SelectFrameLooped(
+          playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
+          kUiArrowAnimationNumFrames, running_time_);
 
-    int bitmap_width = 0;
-    int bitmap_height = 0;
-    GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
+      int bitmap_width = 0;
+      int bitmap_height = 0;
+      GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
 
-    Point2d sprite_pos = intersection.p;
-    float angle = 0.0f;
-    if (intersection.dx == 1) {
-      sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
-      angle = 270.0f;
-    } else if (intersection.dx == -1) {
-      sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
-      angle = 90.0f;
-    } else if (intersection.dy == 1) {
-      sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
-      angle = 0;
-    } else {
-      sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
-      angle = 180.0f;
+      Point2d sprite_pos = intersection.p;
+      float angle = 0.0f;
+      if (intersection.dx == 1) {
+        sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
+        angle = 270.0f;
+      } else if (intersection.dx == -1) {
+        sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
+        angle = 90.0f;
+      } else if (intersection.dy == 1) {
+        sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
+        angle = 0;
+      } else {
+        sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
+        angle = 180.0f;
+      }
+
+      playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
+                                             (int)sprite_pos.y, angle, 0.5f,
+                                             0.5f, 1.0f, 1.0f);
     }
-
-    playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
-                                           (int)sprite_pos.y, angle, 0.5f, 0.5f,
-                                           1.0f, 1.0f);
   }
 
   PlaydateAPI *playdate_;

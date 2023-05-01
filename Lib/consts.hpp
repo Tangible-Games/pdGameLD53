@@ -18,7 +18,6 @@ constexpr float kSpaceCraftRotationSpeedMax = 180.0f;      // Deg
 constexpr float kSpaceCraftRotationDeceleration = 180.0f;  // Deg
 constexpr float kSpaceCraftAsteroidHitVelocityReduction = 0.2f;
 constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
-constexpr float kSpaceCraftCameraOffset = 50.0f;
 constexpr bool kSpaceCraftCrankControlsRotation = false;
 constexpr float kSpaceCraftFieldAnimationLength = 0.5f;
 constexpr int kSpaceCraftFieldAnimationNumFrames = 5;
@@ -35,6 +34,8 @@ constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
 constexpr float kSpaceStationAnimationLength = 2.4f;
+constexpr float kSpaceCraftToStationCameraOffset = 50.0f;
+constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
