@@ -26,6 +26,8 @@ class Stars : public SpaceObject {
   void Update(float dt);
   void Draw(const Camera& camera);
 
+  void SetVelocityRatio(float ratio) { velocity_ratio_ = ratio; }
+
  private:
   void drawDebug(const Point2d& position);
 
@@ -42,4 +44,5 @@ class Stars : public SpaceObject {
   int width_;
   int height_;
   std::array<Star, kStarsNum> stars_;
+  float velocity_ratio_{kStarsVelocitySlowDown};
 };

@@ -52,11 +52,23 @@ class SpaceCraft : public SpaceObject {
     rotation_state_ = RotationState::IDLE;
   }
 
+  void StartHyperJump(const Vector2d& align_to_direction) {
+    playdate_->system->logToConsole("Switching to state: HYPER_JUMP");
+    state_ = State::HYPER_JUMP;
+    state_time_ = 0.0f;
+    engine_state_ = EngineState::FORWARD;
+    rotation_state_ = RotationState::IDLE;
+    align_to_direction_ = align_to_direction;
+    align_velocity_from_ = velocity_;
+    align_direction_from_ = direction_;
+  }
+
  private:
   void load();
   void updateInput(float dt);
   void updateMove(float dt);
   void updateAligning(float dt);
+  void updateHyperJump(float dt);
   void tryMove(const Vector2d& move);
   void draw(const Point2d& position);
   void drawDebug(const Point2d& position);
@@ -75,7 +87,7 @@ class SpaceCraft : public SpaceObject {
     return a1 - a2;
   }
 
-  enum class State { IN_GAME, ALIGNING, PARKED };
+  enum class State { IN_GAME, ALIGNING, PARKED, HYPER_JUMP };
 
   enum class EngineState { IDLE, FLARE_UP, FORWARD, BACKWARD };
 
@@ -96,6 +108,8 @@ class SpaceCraft : public SpaceObject {
   Point2d align_from_;
   Point2d align_to_;
   Vector2d align_direction_from_;
+  Vector2d align_velocity_from_;
+  Vector2d align_to_direction_;
   EngineState engine_state_{EngineState::IDLE};
   EngineState next_engine_state_{EngineState::IDLE};
   float engine_state_time_{0.0f};

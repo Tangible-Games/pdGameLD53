@@ -250,19 +250,47 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       case TargetState::SET:
         if (craft_to_station > stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::READY_TO_JUMP;
+          crank_spins_ = 0.0f;
+
+          Vector2d direction = (stations_[space_station_target_].pos -
+                                stations_[space_station_cur_].pos)
+                                   .GetNormalized();
+          space_craft_.StartHyperJump(direction);
+
+          game_interface_.SetReadyToJump(true);
         }
         break;
-      case TargetState::READY_TO_JUMP:
-        if (craft_to_station < stations_[space_station_cur_].jump_distance) {
-          target_state_ = TargetState::SET;
-        } else if (buttons_current & kButtonA) {
+      case TargetState::READY_TO_JUMP: {
+        crank_spins_ += playdate_->system->getCrankChange();
+        if (crank_spins_ < 0.0f) {
+          crank_spins_ = 0.0f;
+        }
+        if (crank_spins_ > kSpaceCraftHyperJumpCrankSpins) {
+          crank_spins_ = kSpaceCraftHyperJumpCrankSpins;
+        }
+        float stars_velocity_factor =
+            kStarsVelocitySlowDown +
+            (kStarsVelocitySlowDownHyperJump - kStarsVelocitySlowDown) *
+                (crank_spins_ / kSpaceCraftHyperJumpCrankSpins);
+        stars_.SetVelocityRatio(stars_velocity_factor);
+        if (crank_spins_ == kSpaceCraftHyperJumpCrankSpins) {
+          target_state_ = TargetState::WAIT_TO_JUMP;
+          target_state_time_ = 0.0f;
+
+          game_interface_.SetReadyToJump(false);
+
+          playdate_->system->logToConsole("Switch to state: WAIT_TO_JUMP");
+        }
+      } break;
+      case TargetState::WAIT_TO_JUMP:
+        target_state_time_ += dt;
+        if (target_state_time_ > 3.0f) {
+          target_state_time_ = 0.0f;
           target_state_ = TargetState::JUMP;
-          // no way back from here
-          game_interface_.SetReadyToJump(true);
-          // old way to jump
-          if (buttons_current & kButtonA) {
-            target_state_ = TargetState::JUMP;
-          }
+
+          stars_.SetVelocityRatio(kStarsVelocitySlowDown);
+
+          playdate_->system->logToConsole("Switch to state: JUMP");
         }
         break;
       case TargetState::JUMP:
@@ -472,6 +500,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     STATION,
     SET,
     READY_TO_JUMP,
+    WAIT_TO_JUMP,
+    JUMP_ANIMATION,
     JUMP,
   } target_state_{TargetState::NONE};
   float target_state_time_{0.0f};
@@ -483,6 +513,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   float total_delivery_time_{0.0f};
   std::vector<MissionDesc> missions_to_select_;
   std::vector<int> missions_to_select_indices_;
+  float crank_spins_{0.0f};
 
   UiGameInterface game_interface_;
   UiStation ui_station_;

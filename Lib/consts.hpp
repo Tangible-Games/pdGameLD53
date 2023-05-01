@@ -10,7 +10,7 @@
 
 constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
-constexpr float kSpaceCraftPosY = 1200.0f;
+constexpr float kSpaceCraftPosY = 200.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
 constexpr float kSpaceCraftDeceleration = 20.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
@@ -35,6 +35,8 @@ constexpr float kSpaceCraftCollisionImpactToDamageBase = 10.0f;
 constexpr float kSpaceCraftCollisionImpactToDamageRatio = 0.25f;
 constexpr float kSpaceCraftDeliveryTimeFactor = 1.0f;
 constexpr float kSpaceCraftDeliveryOutOfTimeFactor = 0.5f;
+constexpr float kSpaceCraftHyperJumpAlignTimeout = 1.0f;
+constexpr float kSpaceCraftHyperJumpCrankSpins = 360.0f * 3.0f;
 
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
@@ -104,7 +106,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 1500.0f,
-              .jump_distance = 1800.0f,
+              .jump_distance = 400.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -1129,6 +1131,7 @@ inline std::vector<MissionDesc> GetMissions() {
 
 constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;
+constexpr float kStarsVelocitySlowDownHyperJump = 0.1f;
 
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;

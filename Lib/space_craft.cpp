@@ -13,8 +13,10 @@ void SpaceCraft::Update(float dt) {
     updateInput(dt);
     updateMove(dt);
   } else if (state_ == State::PARKED) {
-  } else {
+  } else if (state_ == State::ALIGNING) {
     updateAligning(dt);
+  } else if (state_ == State::HYPER_JUMP) {
+    updateHyperJump(dt);
   }
 
   if (field_state_ == FieldState::ACTIVE) {
@@ -260,6 +262,25 @@ void SpaceCraft::updateAligning(float dt) {
   float angle = getAngleBetween(align_direction_from_, Vector2d(0.0f, -1.0f));
   float new_angle = angle * (1.0f - t / kSpaceStationAlignTimeout);
   direction_ = Vector2d(0.0f, -1.0f).GetRotated(new_angle);
+}
+
+void SpaceCraft::updateHyperJump(float dt) {
+  state_time_ += dt;
+  if (state_time_ > kSpaceCraftHyperJumpAlignTimeout) {
+    state_time_ = kSpaceCraftHyperJumpAlignTimeout;
+  }
+
+  float angle = getAngleBetween(align_direction_from_, align_to_direction_);
+  float new_angle = angle * (1.0f - state_time_ / kSpaceStationAlignTimeout);
+  direction_ = align_to_direction_.GetRotated(new_angle);
+
+  angle = getAngleBetween(align_velocity_from_, align_to_direction_);
+  new_angle = angle * (1.0f - state_time_ / kSpaceStationAlignTimeout);
+  velocity_ =
+      (align_to_direction_ * velocity_.GetLength()).GetRotated(new_angle);
+
+  // No collision.
+  position_ = position_ + velocity_ * dt;
 }
 
 void SpaceCraft::tryMove(const Vector2d& move) {

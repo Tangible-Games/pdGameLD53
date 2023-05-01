@@ -10,9 +10,12 @@ void Stars::Draw(const Camera& camera) {
 
 void Stars::drawDebug(const Point2d& position) {
   std::for_each(stars_.begin(), stars_.end(), [&](auto& s) {
-    playdate_->graphics->fillRect(
-        (int)(s.p.x + position.x / kStarsVelocitySlowDown) % width_,
-        (int)(s.p.y + position.y / kStarsVelocitySlowDown) % height_, s.size,
-        s.size, kColorWhite);
+    float x = s.p.x + position.x / velocity_ratio_;
+    float y = s.p.y + position.y / velocity_ratio_;
+
+    x = x - floor(x / (float)width_) * (float)width_;
+    y = y - floor(y / (float)height_) * (float)height_;
+
+    playdate_->graphics->fillRect(x, y, s.size, s.size, kColorWhite);
   });
 }
