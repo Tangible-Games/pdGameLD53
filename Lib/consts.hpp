@@ -32,7 +32,7 @@ constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
 constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 
-constexpr float kSpaceStationSize = 60.0f;
+constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
 constexpr float kSpaceStationAnimationLength = 2.4f;
 
@@ -78,6 +78,7 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 
 constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
+constexpr bool kDrawDebugStation = false;
 
 inline std::vector<StationArea> GetStations() {
   return {StationArea{

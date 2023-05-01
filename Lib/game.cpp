@@ -140,12 +140,12 @@ class Game {
 
     switch (target_state_) {
       case TargetState::NONE:
-        if (craft_to_station < kSpaceStationSize) {
+        if (craft_to_station < kSpaceStationRadius) {
           target_state_ = TargetState::READY_TO_DOCK;
         }
         break;
       case TargetState::READY_TO_DOCK:
-        if (craft_to_station > kSpaceStationSize) {
+        if (craft_to_station > kSpaceStationRadius) {
           target_state_ = TargetState::NONE;
         } else if (buttons_current & kButtonA) {
           setDebugTarget();

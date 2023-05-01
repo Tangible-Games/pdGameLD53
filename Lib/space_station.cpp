@@ -30,33 +30,20 @@ void SpaceStation::Draw(const Camera& camera) {
 
   DrawBitmapCentered(playdate_, bitmap, camera.ConvertToCameraSpace(position_));
 
-  // drawDebug(camera.ConvertToCameraSpace(position_));
+  if (kDrawDebugStation) {
+    drawDebug(camera.ConvertToCameraSpace(position_));
+  }
 
   std::for_each(asteroids_.begin(), asteroids_.end(),
                 [&](auto& a) { a.Draw(camera); });
 }
 
 void SpaceStation::drawDebug(const Point2d& position) {
-  playdate_->graphics->drawLine((int)position.x - kSpaceStationSize / 2,
-                                (int)position.y - kSpaceStationSize / 2,
-                                (int)position.x + kSpaceStationSize / 2,
-                                (int)position.y - kSpaceStationSize / 2, 3,
-                                kColorWhite);
-  playdate_->graphics->drawLine((int)position.x + kSpaceStationSize / 2,
-                                (int)position.y - kSpaceStationSize / 2,
-                                (int)position.x + kSpaceStationSize / 2,
-                                (int)position.y + kSpaceStationSize / 2, 3,
-                                kColorWhite);
-  playdate_->graphics->drawLine((int)position.x + kSpaceStationSize / 2,
-                                (int)position.y + kSpaceStationSize / 2,
-                                (int)position.x - kSpaceStationSize / 2,
-                                (int)position.y + kSpaceStationSize / 2, 3,
-                                kColorWhite);
-  playdate_->graphics->drawLine((int)position.x - kSpaceStationSize / 2,
-                                (int)position.y + kSpaceStationSize / 2,
-                                (int)position.x - kSpaceStationSize / 2,
-                                (int)position.y - kSpaceStationSize / 2, 3,
-                                kColorWhite);
+  playdate_->graphics->drawEllipse((int)(position.x - kSpaceStationRadius),
+                                   (int)(position.y - kSpaceStationRadius),
+                                   (int)(kSpaceStationRadius * 2.0f),
+                                   (int)(kSpaceStationRadius * 2.0f), 1, 0, 0,
+                                   kColorWhite);
 }
 
 void SpaceStation::load(PlaydateAPI* playdate) {
