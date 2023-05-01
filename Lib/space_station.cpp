@@ -63,7 +63,7 @@ void SpaceStation::load(PlaydateAPI* playdate) {
   }
 
   station_bitmap_table_ =
-      playdate->graphics->loadBitmapTable("data/circle_fat.gif", &error);
+      playdate->graphics->loadBitmapTable("data/circle_big.gif", &error);
   if (error) {
     playdate->system->logToConsole("Failed to load station, error: %s", error);
   }
