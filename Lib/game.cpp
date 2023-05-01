@@ -414,10 +414,14 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       if (mission.cargo_durability > 0) {
         game_interface_.SetCrateHealthPercent(100.0f);
         game_interface_.SetCrateHealthVisibility(true);
+      } else {
+        game_interface_.SetCrateHealthVisibility(false);
       }
 
       if (mission.time_limit_sec > 0.0f) {
         game_interface_.SetTimeVisibility(true);
+      } else {
+        game_interface_.SetTimeVisibility(false);
       }
 
       target_state_ = TargetState::SET;
