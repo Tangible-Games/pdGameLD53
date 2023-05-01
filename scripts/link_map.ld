@@ -56,31 +56,34 @@ SECTIONS
 		*(.data*)
 
 		. = ALIGN(4);
+		/* All data end */
+		__data_end__ = .;
+	} > EXTRAM
+
+	.preinit_array :
+	{
+		. = ALIGN(4);
 		/* preinit data */
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP(*(.preinit_array))
 		PROVIDE_HIDDEN (__preinit_array_end = .);
-
-		. = ALIGN(4);
-		/* init data */
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP(*(SORT(.init_array.*)))
-		KEEP(*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
-
-		. = ALIGN(4);
-		/* finit data */
-		PROVIDE_HIDDEN (__fini_array_start = .);
-		KEEP(*(SORT(.fini_array.*)))
-		KEEP(*(.fini_array))
-		PROVIDE_HIDDEN (__fini_array_end = .);
-
-		. = ALIGN(4);
-		/* All data end */
-		__data_end__ = .;
-
 	} > EXTRAM
-
+	.init_array :
+	{
+		/* init data */
+		. = ALIGN(4);
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array*))
+		PROVIDE_HIDDEN (__init_array_end = .);
+	} > EXTRAM
+	.fini_array :
+	{
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(SORT(.fini_array.*)))
+		KEEP (*(.fini_array*))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+	} > EXTRAM
 	.bss :
 	{
 		. = ALIGN(4);
