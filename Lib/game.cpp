@@ -128,6 +128,7 @@ class Game {
 
     drawArrowToStation(camera_);
 
+    game_interface_.Update(dt);
     game_interface_.Draw();
 
     playdate_->system->drawFPS(5, 5);

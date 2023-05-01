@@ -155,6 +155,8 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
+constexpr int kUiClockAnimationNumFrames = 16;
+constexpr float kUiClockAnimationLength = 1.0f;
 
 enum {
   kFontBold = 0,

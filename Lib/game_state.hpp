@@ -7,6 +7,8 @@
 
 #include "PdSymphony/point2d.hpp"
 
+using namespace PdSymphony::Math;
+
 struct StationArea {
   Point2d pos;  // not the same as for local game coordinates
   uint32_t seed{0};

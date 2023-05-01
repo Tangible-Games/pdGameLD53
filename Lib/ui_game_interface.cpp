@@ -1,5 +1,6 @@
 #include "ui_game_interface.hpp"
 
+#include "consts.hpp"
 #include "pd_helpers.hpp"
 
 void UiGameInterface::Load() {
@@ -32,7 +33,19 @@ void UiGameInterface::Load() {
     playdate_->system->logToConsole(
         "Failed to load top right corner, error: %s", error);
   }
+
+  crate_ = playdate_->graphics->loadBitmap("data/crate.png", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load crate, error: %s", error);
+  }
+
+  clock_ = playdate_->graphics->loadBitmapTable("data/clock.gif", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load clock, error: %s", error);
+  }
 }
+
+void UiGameInterface::Update(float dt) { running_time_ += dt; }
 
 void UiGameInterface::Draw() {
   int screen_width = playdate_->display->getWidth();
@@ -54,4 +67,17 @@ void UiGameInterface::Draw() {
   playdate_->graphics->drawBitmap(
       bottom_right_corner_, screen_width - bitmap_width,
       screen_height - bitmap_height, kBitmapUnflipped);
+
+  GetBitmapSizes(playdate_, crate_, bitmap_width, bitmap_height);
+  playdate_->graphics->drawBitmap(crate_, screen_width - bitmap_width - 15,
+                                  screen_height - bitmap_height - 15,
+                                  kBitmapUnflipped);
+
+  LCDBitmap* bitmap = nullptr;
+
+  bitmap = SelectFrameLooped(playdate_, clock_, kUiClockAnimationLength,
+                             kUiClockAnimationNumFrames, running_time_);
+  GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
+  playdate_->graphics->drawBitmap(
+      bitmap, 15, screen_height - bitmap_height - 15, kBitmapUnflipped);
 }
