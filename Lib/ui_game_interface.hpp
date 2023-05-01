@@ -1,7 +1,7 @@
 #pragma once
 
 class UiGameInterface {
-public:
+ public:
   void Load();
   void Draw();
 };

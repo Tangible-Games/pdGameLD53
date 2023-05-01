@@ -148,11 +148,7 @@ inline std::vector<StationArea> GetStations() {
           }};
 }
 
-inline std::vector<MissionDesc> GetMissions() {
-  return {
-    MissionDesc{}
-  };
-}
+inline std::vector<MissionDesc> GetMissions() { return {MissionDesc{}}; }
 
 constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;
