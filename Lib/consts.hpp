@@ -39,6 +39,8 @@ constexpr float kSpaceCraftToStationCameraOffset = 30.0f;
 constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
 constexpr float kSpaceStationDockSpeed = 30.0f;
 constexpr float kSpaceStationAlignTimeout = 2.0f;
+constexpr int kSpaceStationDockingAnimationNumFrames = 19;
+constexpr float kSpaceStationDockingAnimationLength = 1.9f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;

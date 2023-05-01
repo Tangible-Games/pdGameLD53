@@ -50,6 +50,15 @@ class Game {
 
     game_interface_.Load();
 
+    const char* error = nullptr;
+
+    docking_bitmap_table_ =
+        playdate_->graphics->loadBitmapTable("data/cut-prkng.gif", &error);
+    if (error) {
+      playdate_->system->logToConsole(
+          "Failed to load docking animation, error: %s", error);
+    }
+
     onUpdateArea(0);
   }
 
@@ -91,19 +100,28 @@ class Game {
     stars_.Update(dt);
 
     space_craft_.Update(dt);
+
     setupCamera();
-
     updateState(dt);
-
-    stars_.Draw(camera_);
-    space_station_.Draw(camera_);
-    space_craft_.Draw(camera_);
-
     updateArrowToStation(camera_);
 
     game_interface_.SetSpeed(space_craft_.GetSpeed());
     game_interface_.Update(dt);
-    game_interface_.Draw();
+
+    // Drawing
+
+    stars_.Draw(camera_);
+    if (target_state_ == TargetState::DOCKING) {
+      LCDBitmap *bitmap = SelectFrameLooped(
+          playdate_, docking_bitmap_table_, kSpaceStationDockingAnimationLength,
+          kSpaceStationDockingAnimationNumFrames, target_state_time_);
+
+      playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
+    } else {
+      space_station_.Draw(camera_);
+      space_craft_.Draw(camera_);
+      game_interface_.Draw();
+    }
 
     playdate_->system->drawFPS(5, 5);
 
@@ -156,6 +174,12 @@ class Game {
           target_state_time_ = 0.0f;
         }
       } break;
+      case TargetState::DOCKING:
+        target_state_time_ += dt;
+        if (target_state_time_ > kSpaceStationDockingAnimationLength) {
+          target_state_time_ = kSpaceStationDockingAnimationLength;
+        }
+        break;
       case TargetState::SET:
         if (craft_to_station >
             stations_[space_station_cur_].asteroids_to_base_distance +
@@ -294,6 +318,8 @@ class Game {
   float target_state_time_{0.0f};
 
   UiGameInterface game_interface_;
+
+  LCDBitmapTable *docking_bitmap_table_{nullptr};
 
   float running_time_{0.0f};
 };
