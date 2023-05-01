@@ -180,6 +180,7 @@ enum SoundSample { kSoundTrusters = 0, kSoundMax };
 constexpr const char* kSoundsDataPath[] = {
     /* [kSoundTrusters] = */ "data/sounds/thruster.wav",
 };
+constexpr float kSoundFadingDelta = 0.1f;
 
 enum MusicSample { kMusicMain = 0, kMusicMax };
 constexpr const char* kMusicDataPath[] = {
