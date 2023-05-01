@@ -271,7 +271,7 @@ void SpaceCraft::draw(const Point2d& position) {
   switch (engine_state_) {
     case EngineState::IDLE:
       engine_bitmap = idle_bitmap_;
-      Sounds::instance().playStop(SoundSample::kTrusters);
+      Sounds::instance().playStop(kSoundTrusters);
       break;
 
     case EngineState::FLARE_UP:
@@ -288,7 +288,7 @@ void SpaceCraft::draw(const Point2d& position) {
           kSpaceCraftForwardAnimationNumFrames,
           kSpaceCraftForwardAnimationSeqStart,
           kSpaceCraftForwardAnimationSeqLength, engine_state_time_);
-      Sounds::instance().play(SoundSample::kTrusters);
+      Sounds::instance().play(kSoundTrusters);
       break;
 
     case EngineState::BACKWARD:

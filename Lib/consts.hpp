@@ -176,9 +176,14 @@ constexpr const char* kFontDataPath[] = {
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
 };
 
-enum SoundSample { kTrusters = 0, kSoundsSamplesMax };
+enum SoundSample { kSoundTrusters = 0, kSoundMax };
 constexpr const char* kSoundsDataPath[] = {
-    /* [kTrusters] = */ "data/sounds/thruster.wav",
+    /* [kSoundTrusters] = */ "data/sounds/thruster.wav",
+};
+
+enum MusicSample { kMusicMain = 0, kMusicMax };
+constexpr const char* kMusicDataPath[] = {
+    /* [kMain] = */ "data/sounds/szegvari__space-bar-ambient.mp3",
 };
 
 constexpr bool kDrawDebugAsteroids = false;

@@ -14,7 +14,7 @@ class Sounds {
 
   void loadSounds() {
     // Load all Sounds from consts.hpp kSoundsDataPath
-    for (int i = 0; i < kSoundsSamplesMax; i++) {
+    for (int i = 0; i < kSoundMax; i++) {
       sounds_[i] = playdate_->sound->sample->load(kSoundsDataPath[i]);
     }
   }
@@ -40,11 +40,38 @@ class Sounds {
     }
   }
 
+  void playMusic(MusicSample sample) {
+    if (!music_player_) {
+      music_player_ = playdate_->sound->fileplayer->newPlayer();
+    }
+    if (!music_player_) {
+      return;
+    }
+    if (playdate_->sound->fileplayer->isPlaying(music_player_)) {
+      playdate_->sound->fileplayer->stop(music_player_);
+    }
+    if (music_current_ != sample) {
+      playdate_->sound->fileplayer->loadIntoPlayer(music_player_,
+                                                   kMusicDataPath[sample]);
+      music_current_ = sample;
+    }
+    playdate_->sound->fileplayer->play(music_player_, 0);
+  }
+
+  void stopMusic() {
+    if (music_player_ &&
+        playdate_->sound->fileplayer->isPlaying(music_player_)) {
+      playdate_->sound->fileplayer->stop(music_player_);
+    }
+  }
+
  private:
   Sounds() = default;
 
   PlaydateAPI* playdate_{nullptr};
 
-  std::array<AudioSample*, kSoundsSamplesMax> sounds_;
-  std::array<SamplePlayer*, kSoundsSamplesMax> players_;
+  std::array<AudioSample*, kSoundMax> sounds_;
+  std::array<SamplePlayer*, kSoundMax> players_;
+  FilePlayer* music_player_{nullptr};
+  MusicSample music_current_{kMusicMax};
 };
