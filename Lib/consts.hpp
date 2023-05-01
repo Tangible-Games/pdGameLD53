@@ -152,7 +152,7 @@ inline std::vector<StationArea> GetStations() {
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
-          
+
           StationArea{
               .pos = Point2d(-8 * 1000, 6 * 1000),
               .seed = 48120593,
@@ -335,6 +335,7 @@ constexpr float kUiMovingTooFastTimeout = 3.0f;
 enum FontName {
   kFontBold = 0,
   kFontBoldOutlined,
+  kFontBold2x,
   kFontLast,
 };
 constexpr const char* kFontDataPath[] = {
@@ -342,6 +343,7 @@ constexpr const char* kFontDataPath[] = {
     // files
     /* [kFontBold] = */ "data/fonts/Nontendo-Bold.pft",
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
+    /* [kFontBold2x] =  */ "data/fonts/Nontendo-Bold-2x.fnt",
 };
 
 enum SoundSample {
