@@ -93,6 +93,8 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
           },
           StationArea{
               .pos = Point2d(2 * 1000, 2 * 1000),
@@ -107,6 +109,8 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
           },
           StationArea{
               .pos = Point2d(-2 * 1000, 4 * 1000),
@@ -121,6 +125,8 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
           },
           StationArea{
               .pos = Point2d(-4 * 1000, -3 * 1000),
@@ -135,6 +141,8 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
           },
           StationArea{
               .pos = Point2d(3 * 1000, 1 * 1000),
@@ -149,10 +157,29 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
           }};
 }
 
-inline std::vector<MissionDesc> GetMissions() { return {MissionDesc{}}; }
+inline std::vector<MissionDesc> GetMissions() {
+  return {MissionDesc{
+      .name{"Imported Space Coffee Beans"},
+      .desc{
+          "Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts rejoice!"},
+      .time_limit_str{"2 minutes"},
+      .time_limit_sec = 120.0f,
+      .cargo_durability_str{"durable"},
+      .cargo_durability = 600,
+      .price_str{"5.000"},
+      .price = 5000,
+      // Filled in code.
+      .destination_str{""},
+      .destination_index = -1,
+      .difficulty_str{"moderate"},
+      .difficulty = 1,
+  }};
+}
 
 constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;

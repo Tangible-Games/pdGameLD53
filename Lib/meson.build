@@ -9,6 +9,7 @@ exe_srcs += files(
     'stars.cpp',
     'static_random_generator.cpp',
     'ui_game_interface.cpp',
+    'ui_station.cpp',
 )
 
 exe_incs += include_directories('.')

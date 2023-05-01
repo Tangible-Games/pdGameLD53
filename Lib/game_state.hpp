@@ -16,4 +16,6 @@ struct StationArea {
   std::array<int, 5> num_asteroids;
   float asteroids_to_base_distance{0.0f};
   float asteroids_area_distance{0.0f};
+  std::string difficulty_str;
+  int difficulty{0};
 };

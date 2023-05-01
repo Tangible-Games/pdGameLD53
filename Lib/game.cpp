@@ -12,6 +12,7 @@
 #include "space_station.hpp"
 #include "stars.hpp"
 #include "ui_game_interface.hpp"
+#include "ui_station.hpp"
 
 class Game {
  public:
@@ -21,7 +22,8 @@ class Game {
         space_craft_(playdate),
         space_station_(playdate),
         stars_(playdate),
-        game_interface_(playdate) {
+        game_interface_(playdate),
+        ui_station_(playdate) {
     onStart();
   }
 
@@ -49,15 +51,18 @@ class Game {
     Sounds::instance().loadSounds();
 
     game_interface_.Load();
+    ui_station_.Load();
 
     const char *error = nullptr;
 
     docking_bitmap_table_ =
-        playdate_->graphics->loadBitmapTable("data/cut-prkng.gif", &error);
+        playdate_->graphics->loadBitmapTable("data/cut-prkng-copy.gif", &error);
     if (error) {
       playdate_->system->logToConsole(
           "Failed to load docking animation, error: %s", error);
     }
+
+    current_mission_ = -1;
 
     onUpdateArea(0);
   }
@@ -108,16 +113,21 @@ class Game {
     game_interface_.SetSpeed(space_craft_.GetSpeed());
     game_interface_.Update(dt);
 
+    ui_station_.Update(dt);
+
     // Drawing
 
-    stars_.Draw(camera_);
     if (target_state_ == TargetState::DOCKING) {
+      stars_.Draw(camera_);
       LCDBitmap *bitmap = SelectFrameLooped(
           playdate_, docking_bitmap_table_, kSpaceStationDockingAnimationLength,
           kSpaceStationDockingAnimationNumFrames, target_state_time_);
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
+    } else if (target_state_ == TargetState::STATION) {
+      ui_station_.Draw();
     } else {
+      stars_.Draw(camera_);
       space_station_.Draw(camera_);
       space_craft_.Draw(camera_);
       game_interface_.Draw();
@@ -161,6 +171,8 @@ class Game {
           if (speed > kSpaceStationDockSpeed) {
             game_interface_.SetMovingTooFastText(true);
           } else {
+            game_interface_.SetMovingTooFastText(false);
+
             space_craft_.StartAligning(space_station_.GetPosition());
             target_state_ = TargetState::ALIGN_IN_DOCK;
             target_state_time_ = 0.0f;
@@ -177,8 +189,15 @@ class Game {
       case TargetState::DOCKING:
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationDockingAnimationLength) {
+          std::vector<MissionDesc> missions = GenMissions(space_station_cur_);
+          ui_station_.SetMissions(missions);
+          ui_station_.ShowMissions();
+
+          target_state_ = TargetState::STATION;
           target_state_time_ = kSpaceStationDockingAnimationLength;
         }
+        break;
+      case TargetState::STATION:
         break;
       case TargetState::SET:
         if (craft_to_station >
@@ -293,6 +312,47 @@ class Game {
                              ray_dir, distance);
   }
 
+  std::vector<MissionDesc> GenMissions(int current_station_index) {
+    std::vector<MissionDesc> result;
+
+    std::vector<bool> taken;
+    taken.resize(missions_.size());
+
+    if (current_mission_ != -1) {
+      taken[current_mission_] = true;
+    }
+
+    int num_tries = 3;
+
+    for (int i = 0; i < 3; ++i) {
+      int new_mission = -1;
+      for (int k = 0; k < num_tries; ++k) {
+        int mission_index = rand() % missions_.size();
+        if (!taken[mission_index]) {
+          new_mission = mission_index;
+          break;
+        }
+      }
+      if (new_mission != -1) {
+        taken[new_mission] = true;
+        result.push_back(missions_[new_mission]);
+      }
+    }
+
+    for (int i = 0; i < (int)result.size(); ++i) {
+      int station_index = rand() % stations_.size();
+      if (station_index == current_station_index) {
+        station_index = (station_index + 1) % stations_.size();
+      }
+      result[i].destination_index = station_index;
+      result[i].destination_str = stations_[station_index].name;
+      result[i].difficulty_str = stations_[station_index].difficulty_str;
+      result[i].difficulty = stations_[station_index].difficulty;
+    }
+
+    return result;
+  }
+
   PlaydateAPI *playdate_;
   float prev_time_;
 
@@ -302,22 +362,27 @@ class Game {
   Stars stars_;
 
   std::vector<StationArea> stations_{GetStations()};
+  std::vector<MissionDesc> missions_{GetMissions()};
 
   // current state
-  size_t space_station_cur_{0};
-  size_t space_station_target_{0};
+  int space_station_cur_{0};
+  int space_station_target_{0};
   enum TargetState {
     NONE,
     READY_TO_DOCK,
     ALIGN_IN_DOCK,
     DOCKING,
+    STATION,
     SET,
     READY_TO_JUMP,
     JUMP,
   } target_state_{TargetState::NONE};
   float target_state_time_{0.0f};
 
+  int current_mission_{-1};
+
   UiGameInterface game_interface_;
+  UiStation ui_station_;
 
   LCDBitmapTable *docking_bitmap_table_{nullptr};
 

@@ -213,7 +213,7 @@ void SpaceCraft::updateAligning(float dt) {
 
   float angle = getAngleBetween(align_direction_from_, Vector2d(0.0f, -1.0f));
   float new_angle = angle * (1.0f - t / kSpaceStationAlignTimeout);
-  direction_ = Vector2d(0.0f, -1.0f).GetRotated(-new_angle);
+  direction_ = Vector2d(0.0f, -1.0f).GetRotated(new_angle);
 }
 
 void SpaceCraft::tryMove(const Vector2d& move) {
