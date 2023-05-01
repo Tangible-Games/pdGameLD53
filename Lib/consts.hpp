@@ -10,7 +10,7 @@
 
 constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
-constexpr float kSpaceCraftPosY = 150.0f;
+constexpr float kSpaceCraftPosY = 1200.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
 constexpr float kSpaceCraftDeceleration = 15.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
@@ -51,6 +51,7 @@ constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
 constexpr int kAsteroidsSpatialBinsSize = 1024;
 
 inline std::vector<AsteroidType> GetAsteroidTypes() {
+  // clang-format off
   return std::vector<AsteroidType>{{
                                        .models{"data/met_01.png"},
                                        .bitmaps{},
@@ -81,9 +82,11 @@ inline std::vector<AsteroidType> GetAsteroidTypes() {
                                        .radius = 10.0f,
                                        .breaks_on_collision = true,
                                    }};
+  // clang-format on
 }
 
 inline std::vector<StationArea> GetStations() {
+  // clang-format off
   return {StationArea{
               .pos = Point2d(0, 0),
               .seed = 13124125,
@@ -128,7 +131,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(2 * 1000, 2 * 1000),
               .seed = 89127634,
               .name{"Infinity Junction"},
-              .desc{"Needless to say, there are quite a few\nworlds connected via this station.\nMaybe your homeworld is one of them?"},
+              .desc{"Needless to say, there are quite a few\nworlds connected "
+                    "via this station.\nMaybe your homeworld is one of them?"},
               .num_asteroids =
                   {
                       50,
@@ -147,7 +151,9 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-2 * 1000, 4 * 1000),
               .seed = 12847312,
               .name{"Celestial Crossroads"},
-              .desc{"Enigmatic name and stale tasteless beer.\nSadly, there is nothing more here.\nA trading outpost with a meager population\nof 172 as of today. Wait, 171."},
+              .desc{"Enigmatic name and stale tasteless beer.\nSadly, there is "
+                    "nothing more here.\nA trading outpost with a meager "
+                    "population\nof 172 as of today. Wait, 171."},
               .num_asteroids =
                   {
                       50,
@@ -489,9 +495,11 @@ inline std::vector<StationArea> GetStations() {
               .difficulty_str{"moderate"},
               .difficulty = 1,
           }};
+  // clang-format on
 }
 
 inline std::vector<MissionDesc> GetMissions() {
+  // clang-format off
   return {MissionDesc{
               .name{"Imported Space Coffee Beans"},
               .desc{"Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts "
@@ -510,7 +518,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Urgent Holographic Pizza Delivery"},
-              .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to eat.\nGet it there before it gets cold!"},
+              .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to "
+                    "eat.\nGet it there before it gets cold!"},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
@@ -1114,6 +1123,7 @@ inline std::vector<MissionDesc> GetMissions() {
               .difficulty_str{"moderate"},
               .difficulty = 1,
           }};
+  // clang-format on
 }
 
 constexpr size_t kStarsNum = 20;
