@@ -18,7 +18,6 @@ constexpr float kSpaceCraftRotationSpeedMax = 180.0f;      // Deg
 constexpr float kSpaceCraftRotationDeceleration = 180.0f;  // Deg
 constexpr float kSpaceCraftAsteroidHitVelocityReduction = 0.2f;
 constexpr float kSpaceCraftAsteroidHitRotationVelocityReduction = 0.15f;
-constexpr float kSpaceCraftCameraOffset = 50.0f;
 constexpr bool kSpaceCraftCrankControlsRotation = false;
 constexpr float kSpaceCraftFieldAnimationLength = 0.5f;
 constexpr int kSpaceCraftFieldAnimationNumFrames = 5;
@@ -32,7 +31,11 @@ constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
 constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 
-constexpr float kSpaceStationSize = 60.0f;
+constexpr float kSpaceStationRadius = 60.0f;
+constexpr float kSpaceStationAnimationNumFrames = 2.4f;
+constexpr float kSpaceStationAnimationLength = 2.4f;
+constexpr float kSpaceCraftToStationCameraOffset = 50.0f;
+constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
@@ -76,6 +79,7 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 
 constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
+constexpr bool kDrawDebugStation = false;
 
 inline std::vector<StationArea> GetStations() {
   return {StationArea{
@@ -84,10 +88,10 @@ inline std::vector<StationArea> GetStations() {
               .name{"Station 1"},
               .num_asteroids =
                   {
-                      50,
-                      100,
-                      150,
-                      400,
+                      0,
+                      10,
+                      1,
+                      4,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
@@ -152,3 +156,15 @@ inline std::vector<StationArea> GetStations() {
 
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
+
+enum {
+  kFontBold = 0,
+  kFontBoldOutlined,
+  kFontLast,
+};
+constexpr const char* kFontDataPath[] = {
+    // Source dir contains fnt(s) files and build system convert them to pft
+    // files
+    /* [kFontBold] = */ "data/fonts/Nontendo-Bold.pft",
+    /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
+};
