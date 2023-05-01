@@ -138,7 +138,11 @@ class Game {
     playdate_->system->drawFPS(5, 5);
 
     showState();
+
+    onUpdateSounds();
   }
+
+  void onUpdateSounds() { space_craft_.UpdateSounds(); }
 
   void onJump() { onUpdateArea(space_station_target_); }
 
