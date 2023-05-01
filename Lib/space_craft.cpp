@@ -80,6 +80,19 @@ void SpaceCraft::UpdateSounds() {
       Sounds::instance().play(kSoundRotateRight);
       break;
   }
+
+  constexpr SoundSample sounds[] = {
+      SoundSample::kCollision1, SoundSample::kCollision2,
+      SoundSample::kCollision3, SoundSample::kCollision4};
+  constexpr size_t collision_sounds_size = sizeof(sounds) / sizeof(sounds[0]);
+  if (field_state_ == FieldState::ACTIVE) {
+    int rand_collision = rand() % collision_sounds_size;
+    Sounds::instance().play(sounds[rand_collision]);
+  } else {
+    for (size_t i = 0; i < collision_sounds_size; i++) {
+      Sounds::instance().playStop(sounds[i]);
+    }
+  }
 }
 
 void SpaceCraft::load() {

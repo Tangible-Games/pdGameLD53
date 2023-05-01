@@ -49,7 +49,6 @@ class Game : public UiStation::Callback {
 
     Fonts::instance().loadFonts(playdate_);
     Sounds::instance().setup(playdate_);
-    Sounds::instance().loadSounds();
 
     Sounds::instance().playMusic(kMusicMain);
 
@@ -136,7 +135,7 @@ class Game : public UiStation::Callback {
       game_interface_.Draw();
     }
 
-    playdate_->system->drawFPS(5, 5);
+    // playdate_->system->drawFPS(5, 5);
 
     showState();
 
@@ -189,8 +188,9 @@ class Game : public UiStation::Callback {
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationDockingAnimationLength) {
           missions_to_select_ = GenMissions(space_station_cur_);
+          ui_station_.SetStation(stations_[space_station_cur_], money_);
           ui_station_.SetMissions(missions_to_select_);
-          ui_station_.ShowMissions();
+          ui_station_.ShowStationInfo();
 
           target_state_ = TargetState::STATION;
           target_state_time_ = kSpaceStationDockingAnimationLength;
@@ -396,8 +396,10 @@ class Game : public UiStation::Callback {
   } target_state_{TargetState::NONE};
   float target_state_time_{0.0f};
 
+  int money_{0};
   int current_mission_{-1};
   std::vector<MissionDesc> missions_to_select_;
+  std::vector<int> missions_to_select_indices_;
 
   UiGameInterface game_interface_;
   UiStation ui_station_;
