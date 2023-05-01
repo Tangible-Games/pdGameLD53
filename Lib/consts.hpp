@@ -83,8 +83,8 @@ inline std::vector<StationArea> GetStations() {
   return {StationArea{
               .pos = Point2d(0, 0),
               .seed = 13124125,
-              .name{"Station 1"},
-              .desc{"Sehr gut station"},
+              .name{"Central Station"},
+              .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, businessmen and diplomats just\nlove visiting. Feel at home here and\nmake sure to come back once in a while"},
               .num_asteroids =
                   {
                       0,
@@ -93,8 +93,8 @@ inline std::vector<StationArea> GetStations() {
                       4,
                   },
               .asteroids_to_base_distance = 200.0f,
-              .asteroids_area_distance = 3000.0f,
-              .jump_distance = 3300.0f,
+              .asteroids_area_distance = 1500.0f,
+              .jump_distance = 1800.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
