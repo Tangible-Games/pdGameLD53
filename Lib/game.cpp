@@ -7,6 +7,7 @@
 #include "consts.hpp"
 #include "fonts.hpp"
 #include "pd_helpers.hpp"
+#include "sounds.hpp"
 #include "space_craft.hpp"
 #include "space_station.hpp"
 #include "stars.hpp"
@@ -44,6 +45,8 @@ class Game {
     space_craft_.SetPosition(Point2d(kSpaceCraftPosX, kSpaceCraftPosY));
 
     Fonts::instance().loadFonts(playdate_);
+    Sounds::instance().setup(playdate_);
+    Sounds::instance().loadSounds();
 
     game_interface_.Load();
 

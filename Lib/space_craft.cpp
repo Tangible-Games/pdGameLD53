@@ -1,6 +1,7 @@
 #include "space_craft.hpp"
 
 #include "pd_helpers.hpp"
+#include "sounds.hpp"
 #include "space_station.hpp"
 
 void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
@@ -270,6 +271,7 @@ void SpaceCraft::draw(const Point2d& position) {
   switch (engine_state_) {
     case EngineState::IDLE:
       engine_bitmap = idle_bitmap_;
+      Sounds::instance().playStop(SoundSample::kTrusters);
       break;
 
     case EngineState::FLARE_UP:
@@ -286,6 +288,7 @@ void SpaceCraft::draw(const Point2d& position) {
           kSpaceCraftForwardAnimationNumFrames,
           kSpaceCraftForwardAnimationSeqStart,
           kSpaceCraftForwardAnimationSeqLength, engine_state_time_);
+      Sounds::instance().play(SoundSample::kTrusters);
       break;
 
     case EngineState::BACKWARD:
