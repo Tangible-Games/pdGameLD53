@@ -65,6 +65,15 @@ class Game {
       playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
     }
 
+    // Load all fonts from consts.hpp kFontDataPath
+    for (int i = 0; i < kFontLast; i++) {
+      error = nullptr;
+      fonts_[i] = playdate_->graphics->loadFont(kFontDataPath[i], &error);
+      if (error) {
+        playdate_->system->logToConsole("Failed to load font, error: %s", error);
+      }
+    }
+
     onUpdateArea(0);
   }
 
@@ -118,6 +127,7 @@ class Game {
 
     showState();
   }
+
 
   void onJump() { onUpdateArea(space_station_target_); }
 
@@ -192,12 +202,10 @@ class Game {
         break;
     }
     if (out) {
-      playdate_->graphics->pushContext(nullptr);
-      playdate_->graphics->setDrawMode(kDrawModeInverted);
+      playdate_->graphics->setFont(fonts_[kFontBoldOutlined]);
       playdate_->graphics->drawText(out, strlen(out), kASCIIEncoding,
                                     playdate_->display->getWidth() / 2 - 100,
                                     1);
-      playdate_->graphics->popContext();
     }
   }
 
@@ -310,6 +318,8 @@ class Game {
   } target_state_{TargetState::NONE};
 
   LCDBitmapTable *arrow_bitmap_table_{nullptr};
+
+  std::array<LCDFont*, kFontLast> fonts_;
 
   float running_time_{0.0f};
 };
