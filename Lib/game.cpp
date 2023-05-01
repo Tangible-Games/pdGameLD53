@@ -61,13 +61,6 @@ class Game {
     space_station_.SetPosition(Point2d(0.0f, 0.0f));
     space_craft_.SetPosition(Point2d(kSpaceCraftPosX, kSpaceCraftPosY));
 
-    const char *error = nullptr;
-    arrow_bitmap_table_ =
-        playdate_->graphics->loadBitmapTable("data/triangle_3.gif", &error);
-    if (error) {
-      playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
-    }
-
     Fonts::instance().loadFonts(playdate_);
 
     game_interface_.Load();
@@ -119,7 +112,7 @@ class Game {
     space_station_.Draw(camera_);
     space_craft_.Draw(camera_);
 
-    drawArrowToStation(camera_);
+    updateArrowToStation(camera_);
 
     game_interface_.Update(dt);
     game_interface_.Draw();
@@ -235,13 +228,7 @@ class Game {
                       to_station_norm * offset_factor);
   }
 
-  void drawArrowToStation(const Camera &camera) {
-    int screen_width = playdate_->display->getWidth();
-    int screen_height = playdate_->display->getHeight();
-    AARect2d screen_rect(
-        Point2d((float)screen_width / 2.0f, (float)screen_height / 2.0f),
-        Vector2d((float)screen_width / 2.0f, (float)screen_height / 2.0f));
-
+  void updateArrowToStation(const Camera &camera) {
     Point2d ship_in_camera =
         camera.ConvertToCameraSpace(space_craft_.GetPosition());
 
@@ -258,43 +245,18 @@ class Game {
           camera.ConvertToCameraSpace(space_station_.GetPosition());
       ray_dir = (station_in_camera - ship_in_camera).GetNormalized();
 
+      int screen_width = playdate_->display->getWidth();
+      int screen_height = playdate_->display->getHeight();
+      AARect2d screen_rect(
+          Point2d((float)screen_width / 2.0f, (float)screen_height / 2.0f),
+          Vector2d((float)screen_width / 2.0f, (float)screen_height / 2.0f));
+
       if (screen_rect.IsPointInside(station_in_camera)) {
         is_visible = false;
       }
     }
 
-    if (is_visible) {
-      AARect2d::FromInsideIntersection intersection;
-      screen_rect.IntersectRayFromInside(ship_in_camera, ray_dir, intersection);
-
-      LCDBitmap *bitmap = SelectFrameLooped(
-          playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
-          kUiArrowAnimationNumFrames, running_time_);
-
-      int bitmap_width = 0;
-      int bitmap_height = 0;
-      GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
-
-      Point2d sprite_pos = intersection.p;
-      float angle = 0.0f;
-      if (intersection.dx == 1) {
-        sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
-        angle = 270.0f;
-      } else if (intersection.dx == -1) {
-        sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
-        angle = 90.0f;
-      } else if (intersection.dy == 1) {
-        sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
-        angle = 0;
-      } else {
-        sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
-        angle = 180.0f;
-      }
-
-      playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
-                                             (int)sprite_pos.y, angle, 0.5f,
-                                             0.5f, 1.0f, 1.0f);
-    }
+    game_interface_.SetArrow(is_visible, ship_in_camera, ray_dir);
   }
 
   PlaydateAPI *playdate_;
@@ -317,8 +279,6 @@ class Game {
     READY_TO_JUMP,
     JUMP,
   } target_state_{TargetState::NONE};
-
-  LCDBitmapTable *arrow_bitmap_table_{nullptr};
 
   UiGameInterface game_interface_;
 

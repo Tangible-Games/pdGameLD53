@@ -7,6 +7,12 @@
 void UiGameInterface::Load() {
   const char* error = nullptr;
 
+  arrow_bitmap_table_ =
+      playdate_->graphics->loadBitmapTable("data/triangle_3.gif", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
+  }
+
   bottom_left_corner_ =
       playdate_->graphics->loadBitmap("data/bottom_left.png", &error);
   if (error) {
@@ -49,6 +55,8 @@ void UiGameInterface::Load() {
 void UiGameInterface::Update(float dt) { running_time_ += dt; }
 
 void UiGameInterface::Draw() {
+  drawArrow();
+
   int screen_width = playdate_->display->getWidth();
   int screen_height = playdate_->display->getHeight();
   int bitmap_width = 0;
@@ -101,4 +109,46 @@ void UiGameInterface::Draw() {
       text.data(), text.size(), kASCIIEncoding,
       screen_width - crate_width - 15 - text.size() * 11,
       screen_height - crate_height - 13);
+}
+
+void UiGameInterface::drawArrow() {
+  int screen_width = playdate_->display->getWidth();
+  int screen_height = playdate_->display->getHeight();
+  AARect2d screen_rect(
+      Point2d((float)screen_width / 2.0f, (float)screen_height / 2.0f),
+      Vector2d((float)screen_width / 2.0f, (float)screen_height / 2.0f));
+
+  if (is_arrow_visible_) {
+    AARect2d::FromInsideIntersection intersection;
+    screen_rect.IntersectRayFromInside(ship_pos_, arrow_dir_norm_,
+                                       intersection);
+
+    LCDBitmap* bitmap = SelectFrameLooped(
+        playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
+        kUiArrowAnimationNumFrames, running_time_);
+
+    int bitmap_width = 0;
+    int bitmap_height = 0;
+    GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
+
+    Point2d sprite_pos = intersection.p;
+    float angle = 0.0f;
+    if (intersection.dx == 1) {
+      sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
+      angle = 270.0f;
+    } else if (intersection.dx == -1) {
+      sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
+      angle = 90.0f;
+    } else if (intersection.dy == 1) {
+      sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
+      angle = 0;
+    } else {
+      sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
+      angle = 180.0f;
+    }
+
+    playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
+                                           (int)sprite_pos.y, angle, 0.5f, 0.5f,
+                                           1.0f, 1.0f);
+  }
 }
