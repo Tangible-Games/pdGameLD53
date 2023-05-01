@@ -8,7 +8,12 @@ void SpaceCraft::ResetSpaceStation(SpaceStation* space_station) {
 }
 
 void SpaceCraft::Update(float dt) {
-  updateInput(dt);
+  if (state_ != State::ALIGNING) {
+    updateInput(dt);
+    updateMove(dt);
+  } else {
+    updateAligning(dt);
+  }
 
   if (field_state_ == FieldState::ACTIVE) {
     field_state_time_ += dt;
@@ -184,9 +189,28 @@ void SpaceCraft::updateInput(float dt) {
   } else {
     engine_state_ = EngineState::IDLE;
   }
+}
 
+void SpaceCraft::updateMove(float dt) {
   Vector2d move = velocity_ * dt;
   tryMove(move);
+}
+
+void SpaceCraft::updateAligning(float dt) {
+  state_time_ += dt;
+  float t = state_time_;
+  if (state_time_ > kSpaceStationAlignTimeout) {
+    state_ = State::IN_GAME;
+    state_time_ = 0.0f;
+    t = kSpaceStationAlignTimeout;
+  }
+
+  Vector2d move = (align_to_ - align_from_) * (t / kSpaceStationAlignTimeout);
+  SetPosition(align_from_ + move);
+
+  float angle = getAngleBetween(align_direction_from_, Vector2d(0.0f, -1.0f));
+  float new_angle = angle * (1.0f - t / kSpaceStationAlignTimeout);
+  direction_ = Vector2d(0.0f, -1.0f).GetRotated(-new_angle);
 }
 
 void SpaceCraft::tryMove(const Vector2d& move) {

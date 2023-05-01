@@ -35,24 +35,6 @@ class Game {
   }
 
  private:
-  uint32_t getSeed() {
-    uint32_t currentTime = playdate_->system->getCurrentTimeMilliseconds();
-    // enable accelerometer
-    playdate_->system->setPeripheralsEnabled(kAccelerometer);
-    // Get accelerometer data
-    float accelX, accelY, accelZ;
-    playdate_->system->getAccelerometer(&accelX, &accelY, &accelZ);
-    // disable accelerometer
-    playdate_->system->setPeripheralsEnabled(kNone);
-    float batPercent = playdate_->system->getBatteryPercentage();
-    uint32_t seed = currentTime;
-    seed ^= ((uint32_t)(accelX * 17));
-    seed ^= ((uint32_t)(accelY * 13));
-    seed ^= ((uint32_t)(accelZ * 23));
-    seed ^= ((uint32_t)(batPercent * 19));
-    return seed;
-  }
-
   void onStart() {
     playdate_->system->logToConsole("#onStart");
 
@@ -74,6 +56,8 @@ class Game {
     space_station_.Generate(stations_[idx]);
     stars_.Generate(stations_[idx].seed);
     space_craft_.ResetSpaceStation(&space_station_);
+
+    space_craft_.Start();
 
     if (space_station_cur_ != space_station_target_) {
       Vector2d s = stations_[space_station_cur_].pos -
@@ -106,7 +90,7 @@ class Game {
     space_craft_.Update(dt);
     setupCamera();
 
-    updateState();
+    updateState(dt);
 
     stars_.Draw(camera_);
     space_station_.Draw(camera_);
@@ -114,6 +98,7 @@ class Game {
 
     updateArrowToStation(camera_);
 
+    game_interface_.SetSpeed(space_craft_.GetSpeed());
     game_interface_.Update(dt);
     game_interface_.Draw();
 
@@ -132,7 +117,7 @@ class Game {
     playdate_->system->logToConsole("setDebugTarget %d", space_station_target_);
   }
 
-  void updateState() {
+  void updateState(float dt) {
     auto craft_to_station =
         (space_craft_.GetPosition() - space_station_.GetPosition()).GetLength();
     PDButtons buttons_current;
@@ -147,14 +132,28 @@ class Game {
           target_state_ = TargetState::READY_TO_DOCK;
         }
         break;
-      case TargetState::READY_TO_DOCK:
+      case TargetState::READY_TO_DOCK: {
         if (craft_to_station > kSpaceStationRadius) {
           target_state_ = TargetState::NONE;
-        } else if (buttons_current & kButtonA) {
+        } else {
+          float speed = space_craft_.GetSpeed();
+          if (speed > kSpaceStationDockSpeed) {
+            game_interface_.SetMovingTooFastText(true);
+          } else {
+            space_craft_.StartAligning(space_station_.GetPosition());
+            target_state_ = TargetState::ALIGN_IN_DOCK;
+            target_state_time_ = 0.0f;
+          }
+        }
+      } break;
+      case TargetState::ALIGN_IN_DOCK: {
+        target_state_time_ += dt;
+        if (target_state_time_ > kSpaceStationAlignTimeout) {
           setDebugTarget();
           target_state_ = TargetState::SET;
+          target_state_time_ = 0.0f;
         }
-        break;
+      } break;
       case TargetState::SET:
         if (craft_to_station >
             stations_[space_station_cur_].asteroids_to_base_distance +
@@ -184,7 +183,6 @@ class Game {
     const char *out{nullptr};
     switch (target_state_) {
       case TargetState::READY_TO_DOCK:
-        out = "Press A to get task";
         break;
       case TargetState::SET:
         break;
@@ -233,6 +231,7 @@ class Game {
         camera.ConvertToCameraSpace(space_craft_.GetPosition());
 
     bool is_visible = true;
+    bool is_text_visible = true;
 
     Vector2d ray_dir(0.0f, -1.0f);
     float distance = 0.0f;
@@ -241,6 +240,7 @@ class Game {
       ray_dir = (stations_[space_station_target_].pos -
                  stations_[space_station_cur_].pos)
                     .GetNormalized();
+      is_text_visible = false;
     } else {
       distance = (space_station_.GetPosition() - space_craft_.GetPosition())
                      .GetLength();
@@ -260,7 +260,8 @@ class Game {
       }
     }
 
-    game_interface_.SetArrow(is_visible, ship_in_camera, ray_dir, distance);
+    game_interface_.SetArrow(is_visible, is_text_visible, ship_in_camera,
+                             ray_dir, distance);
   }
 
   PlaydateAPI *playdate_;
@@ -279,10 +280,12 @@ class Game {
   enum TargetState {
     NONE,
     READY_TO_DOCK,
+    ALIGN_IN_DOCK,
     SET,
     READY_TO_JUMP,
     JUMP,
   } target_state_{TargetState::NONE};
+  float target_state_time_{0.0f};
 
   UiGameInterface game_interface_;
 

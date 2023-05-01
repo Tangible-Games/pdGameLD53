@@ -1,6 +1,5 @@
 #include "ui_game_interface.hpp"
 
-#include "consts.hpp"
 #include "fonts.hpp"
 #include "pd_helpers.hpp"
 
@@ -52,7 +51,16 @@ void UiGameInterface::Load() {
   }
 }
 
-void UiGameInterface::Update(float dt) { running_time_ += dt; }
+void UiGameInterface::Update(float dt) {
+  running_time_ += dt;
+
+  if (moving_too_fast_time_ > 0.0f) {
+    moving_too_fast_time_ -= dt;
+    if (moving_too_fast_time_ < 0.0f) {
+      moving_too_fast_time_ = 0.0f;
+    }
+  }
+}
 
 void UiGameInterface::Draw() {
   drawArrow();
@@ -107,8 +115,23 @@ void UiGameInterface::Draw() {
   text = "100%";
   playdate_->graphics->drawText(
       text.data(), text.size(), kASCIIEncoding,
-      screen_width - crate_width - 15 - text.size() * 11,
+      screen_width - crate_width - 15 - text.size() * text_glyph_width_,
       screen_height - crate_height - 13);
+
+  if (kUiDrawSpeed) {
+    text = std::to_string((int)speed_);
+    playdate_->graphics->drawText(
+        text.data(), text.size(), kASCIIEncoding,
+        (screen_width - text.size() * text_glyph_width_) / 2,
+        screen_height - text_glyph_height_ - 13);
+  }
+
+  if (!moving_too_fast_force_hidden_ && moving_too_fast_time_ > 0.0f) {
+    text = "Moving too fast. Decrease speed to dock.";
+    playdate_->graphics->drawText(
+        text.data(), text.size(), kASCIIEncoding,
+        (screen_width - text.size() * text_glyph_width_) / 2 + 55, 35);
+  }
 }
 
 void UiGameInterface::drawArrow() {
@@ -132,8 +155,7 @@ void UiGameInterface::drawArrow() {
     GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
 
     std::string text = std::to_string((int)arrow_distance_);
-    int text_width = text.size() * 9;
-    int text_height = 12;
+    int text_width = text.size() * text_glyph_width_;
 
     Point2d sprite_pos = intersection.p;
     int text_x = 0;
@@ -143,17 +165,17 @@ void UiGameInterface::drawArrow() {
       sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
       angle = 270.0f;
       text_x = (int)sprite_pos.x - bitmap_width / 2 - text_width - 1;
-      text_y = (int)sprite_pos.y - text_height / 2;
+      text_y = (int)sprite_pos.y - text_glyph_height_ / 2;
     } else if (intersection.dx == -1) {
       sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
       angle = 90.0f;
       text_x = (int)sprite_pos.x + bitmap_width / 2 + 1;
-      text_y = (int)sprite_pos.y - text_height / 2;
+      text_y = (int)sprite_pos.y - text_glyph_height_ / 2;
     } else if (intersection.dy == 1) {
       sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
       angle = 0;
       text_x = (int)sprite_pos.x - text_width / 2;
-      text_y = (int)sprite_pos.y - bitmap_height / 2 - text_height - 1;
+      text_y = (int)sprite_pos.y - bitmap_height / 2 - text_glyph_height_ - 1;
     } else {
       sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
       angle = 180.0f;
@@ -165,10 +187,12 @@ void UiGameInterface::drawArrow() {
                                            (int)sprite_pos.y, angle, 0.5f, 0.5f,
                                            1.0f, 1.0f);
 
-    playdate_->graphics->setFont(
-        Fonts::instance().use(FontName::kFontBoldOutlined));
+    if (is_is_arrow_text_visble_) {
+      playdate_->graphics->setFont(
+          Fonts::instance().use(FontName::kFontBoldOutlined));
 
-    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
-                                  text_x, text_y);
+      playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
+                                    text_x, text_y);
+    }
   }
 }
