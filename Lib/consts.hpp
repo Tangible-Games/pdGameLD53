@@ -174,6 +174,11 @@ constexpr const char* kFontDataPath[] = {
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
 };
 
+enum SoundSample { kTrusters = 0, kSoundsSamplesMax };
+constexpr const char* kSoundsDataPath[] = {
+    /* [kTrusters] = */ "data/sounds/thruster.wav",
+};
+
 constexpr bool kDrawDebugAsteroids = false;
 constexpr bool kDrawDebugSpaceCraft = false;
 constexpr bool kDrawDebugStation = false;
