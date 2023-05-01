@@ -1,6 +1,7 @@
 #include "ui_game_interface.hpp"
 
 #include "consts.hpp"
+#include "fonts.hpp"
 #include "pd_helpers.hpp"
 
 void UiGameInterface::Load() {
@@ -68,16 +69,36 @@ void UiGameInterface::Draw() {
       bottom_right_corner_, screen_width - bitmap_width,
       screen_height - bitmap_height, kBitmapUnflipped);
 
-  GetBitmapSizes(playdate_, crate_, bitmap_width, bitmap_height);
-  playdate_->graphics->drawBitmap(crate_, screen_width - bitmap_width - 15,
-                                  screen_height - bitmap_height - 15,
+  int crate_width = 0;
+  int crate_height = 0;
+  GetBitmapSizes(playdate_, crate_, crate_width, crate_height);
+  playdate_->graphics->drawBitmap(crate_, screen_width - crate_width - 15,
+                                  screen_height - crate_height - 15,
                                   kBitmapUnflipped);
 
   LCDBitmap* bitmap = nullptr;
 
+  int clock_width = 0;
+  int clock_height = 0;
   bitmap = SelectFrameLooped(playdate_, clock_, kUiClockAnimationLength,
                              kUiClockAnimationNumFrames, running_time_);
-  GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
-  playdate_->graphics->drawBitmap(
-      bitmap, 15, screen_height - bitmap_height - 15, kBitmapUnflipped);
+  GetBitmapSizes(playdate_, bitmap, clock_width, clock_height);
+  playdate_->graphics->drawBitmap(bitmap, 15, screen_height - clock_height - 15,
+                                  kBitmapUnflipped);
+
+  playdate_->graphics->setFont(
+      Fonts::instance().use(FontName::kFontBoldOutlined));
+
+  std::string text;
+
+  text = "123:45";
+  playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
+                                15 + clock_width + 5,
+                                screen_height - clock_height - 13);
+
+  text = "100%";
+  playdate_->graphics->drawText(
+      text.data(), text.size(), kASCIIEncoding,
+      screen_width - crate_width - 15 - text.size() * 11,
+      screen_height - crate_height - 13);
 }
