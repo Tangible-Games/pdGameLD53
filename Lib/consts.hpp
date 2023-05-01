@@ -343,7 +343,7 @@ constexpr const char* kFontDataPath[] = {
     // files
     /* [kFontBold] = */ "data/fonts/Nontendo-Bold.pft",
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
-    /* [kFontBold2x] =  */ "data/fonts/Nontendo-Bold-2x.fnt",
+    /* [kFontBold2x] =  */ "data/fonts/Nontendo-Bold-2x.pft",
 };
 
 enum SoundSample {
@@ -351,6 +351,10 @@ enum SoundSample {
   kSoundBackward,
   kSoundRotateLeft,
   kSoundRotateRight,
+  kCollision1,
+  kCollision2,
+  kCollision3,
+  kCollision4,
   kSoundMax
 };
 constexpr const char* kSoundsDataPath[] = {
@@ -358,6 +362,10 @@ constexpr const char* kSoundsDataPath[] = {
     /* [kSoundBackward] = */ "data/sounds/thruster_back.wav",
     /* [kSoundRotateLeft] = */ "data/sounds/rotate_left.wav",
     /* [kSoundRotateRight] = */ "data/sounds/rotate_right.wav",
+    /* [kCollision1] = */ "data/sounds/collision-1.wav",
+    /* [kCollision2] = */ "data/sounds/collision-2.wav",
+    /* [kCollision3] = */ "data/sounds/collision-3.wav",
+    /* [kCollision4] = */ "data/sounds/collision-4.wav",
 };
 constexpr float kSoundFadingDelta = 0.1f;
 
