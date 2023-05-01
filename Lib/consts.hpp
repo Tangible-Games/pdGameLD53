@@ -219,9 +219,18 @@ constexpr const char* kFontDataPath[] = {
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
 };
 
-enum SoundSample { kSoundTrusters = 0, kSoundMax };
+enum SoundSample {
+  kSoundTrusters = 0,
+  kSoundBackward,
+  kSoundRotateLeft,
+  kSoundRotateRight,
+  kSoundMax
+};
 constexpr const char* kSoundsDataPath[] = {
     /* [kSoundTrusters] = */ "data/sounds/thruster.wav",
+    /* [kSoundBackward] = */ "data/sounds/thruster_back.wav",
+    /* [kSoundRotateLeft] = */ "data/sounds/rotate_left.wav",
+    /* [kSoundRotateRight] = */ "data/sounds/rotate_right.wav",
 };
 constexpr float kSoundFadingDelta = 0.1f;
 
