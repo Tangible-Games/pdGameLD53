@@ -70,7 +70,8 @@ class Game {
       error = nullptr;
       fonts_[i] = playdate_->graphics->loadFont(kFontDataPath[i], &error);
       if (error) {
-        playdate_->system->logToConsole("Failed to load font, error: %s", error);
+        playdate_->system->logToConsole("Failed to load font, error: %s",
+                                        error);
       }
     }
 
@@ -127,7 +128,6 @@ class Game {
 
     showState();
   }
-
 
   void onJump() { onUpdateArea(space_station_target_); }
 
@@ -319,7 +319,7 @@ class Game {
 
   LCDBitmapTable *arrow_bitmap_table_{nullptr};
 
-  std::array<LCDFont*, kFontLast> fonts_;
+  std::array<LCDFont *, kFontLast> fonts_;
 
   float running_time_{0.0f};
 };
