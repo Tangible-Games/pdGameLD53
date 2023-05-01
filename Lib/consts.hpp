@@ -10,7 +10,7 @@
 
 constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
-constexpr float kSpaceCraftPosY = 1000.0f;
+constexpr float kSpaceCraftPosY = 150.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
 constexpr float kSpaceCraftDeceleration = 15.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
@@ -35,8 +35,10 @@ constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;
 constexpr float kSpaceStationAnimationLength = 2.4f;
-constexpr float kSpaceCraftToStationCameraOffset = 50.0f;
+constexpr float kSpaceCraftToStationCameraOffset = 30.0f;
 constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
+constexpr float kSpaceStationDockSpeed = 30.0f;
+constexpr float kSpaceStationAlignTimeout = 2.0f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
@@ -157,6 +159,8 @@ constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
 constexpr int kUiClockAnimationNumFrames = 16;
 constexpr float kUiClockAnimationLength = 1.0f;
+constexpr bool kUiDrawSpeed = false;
+constexpr float kUiMovingTooFastTimeout = 3.0f;
 
 enum FontName {
   kFontBold = 0,

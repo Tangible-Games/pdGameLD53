@@ -20,12 +20,29 @@ class SpaceCraft : public SpaceObject {
 
   void ResetSpaceStation(SpaceStation* space_station);
 
+  void Start() { state_ = State::IN_GAME; }
+
   void Update(float dt);
   void Draw(const Camera& camera);
+
+  float GetSpeed() const { return velocity_.GetLength(); }
+
+  void StartAligning(const Point2d& align_to) {
+    state_ = State::ALIGNING;
+    state_time_ = 0.0f;
+    align_from_ = GetPosition();
+    align_to_ = align_to;
+    align_direction_from_ = direction_;
+    velocity_ = Vector2d();
+    engine_state_ = EngineState::IDLE;
+    rotation_state_ = RotationState::IDLE;
+  }
 
  private:
   void load();
   void updateInput(float dt);
+  void updateMove(float dt);
+  void updateAligning(float dt);
   void tryMove(const Vector2d& move);
   void draw(const Point2d& position);
   void drawDebug(const Point2d& position);
@@ -44,6 +61,8 @@ class SpaceCraft : public SpaceObject {
     return a1 - a2;
   }
 
+  enum class State { IN_GAME, ALIGNING };
+
   enum class EngineState { IDLE, FLARE_UP, FORWARD, BACKWARD };
 
   enum class RotationState { IDLE, LEFT, RIGHT };
@@ -57,6 +76,11 @@ class SpaceCraft : public SpaceObject {
   float rotation_speed_deg_per_sec_{0.0f};
   float crank_prev_angle_{0.0f};
 
+  State state_{State::IN_GAME};
+  float state_time_{0.0f};
+  Point2d align_from_;
+  Point2d align_to_;
+  Vector2d align_direction_from_;
   EngineState engine_state_{EngineState::IDLE};
   EngineState next_engine_state_{EngineState::IDLE};
   float engine_state_time_{0.0f};
