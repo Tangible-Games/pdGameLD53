@@ -13,10 +13,12 @@ class UiGameInterface {
   void Update(float dt);
   void Draw();
 
-  void SetArrow(bool is_visible, const Point2d& ship_pos, const Vector2d& dir) {
+  void SetArrow(bool is_visible, const Point2d& ship_pos, const Vector2d& dir,
+                float distance) {
     is_arrow_visible_ = is_visible;
     ship_pos_ = ship_pos;
     arrow_dir_norm_ = dir;
+    arrow_distance_ = distance;
   }
 
   void SetTimeSeconds(float time_seconds) { time_seconds_ = time_seconds; }
@@ -30,6 +32,7 @@ class UiGameInterface {
   bool is_arrow_visible_{false};
   Point2d ship_pos_;
   Vector2d arrow_dir_norm_;
+  float arrow_distance_{0.0f};
   float time_seconds_{0.0f};
   float crate_health_percent_{0.0f};
   LCDBitmapTable* arrow_bitmap_table_{nullptr};

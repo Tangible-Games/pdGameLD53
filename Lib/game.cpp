@@ -235,12 +235,16 @@ class Game {
     bool is_visible = true;
 
     Vector2d ray_dir(0.0f, -1.0f);
+    float distance = 0.0f;
     if (target_state_ == TargetState::SET ||
         target_state_ == TargetState::READY_TO_JUMP) {
       ray_dir = (stations_[space_station_target_].pos -
                  stations_[space_station_cur_].pos)
                     .GetNormalized();
     } else {
+      distance = (space_station_.GetPosition() - space_craft_.GetPosition())
+                     .GetLength();
+
       Point2d station_in_camera =
           camera.ConvertToCameraSpace(space_station_.GetPosition());
       ray_dir = (station_in_camera - ship_in_camera).GetNormalized();
@@ -256,7 +260,7 @@ class Game {
       }
     }
 
-    game_interface_.SetArrow(is_visible, ship_in_camera, ray_dir);
+    game_interface_.SetArrow(is_visible, ship_in_camera, ray_dir, distance);
   }
 
   PlaydateAPI *playdate_;

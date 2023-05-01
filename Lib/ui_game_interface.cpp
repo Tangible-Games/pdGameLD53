@@ -131,24 +131,44 @@ void UiGameInterface::drawArrow() {
     int bitmap_height = 0;
     GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
 
+    std::string text = std::to_string((int)arrow_distance_);
+    int text_width = text.size() * 9;
+    int text_height = 12;
+
     Point2d sprite_pos = intersection.p;
+    int text_x = 0;
+    int text_y = 0;
     float angle = 0.0f;
     if (intersection.dx == 1) {
       sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
       angle = 270.0f;
+      text_x = (int)sprite_pos.x - bitmap_width / 2 - text_width - 1;
+      text_y = (int)sprite_pos.y - text_height / 2;
     } else if (intersection.dx == -1) {
       sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
       angle = 90.0f;
+      text_x = (int)sprite_pos.x + bitmap_width / 2 + 1;
+      text_y = (int)sprite_pos.y - text_height / 2;
     } else if (intersection.dy == 1) {
       sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
       angle = 0;
+      text_x = (int)sprite_pos.x - text_width / 2;
+      text_y = (int)sprite_pos.y - bitmap_height / 2 - text_height - 1;
     } else {
       sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
       angle = 180.0f;
+      text_x = (int)sprite_pos.x - text_width / 2;
+      text_y = (int)sprite_pos.y + bitmap_height / 2 + 1;
     }
 
     playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
                                            (int)sprite_pos.y, angle, 0.5f, 0.5f,
                                            1.0f, 1.0f);
+
+    playdate_->graphics->setFont(
+        Fonts::instance().use(FontName::kFontBoldOutlined));
+
+    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
+                                  text_x, text_y);
   }
 }
