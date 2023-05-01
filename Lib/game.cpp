@@ -49,7 +49,6 @@ class Game : public UiStation::Callback {
 
     Fonts::instance().loadFonts(playdate_);
     Sounds::instance().setup(playdate_);
-    Sounds::instance().loadSounds();
 
     Sounds::instance().playMusic(kMusicMain);
 
