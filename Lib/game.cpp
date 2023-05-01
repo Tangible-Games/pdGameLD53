@@ -18,7 +18,8 @@ class Game {
         camera_(playdate),
         space_craft_(playdate),
         space_station_(playdate),
-        stars_(playdate) {
+        stars_(playdate),
+        game_interface_(playdate) {
     onStart();
   }
 

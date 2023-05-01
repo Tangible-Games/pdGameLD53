@@ -3,6 +3,8 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "pd_api.h"
 
+using namespace PdSymphony::Math;
+
 inline void GetBitmapSizes(PlaydateAPI* playdate, LCDBitmap* bitmap,
                            int& width_out, int& height_out) {
   int bitmap_row_bytes = 0;
