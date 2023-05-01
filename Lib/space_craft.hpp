@@ -27,7 +27,12 @@ class SpaceCraft : public SpaceObject {
 
   void ResetSpaceStation(SpaceStation* space_station);
 
-  void Start() { state_ = State::IN_GAME; }
+  void Start(const Point2d& start_position,
+             const Vector2d& start_direction_norm) {
+    SetPosition(start_position);
+    direction_ = start_direction_norm;
+    state_ = State::IN_GAME;
+  }
 
   void Update(float dt);
   void Draw(const Camera& camera);
