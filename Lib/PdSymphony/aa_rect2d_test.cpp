@@ -60,11 +60,12 @@ TEST(AARect2d, IsPointOnBottomBorder) {
   ASSERT_FALSE(rect.IsPointOnBottomBorder(Point2d(12.1f, 12.0f), 0.0001f));
 }
 
-TEST(AARect2d, DISABLED_IntersectRayFromInside) {
+TEST(AARect2d, IntersectRayFromInside) {
   AARect2d rect(Point2d(10.0f, 15.0f),
                 /* new_half_size= */ Vector2d(2.0f, 3.0f));
 
   AARect2d::FromInsideIntersection intersection;
+
   rect.IntersectRayFromInside(
       /* ray_start= */ Point2d(10.0f, 15.0f),
       /* ray_dir_norm= */ Vector2d(2.0f, 2.0f).GetNormalized(), intersection);
@@ -84,13 +85,67 @@ TEST(AARect2d, DISABLED_IntersectRayFromInside) {
   ASSERT_EQ(0, intersection.dy);
 
   rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 17.0f),
+      /* ray_dir_norm= */ Vector2d(1.0f, 1.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(11.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(18.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(0, intersection.dx);
+  ASSERT_EQ(1, intersection.dy);
+
+  rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 13.0f),
+      /* ray_dir_norm= */ Vector2d(1.0f, -1.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(11.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(12.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(0, intersection.dx);
+  ASSERT_EQ(-1, intersection.dy);
+
+  rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 15.0f),
+      /* ray_dir_norm= */ Vector2d(-2.0f, 2.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(8.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(17.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(-1, intersection.dx);
+  ASSERT_EQ(0, intersection.dy);
+
+  rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 15.0f),
+      /* ray_dir_norm= */ Vector2d(-2.0f, 1.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(8.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(16.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(-1, intersection.dx);
+  ASSERT_EQ(0, intersection.dy);
+
+  rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 17.0f),
+      /* ray_dir_norm= */ Vector2d(-1.0f, 1.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(9.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(18.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(0, intersection.dx);
+  ASSERT_EQ(1, intersection.dy);
+
+  rect.IntersectRayFromInside(
+      /* ray_start= */ Point2d(10.0f, 13.0f),
+      /* ray_dir_norm= */ Vector2d(-1.0f, -1.0f).GetNormalized(), intersection);
+  ASSERT_TRUE(intersection.has_intersection);
+  ASSERT_NEAR(9.0f, intersection.p.x, 0.0001f);
+  ASSERT_NEAR(12.0f, intersection.p.y, 0.0001f);
+  ASSERT_EQ(0, intersection.dx);
+  ASSERT_EQ(-1, intersection.dy);
+
+  rect.IntersectRayFromInside(
       /* ray_start= */ Point2d(10.0f, 15.0f),
       /* ray_dir_norm= */ Vector2d(1.0f, 3.0f).GetNormalized(), intersection);
   ASSERT_TRUE(intersection.has_intersection);
   ASSERT_NEAR(11.0f, intersection.p.x, 0.0001f);
   ASSERT_NEAR(18.0f, intersection.p.y, 0.0001f);
-  ASSERT_EQ(1, intersection.dx);
-  ASSERT_EQ(0, intersection.dy);
+  ASSERT_EQ(0, intersection.dx);
+  ASSERT_EQ(1, intersection.dy);
 
   rect.IntersectRayFromInside(
       /* ray_start= */ Point2d(10.0f, 15.0f),
@@ -98,7 +153,7 @@ TEST(AARect2d, DISABLED_IntersectRayFromInside) {
   ASSERT_TRUE(intersection.has_intersection);
   ASSERT_NEAR(12.0f, intersection.p.x, 0.0001f);
   ASSERT_NEAR(18.0f, intersection.p.y, 0.0001f);
-  ASSERT_EQ(1, intersection.dx);
+  ASSERT_EQ(0, intersection.dx);
   ASSERT_EQ(1, intersection.dy);
 
   rect.IntersectRayFromInside(

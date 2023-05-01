@@ -85,9 +85,9 @@ inline std::vector<StationArea> GetStations() {
               .num_asteroids =
                   {
                       50,
-                      100,
+                      0,
                       150,
-                      400,
+                      0,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
@@ -149,3 +149,6 @@ inline std::vector<StationArea> GetStations() {
               .asteroids_area_distance = 3000.0f,
           }};
 }
+
+constexpr int kUiArrowAnimationNumFrames = 8;
+constexpr float kUiArrowAnimationLength = 1.6f;

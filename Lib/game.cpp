@@ -5,6 +5,7 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "camera.hpp"
 #include "consts.hpp"
+#include "pd_helpers.hpp"
 #include "space_craft.hpp"
 #include "space_station.hpp"
 #include "stars.hpp"
@@ -57,11 +58,19 @@ class Game {
     space_station_.SetPosition(Point2d(0.0f, 0.0f));
     space_craft_.SetPosition(Point2d(kSpaceCraftPosX, kSpaceCraftPosY));
 
+    const char *error = nullptr;
+    arrow_bitmap_table_ =
+        playdate_->graphics->loadBitmapTable("data/triangle_3.gif", &error);
+    if (error) {
+      playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
+    }
+
     onUpdateArea(0);
   }
 
   void onUpdateArea(uint32_t idx) {
     playdate_->system->logToConsole("#onUpdateArea %d", idx);
+
     space_station_.Generate(stations_[idx]);
     stars_.Generate(stations_[idx].seed);
     space_craft_.ResetSpaceStation(&space_station_);
@@ -86,6 +95,8 @@ class Game {
   }
 
   void onUpdateAndDraw(float dt) {
+    running_time_ += dt;
+
     playdate_->graphics->clear(kColorBlack);
 
     space_station_.Update(dt);
@@ -101,7 +112,7 @@ class Game {
     space_station_.Draw(camera_);
     space_craft_.Draw(camera_);
 
-    drawLineToStation(camera_);
+    drawArrowToStation(camera_);
 
     playdate_->system->drawFPS(5, 5);
 
@@ -130,10 +141,10 @@ class Game {
     switch (target_state_) {
       case TargetState::NONE:
         if (craft_to_station < kSpaceStationSize) {
-          target_state_ = TargetState::READY_TO_GET;
+          target_state_ = TargetState::READY_TO_DOCK;
         }
         break;
-      case TargetState::READY_TO_GET:
+      case TargetState::READY_TO_DOCK:
         if (craft_to_station > kSpaceStationSize) {
           target_state_ = TargetState::NONE;
         } else if (buttons_current & kButtonA) {
@@ -169,47 +180,11 @@ class Game {
   void showState() {
     const char *out{nullptr};
     switch (target_state_) {
-      case TargetState::READY_TO_GET:
+      case TargetState::READY_TO_DOCK:
         out = "Press A to get task";
         break;
-      case TargetState::SET: {
-        Point2d p1 =
-            camera_.ConvertToCameraSpace(stations_[space_station_cur_].pos,
-                                         stations_[space_station_cur_].pos);
-        Point2d p2 =
-            camera_.ConvertToCameraSpace(stations_[space_station_target_].pos,
-                                         stations_[space_station_cur_].pos);
-        Segment2d s{p1, p2};
-        Point2d intersect;
-        Vector2d direction{0, 0};
-        const Point2d p00{0, 0};
-        const Point2d p01{playdate_->display->getWidth() * 1.0f, 0};
-        const Point2d p11{playdate_->display->getWidth() * 1.0f,
-                          playdate_->display->getHeight() * 1.0f};
-        const Point2d p10{0, playdate_->display->getHeight() * 1.0f};
-        if (s.Intersect(Segment2d(p00, p01), 0.001f, intersect)) {
-          direction = {0, 1};
-        } else if (s.Intersect(Segment2d(p10, p11), 0.001f, intersect)) {
-          direction = {0, -1};
-        } else if (s.Intersect(Segment2d(p00, p10), 0.001f, intersect)) {
-          direction = {1, 0};
-        } else if (s.Intersect(Segment2d(p01, p11), 0.001f, intersect)) {
-          direction = {-1, 0};
-        } else {
-          break;
-        }
-        Point2d front = intersect + direction * 10.0f;
-        Vector2d right_direction = direction.GetRotated(DegToRad(-90.0f));
-        Point2d right = intersect + right_direction * 10.0f - direction * 20.0f;
-        Point2d left = intersect - right_direction * 10.0f - direction * 20.0f;
-        playdate_->graphics->drawLine((int)front.x, (int)front.y, (int)right.x,
-                                      (int)right.y, 3, kColorWhite);
-        playdate_->graphics->drawLine((int)right.x, (int)right.y, (int)left.x,
-                                      (int)left.y, 3, kColorWhite);
-        playdate_->graphics->drawLine((int)left.x, (int)left.y, (int)front.x,
-                                      (int)front.y, 3, kColorWhite);
-
-      } break;
+      case TargetState::SET:
+        break;
       case TargetState::READY_TO_JUMP:
         out = "Press A to jump";
         break;
@@ -227,19 +202,73 @@ class Game {
   }
 
   void setupCamera() {
-    Vector2d to_station_norm =
-        (space_station_.GetPosition() - space_craft_.GetPosition())
-            .GetNormalized();
+    Vector2d to_station_norm;
+    if (target_state_ == TargetState::SET ||
+        target_state_ == TargetState::READY_TO_JUMP) {
+      to_station_norm = (stations_[space_station_target_].pos -
+                         stations_[space_station_cur_].pos)
+                            .GetNormalized();
+    } else {
+      to_station_norm =
+          (space_station_.GetPosition() - space_craft_.GetPosition())
+              .GetNormalized();
+    }
     camera_.SetLookAt(space_craft_.GetPosition() +
                       to_station_norm * kSpaceCraftCameraOffset);
   }
 
-  void drawLineToStation(const Camera &camera) {
-    Point2d p1 = camera.ConvertToCameraSpace(space_craft_.GetPosition());
-    Point2d p2 = camera.ConvertToCameraSpace(space_station_.GetPosition());
+  void drawArrowToStation(const Camera &camera) {
+    int screen_width = playdate_->display->getWidth();
+    int screen_height = playdate_->display->getHeight();
+    AARect2d screen_rect(
+        Point2d((float)screen_width / 2.0f, (float)screen_height / 2.0f),
+        Vector2d((float)screen_width / 2.0f, (float)screen_height / 2.0f));
 
-    playdate_->graphics->drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y, 1,
-                                  kColorWhite);
+    Point2d ship_in_camera =
+        camera.ConvertToCameraSpace(space_craft_.GetPosition());
+
+    Vector2d ray_dir(0.0f, -1.0f);
+    if (target_state_ == TargetState::SET ||
+        target_state_ == TargetState::READY_TO_JUMP) {
+      ray_dir = (stations_[space_station_target_].pos -
+                 stations_[space_station_cur_].pos)
+                    .GetNormalized();
+    } else {
+      Point2d station_in_camera =
+          camera.ConvertToCameraSpace(space_station_.GetPosition());
+      ray_dir = (station_in_camera - ship_in_camera).GetNormalized();
+    }
+
+    AARect2d::FromInsideIntersection intersection;
+    screen_rect.IntersectRayFromInside(ship_in_camera, ray_dir, intersection);
+
+    LCDBitmap *bitmap = SelectFrameLooped(
+        playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
+        kUiArrowAnimationNumFrames, running_time_);
+
+    int bitmap_width = 0;
+    int bitmap_height = 0;
+    GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
+
+    Point2d sprite_pos = intersection.p;
+    float angle = 0.0f;
+    if (intersection.dx == 1) {
+      sprite_pos.x = sprite_pos.x - (float)bitmap_width / 2.0f;
+      angle = 270.0f;
+    } else if (intersection.dx == -1) {
+      sprite_pos.x = sprite_pos.x + (float)bitmap_height / 2.0f;
+      angle = 90.0f;
+    } else if (intersection.dy == 1) {
+      sprite_pos.y = sprite_pos.y - (float)bitmap_height / 2.0f;
+      angle = 0;
+    } else {
+      sprite_pos.y = sprite_pos.y + (float)bitmap_height / 2.0f;
+      angle = 180.0f;
+    }
+
+    playdate_->graphics->drawRotatedBitmap(bitmap, (int)sprite_pos.x,
+                                           (int)sprite_pos.y, angle, 0.5f, 0.5f,
+                                           1.0f, 1.0f);
   }
 
   PlaydateAPI *playdate_;
@@ -257,11 +286,15 @@ class Game {
   size_t space_station_target_{0};
   enum TargetState {
     NONE,
-    READY_TO_GET,
+    READY_TO_DOCK,
     SET,
     READY_TO_JUMP,
     JUMP,
   } target_state_{TargetState::NONE};
+
+  LCDBitmapTable *arrow_bitmap_table_{nullptr};
+
+  float running_time_{0.0f};
 };
 
 static int test = 0;

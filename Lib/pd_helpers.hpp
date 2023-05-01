@@ -3,6 +3,16 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "pd_api.h"
 
+inline void GetBitmapSizes(PlaydateAPI* playdate, LCDBitmap* bitmap,
+                           int& width_out, int& height_out) {
+  int bitmap_row_bytes = 0;
+  uint8_t* bitmap_mask = 0;
+  uint8_t* bitmap_data = 0;
+  playdate->graphics->getBitmapData(bitmap, &width_out, &height_out,
+                                    &bitmap_row_bytes, &bitmap_mask,
+                                    &bitmap_data);
+}
+
 inline void DrawBitmapCentered(PlaydateAPI* playdate, LCDBitmap* bitmap,
                                const Point2d& center) {
   int bitmap_width = 0;
