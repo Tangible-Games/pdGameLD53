@@ -12,7 +12,7 @@ constexpr float kSpaceCraftRadius = 23.0f;
 constexpr float kSpaceCraftPosX = 0.0f;
 constexpr float kSpaceCraftPosY = 1200.0f;
 constexpr float kSpaceCraftAcceleration = 40.0f;
-constexpr float kSpaceCraftDeceleration = 15.0f;
+constexpr float kSpaceCraftDeceleration = 20.0f;
 constexpr float kSpaceCraftVelocityMax = 80.0f;
 constexpr float kSpaceCraftRotationAcceleration = 360.0f;  // Deg
 constexpr float kSpaceCraftRotationSpeedMax = 180.0f;      // Deg
@@ -90,7 +90,7 @@ inline std::vector<StationArea> GetStations() {
   // clang-format off
   return {StationArea{
               .pos = Point2d(0, 0),
-              .seed = 13124125,
+              .seed = 13124130,
               .name{"Central Station"},
               .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, "
                     "businessmen and diplomats just\nlove visiting. Feel at "
@@ -99,8 +99,8 @@ inline std::vector<StationArea> GetStations() {
                   {
                       0,
                       10,
-                      1,
-                      4,
+                      15,
+                      18,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 1500.0f,
