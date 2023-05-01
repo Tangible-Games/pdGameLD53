@@ -44,6 +44,8 @@ class UiGameInterface {
     }
   }
 
+  void SetReadyToJump(bool show) { ready_to_jump_ = show; }
+
  private:
   void drawArrow();
 
@@ -60,6 +62,7 @@ class UiGameInterface {
   float speed_{0.0f};
   float moving_too_fast_time_{0.0f};
   bool moving_too_fast_force_hidden_{false};
+  bool ready_to_jump_{false};
   LCDBitmapTable* arrow_bitmap_table_{nullptr};
   LCDBitmap* bottom_left_corner_{nullptr};
   LCDBitmap* bottom_right_corner_{nullptr};

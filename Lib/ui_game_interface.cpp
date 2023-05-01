@@ -150,6 +150,13 @@ void UiGameInterface::Draw() {
         text.data(), text.size(), kASCIIEncoding,
         (screen_width - text.size() * text_glyph_width_) / 2 + 55, 35);
   }
+
+  if (ready_to_jump_) {
+    text = "Ready to jump. Use Crank to jump.";
+    playdate_->graphics->drawText(
+        text.data(), text.size(), kASCIIEncoding,
+        (screen_width - text.size() * text_glyph_width_) / 2 + 55, 35);
+  }
 }
 
 void UiGameInterface::drawArrow() {

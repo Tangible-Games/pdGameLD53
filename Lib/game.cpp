@@ -71,6 +71,16 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     current_mission_ = -1;
 
     onUpdateArea(0);
+
+    // hack to start from jump position
+#if 0
+    target_state_ = TargetState::STATION;
+    GenMissions(space_station_cur_, missions_to_select_,
+                    missions_to_select_indices_);
+    OnSelectMission(0);
+    space_craft_.SetVelocity(Vector2d(0, -100));
+    space_craft_.SetPosition(Point2d(0, stations_[space_station_cur_].jump_distance + 1000));
+#endif
   }
 
   void onUpdateArea(uint32_t idx) {
@@ -137,8 +147,6 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     }
 
     // playdate_->system->drawFPS(5, 5);
-
-    showState();
 
     onUpdateSounds();
   }
@@ -245,10 +253,18 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         }
         break;
       case TargetState::READY_TO_JUMP:
+<<<<<<< HEAD
         if (craft_to_station < stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::SET;
         } else if (buttons_current & kButtonA) {
           target_state_ = TargetState::JUMP;
+=======
+        // no way back from here
+        game_interface_.SetReadyToJump(true);
+        // old way to jump
+        if (buttons_current & kButtonA) {
+            target_state_ = TargetState::JUMP;
+>>>>>>> dd63b5f1a3ecb80c7a2e401c5c23506f3c54634b
         }
         break;
       case TargetState::JUMP:
@@ -257,28 +273,6 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         break;
       default:
         break;
-    }
-  }
-
-  void showState() {
-    const char *out{nullptr};
-    switch (target_state_) {
-      case TargetState::READY_TO_DOCK:
-        break;
-      case TargetState::SET:
-        break;
-      case TargetState::READY_TO_JUMP:
-        out = "Press A to jump";
-        break;
-      default:
-        break;
-    }
-    if (out) {
-      playdate_->graphics->setFont(
-          Fonts::instance().use(FontName::kFontBoldOutlined));
-      playdate_->graphics->drawText(out, strlen(out), kASCIIEncoding,
-                                    playdate_->display->getWidth() / 2 - 100,
-                                    1);
     }
   }
 

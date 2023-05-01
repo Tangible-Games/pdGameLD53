@@ -176,7 +176,7 @@ inline std::vector<StationArea> GetStations() {
                     "businessmen\nYou into big rocks yourself?"},
               .num_asteroids =
                   {
-                      400,
+                      370,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
