@@ -156,7 +156,7 @@ constexpr float kStarsVelocitySlowDown = 100.0f;
 constexpr int kUiArrowAnimationNumFrames = 8;
 constexpr float kUiArrowAnimationLength = 1.6f;
 
-enum {
+enum FontName {
   kFontBold = 0,
   kFontBoldOutlined,
   kFontLast,
