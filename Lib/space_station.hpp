@@ -44,8 +44,11 @@ class SpaceStation : public SpaceObject {
 
   static bool loaded;
   static std::vector<AsteroidType> asteroid_types_;
+  static LCDBitmapTable* station_bitmap_table_;
   std::vector<Asteroid> asteroids_;
   SpatialBin2d<int> asteroids_spatial_bin_{kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsSize};
+
+  float running_time_{0.0f};
 };

@@ -33,6 +33,8 @@ constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
 
 constexpr float kSpaceStationSize = 60.0f;
+constexpr float kSpaceStationAnimationNumFrames = 2.4f;
+constexpr float kSpaceStationAnimationLength = 2.4f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
 constexpr float kAsteroidsSpatialBinsCellSize = 150.0f;
@@ -84,10 +86,10 @@ inline std::vector<StationArea> GetStations() {
               .name{"Station 1"},
               .num_asteroids =
                   {
-                      50,
-                      100,
-                      150,
-                      400,
+                      0,
+                      10,
+                      1,
+                      4,
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,

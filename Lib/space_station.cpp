@@ -2,23 +2,35 @@
 
 #include <algorithm>
 
+#include "pd_helpers.hpp"
 #include "static_random_generator.hpp"
 
 bool SpaceStation::loaded = false;
 std::vector<AsteroidType> SpaceStation::asteroid_types_;
+LCDBitmapTable* SpaceStation::station_bitmap_table_ = nullptr;
 
 void SpaceStation::Generate(const StationArea& station_area) {
   StaticRandomGenerator::get().SetSeed(station_area.seed);
   createAsteroids(station_area);
+
+  running_time_ = 0.0f;
 }
 
 void SpaceStation::Update(float dt) {
+  running_time_ += dt;
+
   std::for_each(asteroids_.begin(), asteroids_.end(),
                 [dt](auto& a) { a.Update(dt); });
 }
 
 void SpaceStation::Draw(const Camera& camera) {
-  drawDebug(camera.ConvertToCameraSpace(position_));
+  LCDBitmap* bitmap = SelectFrameLooped(
+      playdate_, station_bitmap_table_, kSpaceStationAnimationLength,
+      kSpaceStationAnimationNumFrames, running_time_);
+
+  DrawBitmapCentered(playdate_, bitmap, camera.ConvertToCameraSpace(position_));
+
+  // drawDebug(camera.ConvertToCameraSpace(position_));
 
   std::for_each(asteroids_.begin(), asteroids_.end(),
                 [&](auto& a) { a.Draw(camera); });
@@ -48,11 +60,12 @@ void SpaceStation::drawDebug(const Point2d& position) {
 }
 
 void SpaceStation::load(PlaydateAPI* playdate) {
+  const char* error = nullptr;
+
   asteroid_types_ = GetAsteroidTypes();
   for (auto& asteroid_type : asteroid_types_) {
     asteroid_type.bitmaps.resize(asteroid_type.models.size());
     for (int i = 0; i < (int)asteroid_type.models.size(); ++i) {
-      const char* error = 0;
       asteroid_type.bitmaps[i] =
           playdate->graphics->loadBitmap(asteroid_type.models[i], &error);
       if (error) {
@@ -60,6 +73,12 @@ void SpaceStation::load(PlaydateAPI* playdate) {
                                        error);
       }
     }
+  }
+
+  station_bitmap_table_ =
+      playdate->graphics->loadBitmapTable("data/circle_fat.gif", &error);
+  if (error) {
+    playdate->system->logToConsole("Failed to load station, error: %s", error);
   }
 }
 

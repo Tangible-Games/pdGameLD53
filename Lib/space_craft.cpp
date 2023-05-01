@@ -43,7 +43,8 @@ void SpaceCraft::Draw(const Camera& camera) {
 }
 
 void SpaceCraft::load() {
-  const char* error = 0;
+  const char* error = nullptr;
+
   idle_bitmap_ = playdate_->graphics->loadBitmap("data/ship.png", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load ship's idle, error: %s",
