@@ -6,6 +6,13 @@
 void UiStation::Load() {
   const char* error = nullptr;
 
+  station_screen_ =
+      playdate_->graphics->loadBitmap("data/station_screen.png", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load station screen, error: %s",
+                                    error);
+  }
+
   job_card_ = playdate_->graphics->loadBitmap("data/job_card.png", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load job card, error: %s",
@@ -61,7 +68,11 @@ void UiStation::Update(float dt) {
   is_a_pressed_ = (buttons_current & kButtonA);
 
   if (buttons_released & kButtonA) {
-    callback_->OnSelectMission(cur_mission_);
+    if (mode_ == Mode::STATION_INFO) {
+      mode_ = Mode::MISSIONS;
+    } else if (mode_ == Mode::MISSIONS) {
+      callback_->OnSelectMission(cur_mission_);
+    }
   }
 }
 
@@ -69,41 +80,64 @@ void UiStation::Draw() {
   int screen_width = playdate_->display->getWidth();
   int screen_height = playdate_->display->getHeight();
 
-  if (mode_ == Mode::MISSIONS) {
+  if (mode_ == Mode::STATION_INFO) {
+    playdate_->graphics->drawBitmap(station_screen_, 0, 0, kBitmapUnflipped);
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold2x));
+
+    playdate_->graphics->drawText(station_.name.data(), station_.name.size(),
+                                  kASCIIEncoding, 25, 50);
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
+
+    std::string text = std::to_string(money_);
+    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding, 18,
+                                  4);
+
+    playdate_->graphics->drawText(station_.desc.data(), station_.desc.size(),
+                                  kASCIIEncoding, 25, 100);
+
+  } else if (mode_ == Mode::MISSIONS) {
     playdate_->graphics->drawBitmap(job_card_, 0, 0, kBitmapUnflipped);
 
-    playdate_->graphics->setFont(
-        Fonts::instance().use(FontName::kFontBoldOutlined));
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold2x));
+
+    // playdate_->graphics->pushContext(nullptr);
+    // playdate_->graphics->setDrawMode(kDrawModeInverted);
 
     playdate_->graphics->drawText(missions_[cur_mission_].name.data(),
                                   missions_[cur_mission_].name.size(),
-                                  kASCIIEncoding, 38, 49);
+                                  kASCIIEncoding, 25, 49);
+
+    // playdate_->graphics->popContext();
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
 
     playdate_->graphics->drawText(missions_[cur_mission_].desc.data(),
                                   missions_[cur_mission_].desc.size(),
-                                  kASCIIEncoding, 38, 77);
+                                  kASCIIEncoding, 25, 77);
 
     playdate_->graphics->drawText(
         missions_[cur_mission_].destination_str.data(),
-        missions_[cur_mission_].destination_str.size(), kASCIIEncoding, 38,
-        150);
+        missions_[cur_mission_].destination_str.size(), kASCIIEncoding, 40,
+        151);
 
     playdate_->graphics->drawText(
         missions_[cur_mission_].cargo_durability_str.data(),
-        missions_[cur_mission_].cargo_durability_str.size(), kASCIIEncoding, 38,
-        177);
+        missions_[cur_mission_].cargo_durability_str.size(), kASCIIEncoding, 40,
+        178);
 
     playdate_->graphics->drawText(missions_[cur_mission_].difficulty_str.data(),
                                   missions_[cur_mission_].difficulty_str.size(),
-                                  kASCIIEncoding, 38, 204);
+                                  kASCIIEncoding, 40, 205);
 
     playdate_->graphics->drawText(missions_[cur_mission_].time_limit_str.data(),
                                   missions_[cur_mission_].time_limit_str.size(),
-                                  kASCIIEncoding, 232, 177);
+                                  kASCIIEncoding, 232, 178);
 
     playdate_->graphics->drawText(missions_[cur_mission_].price_str.data(),
                                   missions_[cur_mission_].price_str.size(),
-                                  kASCIIEncoding, 232, 204);
+                                  kASCIIEncoding, 232, 205);
 
     int bitmap_width = 0;
     int bitmap_height = 0;
@@ -121,11 +155,16 @@ void UiStation::Draw() {
     playdate_->graphics->drawBitmap(
         dots_bitmap, 379, (screen_height - 40 - bitmap_height) / 2 + 40,
         kBitmapUnflipped);
+  }
 
+  if (mode_ == Mode::STATION_INFO || mode_ == Mode::MISSIONS) {
     LCDBitmap* a_button_bitmap = a_button_;
     if (is_a_pressed_) {
       a_button_bitmap = a_button_pressed_;
     }
+
+    int bitmap_width = 0;
+    int bitmap_height = 0;
 
     GetBitmapSizes(playdate_, a_button_bitmap, bitmap_width, bitmap_height);
     playdate_->graphics->drawBitmap(
