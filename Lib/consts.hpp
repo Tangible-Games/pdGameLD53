@@ -128,7 +128,8 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(2 * 1000, 2 * 1000),
               .seed = 89127634,
               .name{"Infinity Junction"},
-              .desc{"Needless to say, there are quite a few\nworlds connected via this station.\nMaybe your homeworld is one of them?"},
+              .desc{"Needless to say, there are quite a few\nworlds connected "
+                    "via this station.\nMaybe your homeworld is one of them?"},
               .num_asteroids =
                   {
                       50,
@@ -147,7 +148,9 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-2 * 1000, 4 * 1000),
               .seed = 12847312,
               .name{"Celestial Crossroads"},
-              .desc{"Enigmatic name and stale tasteless beer.\nSadly, there is nothing more here.\nA trading outpost with a meager population\nof 172 as of today. Wait, 171."},
+              .desc{"Enigmatic name and stale tasteless beer.\nSadly, there is "
+                    "nothing more here.\nA trading outpost with a meager "
+                    "population\nof 172 as of today. Wait, 171."},
               .num_asteroids =
                   {
                       50,
@@ -510,7 +513,8 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Urgent Holographic Pizza Delivery"},
-              .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to eat.\nGet it there before it gets cold!"},
+              .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to "
+                    "eat.\nGet it there before it gets cold!"},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
