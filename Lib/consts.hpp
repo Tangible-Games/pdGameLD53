@@ -84,6 +84,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(0, 0),
               .seed = 13124125,
               .name{"Station 1"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       0,
@@ -93,6 +94,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -100,6 +102,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(2 * 1000, 2 * 1000),
               .seed = 89127634,
               .name{"Station 2"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -109,6 +112,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -116,6 +120,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-2 * 1000, 4 * 1000),
               .seed = 12847312,
               .name{"Station 3"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -125,6 +130,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -132,6 +138,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-4 * 1000, -3 * 1000),
               .seed = 23098412,
               .name{"Station 4"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -141,6 +148,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -149,6 +157,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-8 * 1000, 6 * 1000),
               .seed = 48120593,
               .name{"Falcon's Flight"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -158,6 +167,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -166,6 +176,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(10 * 1000, -9 * 1000),
               .seed = 37291048,
               .name{"Tardis Terminal"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -175,6 +186,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -183,6 +195,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(-6 * 1000, 5 * 1000),
               .seed = 28619075,
               .name{"Gallifrey Gateway"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -192,6 +205,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -200,6 +214,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(3 * 1000, -1 * 1000),
               .seed = 12938407,
               .name{"Stark Spaceport"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -209,6 +224,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -217,6 +233,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(9 * 1000, 8 * 1000),
               .seed = 54298103,
               .name{"Gotham Galactica"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -226,6 +243,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -234,6 +252,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(4 * 1000, -7 * 1000),
               .seed = 94057281,
               .name{"Metropolis Metastation"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -243,6 +262,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           },
@@ -251,6 +271,7 @@ inline std::vector<StationArea> GetStations() {
               .pos = Point2d(3 * 1000, 1 * 1000),
               .seed = 98214186,
               .name{"Station 5"},
+              .desc{"Sehr gut station"},
               .num_asteroids =
                   {
                       50,
@@ -260,6 +281,7 @@ inline std::vector<StationArea> GetStations() {
                   },
               .asteroids_to_base_distance = 200.0f,
               .asteroids_area_distance = 3000.0f,
+              .jump_distance = 3300.0f,
               .difficulty_str{"moderate"},
               .difficulty = 1,
           }};
