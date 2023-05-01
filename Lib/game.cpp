@@ -195,6 +195,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
             space_craft_.StartAligning(space_station_.GetPosition());
             target_state_ = TargetState::ALIGN_IN_DOCK;
             target_state_time_ = 0.0f;
+            Sounds::instance().playMusic(kMusicBase);
           }
         }
       } break;
@@ -248,6 +249,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       case TargetState::STATION:
         break;
       case TargetState::SET:
+        Sounds::instance().playMusic(kMusicMain);
         if (craft_to_station > stations_[space_station_cur_].jump_distance) {
           target_state_ = TargetState::READY_TO_JUMP;
           crank_spins_ = 0.0f;
