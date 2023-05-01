@@ -1,5 +1,8 @@
 #include "ui_game_interface.hpp"
 
+#include <iomanip>
+#include <sstream>
+
 #include "fonts.hpp"
 #include "pd_helpers.hpp"
 
@@ -87,36 +90,51 @@ void UiGameInterface::Draw() {
 
   int crate_width = 0;
   int crate_height = 0;
-  GetBitmapSizes(playdate_, crate_, crate_width, crate_height);
-  playdate_->graphics->drawBitmap(crate_, screen_width - crate_width - 15,
-                                  screen_height - crate_height - 15,
-                                  kBitmapUnflipped);
+  if (is_crate_visible_) {
+    GetBitmapSizes(playdate_, crate_, crate_width, crate_height);
+    playdate_->graphics->drawBitmap(crate_, screen_width - crate_width - 15,
+                                    screen_height - crate_height - 15,
+                                    kBitmapUnflipped);
+  }
 
   LCDBitmap* bitmap = nullptr;
 
   int clock_width = 0;
   int clock_height = 0;
-  bitmap = SelectFrameLooped(playdate_, clock_, kUiClockAnimationLength,
-                             kUiClockAnimationNumFrames, running_time_);
-  GetBitmapSizes(playdate_, bitmap, clock_width, clock_height);
-  playdate_->graphics->drawBitmap(bitmap, 15, screen_height - clock_height - 15,
-                                  kBitmapUnflipped);
+  if (is_time_visible_) {
+    bitmap = SelectFrameLooped(playdate_, clock_, kUiClockAnimationLength,
+                               kUiClockAnimationNumFrames, running_time_);
+    GetBitmapSizes(playdate_, bitmap, clock_width, clock_height);
+    playdate_->graphics->drawBitmap(
+        bitmap, 15, screen_height - clock_height - 15, kBitmapUnflipped);
+  }
 
   playdate_->graphics->setFont(
       Fonts::instance().use(FontName::kFontBoldOutlined));
 
   std::string text;
 
-  text = "123:45";
-  playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding,
-                                15 + clock_width + 5,
-                                screen_height - clock_height - 13);
+  if (is_time_visible_) {
+    int seconds = (int)time_seconds_;
+    int minutes = seconds / 60;
+    seconds = seconds % 60;
 
-  text = "100%";
-  playdate_->graphics->drawText(
-      text.data(), text.size(), kASCIIEncoding,
-      screen_width - crate_width - 15 - text.size() * text_glyph_width_,
-      screen_height - crate_height - 13);
+    std::ostringstream ss;
+    ss << std::setw(2) << std::setfill('0') << minutes << ":" << std::setw(2)
+       << std::setfill('0') << seconds;
+
+    playdate_->graphics->drawText(ss.str().data(), ss.str().size(),
+                                  kASCIIEncoding, 15 + clock_width + 5,
+                                  screen_height - clock_height - 13);
+  }
+
+  if (is_crate_visible_) {
+    text = std::to_string((int)crate_health_percent_) + "%";
+    playdate_->graphics->drawText(
+        text.data(), text.size(), kASCIIEncoding,
+        screen_width - crate_width - 25 - text.size() * text_glyph_width_,
+        screen_height - crate_height - 13);
+  }
 
   if (kUiDrawSpeed) {
     text = std::to_string((int)speed_);

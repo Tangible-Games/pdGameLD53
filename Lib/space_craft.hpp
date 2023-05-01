@@ -12,11 +12,18 @@ class SpaceStation;
 
 class SpaceCraft : public SpaceObject {
  public:
+  class Callback {
+   public:
+    virtual void OnHit(float impact) = 0;
+  };
+
   SpaceCraft(PlaydateAPI* playdate)
       : playdate_(playdate),
         crank_prev_angle_(playdate->system->getCrankAngle()) {
     load();
   }
+
+  void RegisterCallback(Callback* callback) { callback_ = callback; }
 
   void ResetSpaceStation(SpaceStation* space_station);
 
@@ -72,6 +79,7 @@ class SpaceCraft : public SpaceObject {
   enum class FieldState { IDLE, ACTIVE };
 
   PlaydateAPI* playdate_{nullptr};
+  Callback* callback_{nullptr};
   SpaceStation* space_station_{nullptr};
   float radius_{kSpaceCraftRadius};
   Vector2d direction_{0.0f, -1.0f};

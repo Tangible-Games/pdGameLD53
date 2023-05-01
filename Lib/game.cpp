@@ -14,7 +14,7 @@
 #include "ui_game_interface.hpp"
 #include "ui_station.hpp"
 
-class Game : public UiStation::Callback {
+class Game : public SpaceCraft::Callback, public UiStation::Callback {
  public:
   Game(PlaydateAPI *playdate)
       : playdate_(playdate),
@@ -24,6 +24,7 @@ class Game : public UiStation::Callback {
         stars_(playdate),
         game_interface_(playdate),
         ui_station_(playdate) {
+    space_craft_.RegisterCallback(this);
     ui_station_.RegisterCallback(this);
     onStart();
   }
@@ -66,6 +67,9 @@ class Game : public UiStation::Callback {
     }
 
     current_mission_ = -1;
+
+    game_interface_.SetTimeVisibility(false);
+    game_interface_.SetCrateHealthVisibility(false);
 
     onUpdateArea(0);
   }
@@ -156,6 +160,17 @@ class Game : public UiStation::Callback {
     playdate_->system->getButtonState(&buttons_current, &buttons_pushed,
                                       &buttons_released);
 
+    if (current_mission_ != -1) {
+      if (delivery_time_ > 0.0f) {
+        delivery_time_ -= (dt * kSpaceCraftDeliveryTimeFactor);
+        if (delivery_time_ < 0.0f) {
+          delivery_time_ = 0.0f;
+        }
+      }
+
+      game_interface_.SetTimeSeconds(delivery_time_);
+    }
+
     switch (target_state_) {
       case TargetState::NONE:
         if (craft_to_station < kSpaceStationRadius) {
@@ -188,7 +203,8 @@ class Game : public UiStation::Callback {
       case TargetState::DOCKING:
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationDockingAnimationLength) {
-          missions_to_select_ = GenMissions(space_station_cur_);
+          GenMissions(space_station_cur_, missions_to_select_,
+                      missions_to_select_indices_);
           ui_station_.SetStation(stations_[space_station_cur_], money_);
           ui_station_.SetMissions(missions_to_select_);
           ui_station_.ShowStationInfo();
@@ -312,9 +328,9 @@ class Game : public UiStation::Callback {
                              ray_dir, distance);
   }
 
-  std::vector<MissionDesc> GenMissions(int current_station_index) {
-    std::vector<MissionDesc> result;
-
+  void GenMissions(int current_station_index,
+                   std::vector<MissionDesc> &missions_out,
+                   std::vector<int> &missions_indices_out) const {
     std::vector<bool> taken;
     taken.resize(missions_.size());
 
@@ -335,35 +351,72 @@ class Game : public UiStation::Callback {
       }
       if (new_mission != -1) {
         taken[new_mission] = true;
-        result.push_back(missions_[new_mission]);
+        missions_out.push_back(missions_[new_mission]);
+        missions_indices_out.push_back(new_mission);
       }
     }
 
-    for (int i = 0; i < (int)result.size(); ++i) {
+    for (int i = 0; i < (int)missions_out.size(); ++i) {
       int station_index = rand() % stations_.size();
       if (station_index == current_station_index) {
         station_index = (station_index + 1) % stations_.size();
       }
-      result[i].destination_index = station_index;
-      result[i].destination_str = stations_[station_index].name;
-      result[i].difficulty_str = stations_[station_index].difficulty_str;
-      result[i].difficulty = stations_[station_index].difficulty;
+      missions_out[i].destination_index = station_index;
+      missions_out[i].destination_str = stations_[station_index].name;
+      missions_out[i].difficulty_str = stations_[station_index].difficulty_str;
+      missions_out[i].difficulty = stations_[station_index].difficulty;
     }
 
     playdate_->system->logToConsole("Number of missions generated: %i",
-                                    result.size());
-
-    return result;
+                                    missions_out.size());
   }
 
-  // UiMission
-  void OnSelectMission(int mission_index) {
+  // SpaceCraft
+  void OnHit(float impact) override {
+    playdate_->system->logToConsole("Hit with impact: %f", (double)impact);
+
+    if (current_mission_ != -1) {
+      float damage = kSpaceCraftCollisionImpactToDamageBase +
+                     impact * kSpaceCraftCollisionImpactToDamageRatio;
+      cargo_health_ -= damage;
+      if (cargo_health_ < 0.0f) {
+        cargo_health_ = 0.0f;
+      }
+
+      game_interface_.SetCrateHealthPercent(
+          cargo_health_ / missions_[current_mission_].cargo_durability *
+          100.0f);
+    }
+  }
+
+  // UiStation
+  void OnSelectMission(int mission_index) override {
+    playdate_->system->logToConsole("#OnSelectMission, mission_index: %i",
+                                    mission_index);
+
     if (target_state_ == TargetState::STATION) {
-      const MissionDesc &mission = missions_to_select_[mission_index];
+      current_mission_ = missions_to_select_indices_[mission_index];
+      const MissionDesc &mission = missions_to_select_[current_mission_];
+
+      playdate_->system->logToConsole("Mission: %i, %s", current_mission_,
+                                      mission.name.c_str());
 
       space_station_target_ = mission.destination_index;
-      playdate_->system->logToConsole("setDebugTarget %d",
-                                      space_station_target_);
+      playdate_->system->logToConsole(
+          "Next station: %i, %s", space_station_target_,
+          stations_[space_station_target_].name.c_str());
+
+      delivery_time_ = mission.time_limit_sec;
+      cargo_health_ = mission.cargo_durability;
+
+      if (mission.cargo_durability > 0) {
+        game_interface_.SetCrateHealthPercent(100.0f);
+        game_interface_.SetCrateHealthVisibility(true);
+      }
+
+      if (mission.time_limit_sec > 0.0f) {
+        game_interface_.SetTimeVisibility(true);
+      }
 
       target_state_ = TargetState::SET;
 
@@ -399,6 +452,8 @@ class Game : public UiStation::Callback {
 
   int money_{0};
   int current_mission_{-1};
+  float cargo_health_{0.0f};
+  float delivery_time_{0.0f};
   std::vector<MissionDesc> missions_to_select_;
   std::vector<int> missions_to_select_indices_;
 

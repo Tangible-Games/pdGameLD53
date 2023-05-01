@@ -276,6 +276,8 @@ void SpaceCraft::tryMove(const Vector2d& move) {
 
       Vector2d tangent = out.GetRotated(DegToRad(-90.0f));
 
+      float velocity_length = velocity_.GetLength();
+
       float x = out * velocity_;
       float y = tangent * velocity_;
       velocity_ =
@@ -289,6 +291,8 @@ void SpaceCraft::tryMove(const Vector2d& move) {
         field_state_ = FieldState::ACTIVE;
         field_state_time_ = 0.0f;
       }
+
+      callback_->OnHit(velocity_length);
     }
   }
 }

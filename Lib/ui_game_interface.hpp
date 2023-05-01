@@ -23,7 +23,13 @@ class UiGameInterface {
     arrow_distance_ = distance;
   }
 
+  void SetTimeVisibility(bool is_visible) { is_time_visible_ = is_visible; }
+
   void SetTimeSeconds(float time_seconds) { time_seconds_ = time_seconds; }
+
+  void SetCrateHealthVisibility(bool is_visible) {
+    is_crate_visible_ = is_visible;
+  }
 
   void SetCrateHealthPercent(float percent) { crate_health_percent_ = percent; }
 
@@ -47,7 +53,9 @@ class UiGameInterface {
   Point2d ship_pos_;
   Vector2d arrow_dir_norm_;
   float arrow_distance_{0.0f};
+  bool is_time_visible_{false};
   float time_seconds_{0.0f};
+  bool is_crate_visible_{false};
   float crate_health_percent_{0.0f};
   float speed_{0.0f};
   float moving_too_fast_time_{0.0f};

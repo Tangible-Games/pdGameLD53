@@ -31,6 +31,9 @@ constexpr int kSpaceCraftFlareUpAnimationSeqLength = 2;
 constexpr float kSpaceCraftSmallEnginesAnimationLenght = 0.25f;
 constexpr float kSpaceCraftSmallEnginesAnimationNumFrames = 3;
 constexpr float kSpaceCraftCollisionBroadPhaseMargin = 20.0f;
+constexpr float kSpaceCraftCollisionImpactToDamageBase = 10.0f;
+constexpr float kSpaceCraftCollisionImpactToDamageRatio = 0.25f;
+constexpr float kSpaceCraftDeliveryTimeFactor = 2.0f;
 
 constexpr float kSpaceStationRadius = 60.0f;
 constexpr float kSpaceStationAnimationNumFrames = 2.4f;

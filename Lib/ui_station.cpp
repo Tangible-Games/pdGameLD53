@@ -1,5 +1,8 @@
 #include "ui_station.hpp"
 
+#include <iomanip>
+#include <sstream>
+
 #include "fonts.hpp"
 #include "pd_helpers.hpp"
 
@@ -90,9 +93,11 @@ void UiStation::Draw() {
 
     playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
 
-    std::string text = std::to_string(money_);
-    playdate_->graphics->drawText(text.data(), text.size(), kASCIIEncoding, 18,
-                                  4);
+    std::ostringstream ss;
+    ss << std::setw(5) << std::setfill('0') << money_;
+
+    playdate_->graphics->drawText(ss.str().data(), ss.str().size(),
+                                  kASCIIEncoding, 18, 4);
 
     playdate_->graphics->drawText(station_.desc.data(), station_.desc.size(),
                                   kASCIIEncoding, 25, 100);
