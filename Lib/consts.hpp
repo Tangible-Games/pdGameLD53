@@ -488,8 +488,7 @@ inline std::vector<MissionDesc> GetMissions() {
           },
           MissionDesc{
               .name{"Urgent Holographic Pizza Delivery"},
-              .desc{"50 pizzas, 5 toppings each.\nPiping hot & ready to "
-                    "eat.\nGet it there before it gets cold!"},
+              .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to eat.\nGet it there before it gets cold!"},
               .time_limit_str{"4 minutes"},
               .time_limit_sec = 240.0f,
               .cargo_durability_str{"durable"},
@@ -886,7 +885,7 @@ inline std::vector<MissionDesc> GetMissions() {
               .difficulty = 1,
           },
           MissionDesc{
-              .name{"Holographic Home Décor"},
+              .name{"Holographic Home Decor"},
               .desc{"Futuristic furnishings.\nUpgrade living spaces.\nKeep "
                     "them in top shape."},
               .time_limit_str{"no limit"},
