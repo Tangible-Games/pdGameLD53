@@ -14,7 +14,7 @@
 #include "ui_game_interface.hpp"
 #include "ui_station.hpp"
 
-class Game {
+class Game : public UiStation::Callback {
  public:
   Game(PlaydateAPI *playdate)
       : playdate_(playdate),
@@ -24,6 +24,7 @@ class Game {
         stars_(playdate),
         game_interface_(playdate),
         ui_station_(playdate) {
+    ui_station_.RegisterCallback(this);
     onStart();
   }
 
@@ -146,14 +147,6 @@ class Game {
 
   void onJump() { onUpdateArea(space_station_target_); }
 
-  void setDebugTarget() {
-    // random station from list
-    space_station_target_ =
-        (space_station_cur_ + 1 + (rand() % (stations_.size() - 1))) %
-        stations_.size();
-    playdate_->system->logToConsole("setDebugTarget %d", space_station_target_);
-  }
-
   void updateState(float dt) {
     auto craft_to_station =
         (space_craft_.GetPosition() - space_station_.GetPosition()).GetLength();
@@ -195,8 +188,8 @@ class Game {
       case TargetState::DOCKING:
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationDockingAnimationLength) {
-          std::vector<MissionDesc> missions = GenMissions(space_station_cur_);
-          ui_station_.SetMissions(missions);
+          missions_to_select_ = GenMissions(space_station_cur_);
+          ui_station_.SetMissions(missions_to_select_);
           ui_station_.ShowMissions();
 
           target_state_ = TargetState::STATION;
@@ -362,6 +355,21 @@ class Game {
     return result;
   }
 
+  // UiMission
+  void OnSelectMission(int mission_index) {
+    if (target_state_ == TargetState::STATION) {
+      const MissionDesc &mission = missions_to_select_[mission_index];
+
+      space_station_target_ = mission.destination_index;
+      playdate_->system->logToConsole("setDebugTarget %d",
+                                      space_station_target_);
+
+      target_state_ = TargetState::SET;
+
+      space_craft_.Start();
+    }
+  }
+
   PlaydateAPI *playdate_;
   float prev_time_;
 
@@ -389,6 +397,7 @@ class Game {
   float target_state_time_{0.0f};
 
   int current_mission_{-1};
+  std::vector<MissionDesc> missions_to_select_;
 
   UiGameInterface game_interface_;
   UiStation ui_station_;
