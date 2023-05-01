@@ -164,21 +164,37 @@ inline std::vector<StationArea> GetStations() {
 
 inline std::vector<MissionDesc> GetMissions() {
   return {MissionDesc{
-      .name{"Imported Space Coffee Beans"},
-      .desc{
-          "Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts rejoice!"},
-      .time_limit_str{"2 minutes"},
-      .time_limit_sec = 120.0f,
-      .cargo_durability_str{"durable"},
-      .cargo_durability = 600,
-      .price_str{"5.000"},
-      .price = 5000,
-      // Filled in code.
-      .destination_str{""},
-      .destination_index = -1,
-      .difficulty_str{"moderate"},
-      .difficulty = 1,
-  }};
+              .name{"Imported Space Coffee Beans"},
+              .desc{"Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts "
+                    "rejoice!"},
+              .time_limit_str{"2 minutes"},
+              .time_limit_sec = 120.0f,
+              .cargo_durability_str{"durable"},
+              .cargo_durability = 600,
+              .price_str{"5.000"},
+              .price = 5000,
+              // Filled in code.
+              .destination_str{""},
+              .destination_index = -1,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          },
+          MissionDesc{
+              .name{"Imported Space Coffee Beans 2"},
+              .desc{"Aromatic and rich.\nKeep the cargo dry.\nCaffeine addicts "
+                    "rejoice!"},
+              .time_limit_str{"2 minutes"},
+              .time_limit_sec = 120.0f,
+              .cargo_durability_str{"durable"},
+              .cargo_durability = 600,
+              .price_str{"5.000"},
+              .price = 5000,
+              // Filled in code.
+              .destination_str{""},
+              .destination_index = -1,
+              .difficulty_str{"moderate"},
+              .difficulty = 1,
+          }};
 }
 
 constexpr size_t kStarsNum = 20;
@@ -203,9 +219,18 @@ constexpr const char* kFontDataPath[] = {
     /* [kFontBoldOutlined] =  */ "data/fonts/Nontendo-Bold-Outlined.pft",
 };
 
-enum SoundSample { kSoundTrusters = 0, kSoundMax };
+enum SoundSample {
+  kSoundTrusters = 0,
+  kSoundBackward,
+  kSoundRotateLeft,
+  kSoundRotateRight,
+  kSoundMax
+};
 constexpr const char* kSoundsDataPath[] = {
     /* [kSoundTrusters] = */ "data/sounds/thruster.wav",
+    /* [kSoundBackward] = */ "data/sounds/thruster_back.wav",
+    /* [kSoundRotateLeft] = */ "data/sounds/rotate_left.wav",
+    /* [kSoundRotateRight] = */ "data/sounds/rotate_right.wav",
 };
 constexpr float kSoundFadingDelta = 0.1f;
 

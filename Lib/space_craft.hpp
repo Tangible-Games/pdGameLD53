@@ -24,6 +24,7 @@ class SpaceCraft : public SpaceObject {
 
   void Update(float dt);
   void Draw(const Camera& camera);
+  void UpdateSounds();
 
   float GetSpeed() const { return velocity_.GetLength(); }
 

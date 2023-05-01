@@ -49,6 +49,39 @@ void SpaceCraft::Draw(const Camera& camera) {
   }
 }
 
+void SpaceCraft::UpdateSounds() {
+  switch (engine_state_) {
+    case EngineState::IDLE:
+      Sounds::instance().playStop(kSoundTrusters);
+      Sounds::instance().playStop(kSoundBackward);
+      break;
+
+    case EngineState::FLARE_UP:
+    case EngineState::FORWARD:
+      Sounds::instance().play(kSoundTrusters);
+      break;
+
+    case EngineState::BACKWARD:
+      Sounds::instance().play(kSoundBackward);
+      break;
+  }
+
+  switch (rotation_state_) {
+    case RotationState::IDLE:
+      Sounds::instance().playStop(kSoundRotateLeft);
+      Sounds::instance().playStop(kSoundRotateRight);
+      break;
+
+    case RotationState::LEFT:
+      Sounds::instance().play(kSoundRotateLeft);
+      break;
+
+    case RotationState::RIGHT:
+      Sounds::instance().play(kSoundRotateRight);
+      break;
+  }
+}
+
 void SpaceCraft::load() {
   const char* error = nullptr;
 
@@ -271,7 +304,6 @@ void SpaceCraft::draw(const Point2d& position) {
   switch (engine_state_) {
     case EngineState::IDLE:
       engine_bitmap = idle_bitmap_;
-      Sounds::instance().playStop(kSoundTrusters);
       break;
 
     case EngineState::FLARE_UP:
@@ -288,7 +320,6 @@ void SpaceCraft::draw(const Point2d& position) {
           kSpaceCraftForwardAnimationNumFrames,
           kSpaceCraftForwardAnimationSeqStart,
           kSpaceCraftForwardAnimationSeqLength, engine_state_time_);
-      Sounds::instance().play(kSoundTrusters);
       break;
 
     case EngineState::BACKWARD:

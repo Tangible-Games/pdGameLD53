@@ -138,7 +138,11 @@ class Game {
     playdate_->system->drawFPS(5, 5);
 
     showState();
+
+    onUpdateSounds();
   }
+
+  void onUpdateSounds() { space_craft_.UpdateSounds(); }
 
   void onJump() { onUpdateArea(space_station_target_); }
 
@@ -351,6 +355,9 @@ class Game {
       result[i].difficulty_str = stations_[station_index].difficulty_str;
       result[i].difficulty = stations_[station_index].difficulty;
     }
+
+    playdate_->system->logToConsole("Number of missions generated: %i",
+                                    result.size());
 
     return result;
   }
