@@ -158,7 +158,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       game_interface_.Draw();
     }
 
-    // playdate_->system->drawFPS(5, 5);
+    playdate_->system->drawFPS(5, 5);
 
     onUpdateSounds();
   }
@@ -170,11 +170,6 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   void updateState(float dt) {
     auto craft_to_station =
         (space_craft_.GetPosition() - space_station_.GetPosition()).GetLength();
-    PDButtons buttons_current;
-    PDButtons buttons_pushed;
-    PDButtons buttons_released;
-    playdate_->system->getButtonState(&buttons_current, &buttons_pushed,
-                                      &buttons_released);
 
     if (current_mission_ != -1) {
       total_delivery_time_ += dt;
