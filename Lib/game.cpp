@@ -324,7 +324,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     Vector2d to_station_norm;
     float offset_factor = 1.0f;
     if (target_state_ == TargetState::SET ||
-        target_state_ == TargetState::READY_TO_JUMP) {
+        target_state_ == TargetState::READY_TO_JUMP ||
+        target_state_ == TargetState::WAIT_TO_JUMP) {
       to_station_norm = (stations_[space_station_target_].pos -
                          stations_[space_station_cur_].pos)
                             .GetNormalized();
@@ -358,7 +359,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     Vector2d ray_dir(0.0f, -1.0f);
     float distance = 0.0f;
     if (target_state_ == TargetState::SET ||
-        target_state_ == TargetState::READY_TO_JUMP) {
+        target_state_ == TargetState::READY_TO_JUMP ||
+        target_state_ == TargetState::WAIT_TO_JUMP) {
       ray_dir = (stations_[space_station_target_].pos -
                  stations_[space_station_cur_].pos)
                     .GetNormalized();
