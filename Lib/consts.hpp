@@ -520,7 +520,7 @@ inline std::vector<MissionDesc> GetMissions() {
               .difficulty = 1,
           },
           MissionDesc{
-              .name{"Urgent Holographic Pizza Delivery"},
+              .name{"Urgent Pizza Delivery"},
               .desc{"50 pizzas, 5 toppings each.\nPiping hot and ready to "
                     "eat.\nGet it there before it gets cold!"},
               .time_limit_str{"4 minutes"},
