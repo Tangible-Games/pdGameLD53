@@ -13,7 +13,21 @@ class UiStation {
     virtual void OnSelectMission(int mission_index) = 0;
   };
 
-  UiStation(PlaydateAPI* playdate) : playdate_(playdate) { (void)playdate_; }
+  UiStation(PlaydateAPI* playdate)
+      : playdate_(playdate),
+        station_screen_intro_header_("My dear child!"),
+        station_screen_intro_desc_(
+            "I believe my lawyer gave you this letter.\nSave your tears, "
+            "you'll soon be in a lot more trouble.\nI bequeath you my "
+            "spaceship...\nWell, more like a space-beaten old truck.\nGo to "
+            "the "
+            "vastness of space, make a lot of money\nand pay back my gigantic "
+            "debt.\nA couple of centuries should be enough.\n\n                "
+            " "
+            "                                                                  "
+            "                      Your grandfather.") {
+    (void)playdate_;
+  }
 
   void RegisterCallback(Callback* callback) { callback_ = callback; }
 
@@ -39,6 +53,8 @@ class UiStation {
     cur_mission_ = 0;
   }
 
+  void ShowIntro() { mode_ = Mode::INTRO; }
+
   void ShowDelivery() { mode_ = Mode::DELIVERY; }
 
   void ShowStationInfo() { mode_ = Mode::STATION_INFO; }
@@ -46,10 +62,13 @@ class UiStation {
   void ShowMissions() { mode_ = Mode::MISSIONS; }
 
  private:
-  enum class Mode { IDLE, DELIVERY, STATION_INFO, MISSIONS };
+  enum class Mode { IDLE, INTRO, DELIVERY, STATION_INFO, MISSIONS };
 
   PlaydateAPI* playdate_{nullptr};
   Callback* callback_{nullptr};
+  const std::string station_screen_intro_header_{};
+  const std::string station_screen_intro_desc_{};
+  LCDBitmap* station_screen_intro_{nullptr};
   LCDBitmap* mission_results_{nullptr};
   LCDBitmap* station_screen_{nullptr};
   LCDBitmap* job_card_{nullptr};

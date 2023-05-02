@@ -158,7 +158,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       game_interface_.Draw();
     }
 
-    playdate_->system->drawFPS(5, 5);
+    // playdate_->system->drawFPS(5, 5);
 
     onUpdateSounds();
   }
@@ -246,7 +246,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
           if (current_mission_ != -1) {
             ui_station_.ShowDelivery();
           } else {
-            ui_station_.ShowStationInfo();
+            ui_station_.ShowIntro();
           }
 
           target_state_ = TargetState::STATION;

@@ -9,6 +9,13 @@
 void UiStation::Load() {
   const char* error = nullptr;
 
+  station_screen_intro_ =
+      playdate_->graphics->loadBitmap("data/station_screen_intro.png", &error);
+  if (error) {
+    playdate_->system->logToConsole("Failed to load station intro, error: %s",
+                                    error);
+  }
+
   mission_results_ =
       playdate_->graphics->loadBitmap("data/mission_results.png", &error);
   if (error) {
@@ -78,7 +85,9 @@ void UiStation::Update(float dt) {
   is_a_pressed_ = (buttons_current & kButtonA);
 
   if (buttons_released & kButtonA) {
-    if (mode_ == Mode::DELIVERY) {
+    if (mode_ == Mode::INTRO) {
+      mode_ = Mode::STATION_INFO;
+    } else if (mode_ == Mode::DELIVERY) {
       mode_ = Mode::STATION_INFO;
     } else if (mode_ == Mode::STATION_INFO) {
       mode_ = Mode::MISSIONS;
@@ -92,7 +101,22 @@ void UiStation::Draw() {
   int screen_width = playdate_->display->getWidth();
   int screen_height = playdate_->display->getHeight();
 
-  if (mode_ == Mode::DELIVERY) {
+  if (mode_ == Mode::INTRO) {
+    playdate_->graphics->drawBitmap(station_screen_intro_, 0, 0,
+                                    kBitmapUnflipped);
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold2x));
+
+    playdate_->graphics->drawText(station_screen_intro_header_.data(),
+                                  station_screen_intro_header_.size(),
+                                  kASCIIEncoding, 25, 50);
+
+    playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
+
+    playdate_->graphics->drawText(station_screen_intro_desc_.data(),
+                                  station_screen_intro_desc_.size(),
+                                  kASCIIEncoding, 25, 90);
+  } else if (mode_ == Mode::DELIVERY) {
     playdate_->graphics->drawBitmap(mission_results_, 0, 0, kBitmapUnflipped);
 
     playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
@@ -221,8 +245,8 @@ void UiStation::Draw() {
         kBitmapUnflipped);
   }
 
-  if (mode_ == Mode::DELIVERY || mode_ == Mode::STATION_INFO ||
-      mode_ == Mode::MISSIONS) {
+  if (mode_ == Mode::INTRO || mode_ == Mode::DELIVERY ||
+      mode_ == Mode::STATION_INFO || mode_ == Mode::MISSIONS) {
     LCDBitmap* a_button_bitmap = a_button_;
     if (is_a_pressed_) {
       a_button_bitmap = a_button_pressed_;
