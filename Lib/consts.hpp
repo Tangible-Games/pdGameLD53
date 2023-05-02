@@ -112,26 +112,6 @@ inline std::vector<StationArea> GetStations() {
           },
           StationArea{
               .pos = Point2d(2 * 1000, 2 * 1000),
-              .seed = 13124125,
-              .name{"Central Station 2"},
-              .desc{"Guten Tag, Hola, Hello!\nWelcome to Central!\nTravellers, "
-                    "businessmen and diplomats just\nlove visiting. Feel at "
-                    "home here and\nmake sure to come back once in a while"},
-              .num_asteroids =
-                  {
-                      0,
-                      10,
-                      1,
-                      4,
-                  },
-              .asteroids_to_base_distance = 200.0f,
-              .asteroids_area_distance = 1500.0f,
-              .jump_distance = 1800.0f,
-              .difficulty_str{"moderate"},
-              .difficulty = 1,
-          },
-          StationArea{
-              .pos = Point2d(2 * 1000, 2 * 1000),
               .seed = 89127634,
               .name{"Infinity Junction"},
               .desc{"Needless to say, there are quite a few\nworlds connected "
@@ -1179,8 +1159,8 @@ constexpr float kSoundFadingDelta = 0.1f;
 
 enum MusicSample { kMusicMain = 0, kMusicBase, kMusicMax };
 constexpr const char* kMusicDataPath[] = {
-    /* [kMain] = */ "data/sounds/main_music.wav",
-    /* [kMusicBase] = */ "data/sounds/intro_music.wav",
+    /* [kMain] = */ "data/sounds/main_music.mp3",
+    /* [kMusicBase] = */ "data/sounds/intro_music.mp3",
 };
 
 constexpr bool kDrawDebugAsteroids = false;
