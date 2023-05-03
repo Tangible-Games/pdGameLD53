@@ -227,14 +227,14 @@ def run(pd_sdk, game_dir, debug = False, stats = False):
 
     cmd_run([pd_sdk + '/bin/pdutil', tty_dev, 'run', '/Games/' + game_name], 'Failed to run game {}'.format(game_name))
 
-    if dbg is not None:
+    if dbg:
         try:
             while dbg.poll() is None:
                 dbg_out = dbg.stdout.readline()
                 print(dbg_out.strip().decode('UTF-8'))
         except KeyboardInterrupt:
             sys.exit()
-    if stats is not None:
+    if stats:
         try:
             while True:
                 mount_out = cmd_run([pd_sdk + '/bin/pdutil', tty_dev, 'stats'], 'Unable to run stats')
