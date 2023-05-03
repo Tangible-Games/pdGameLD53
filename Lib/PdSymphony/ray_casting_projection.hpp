@@ -19,8 +19,8 @@ class RayCastingProjection {
 
   void SetViewport(int screen_width, int screen_height,
                    float horizontal_fov_deg) {
-    screen_width_ = screen_width;
-    screen_height_ = screen_height;
+    screen_width_ = (float)screen_width;
+    screen_height_ = (float)screen_height;
     aspect_ratio_ = (float)screen_width / (float)screen_height;
     horizontal_half_fov_deg_ = horizontal_fov_deg / 2.0f;
     horizontal_half_fov_tan_inv_ =
@@ -58,7 +58,7 @@ class RayCastingProjection {
   }
 
   Math::Vector2d GetRayWorld(int ray_index) const {
-    int screen_half_width = screen_width_ / 2;
+    int screen_half_width = (int)(screen_width_ / 2.0f);
     float x =
         ((float)(ray_index - screen_half_width) / (float)screen_half_width) *
         horizontal_half_fov_tan_inv_;
@@ -75,11 +75,11 @@ class RayCastingProjection {
     // TODO(truvorskameikin): Build rays only for the half of the screen to save
     // some memory.
 
-    int screen_half_width = screen_width_ / 2;
+    int screen_half_width = (int)(screen_width_ / 2.0f);
 
-    rays_.resize(screen_width_);
-    ray_lengths_inv_.resize(screen_width_);
-    for (int i = 0; i < screen_width_; ++i) {
+    rays_.resize((int)screen_width_);
+    ray_lengths_inv_.resize((int)screen_width_);
+    for (int i = 0; i < (int)screen_width_; ++i) {
       float x = ((float)(i - screen_half_width) / (float)screen_half_width) *
                 horizontal_half_fov_tan_inv_;
       Math::Vector2d v = Math::Vector2d(x, 1.0f);

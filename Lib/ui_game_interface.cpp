@@ -132,7 +132,7 @@ void UiGameInterface::Draw() {
     text = std::to_string((int)crate_health_percent_) + "%";
     playdate_->graphics->drawText(
         text.data(), text.size(), kASCIIEncoding,
-        screen_width - crate_width - 25 - text.size() * text_glyph_width_,
+        screen_width - crate_width - 25 - (int)text.size() * text_glyph_width_,
         screen_height - crate_height - 13);
   }
 
@@ -140,7 +140,7 @@ void UiGameInterface::Draw() {
     text = std::to_string((int)speed_);
     playdate_->graphics->drawText(
         text.data(), text.size(), kASCIIEncoding,
-        (screen_width - text.size() * text_glyph_width_) / 2,
+        (screen_width - (int)text.size() * text_glyph_width_) / 2,
         screen_height - text_glyph_height_ - 13);
   }
 
@@ -148,14 +148,14 @@ void UiGameInterface::Draw() {
     text = "Moving too fast. Decrease speed to dock.";
     playdate_->graphics->drawText(
         text.data(), text.size(), kASCIIEncoding,
-        (screen_width - text.size() * text_glyph_width_) / 2 + 55, 35);
+        (screen_width - (int)text.size() * text_glyph_width_) / 2 + 55, 35);
   }
 
   if (ready_to_jump_) {
     text = "Ready to jump. Use Crank to jump.";
     playdate_->graphics->drawText(
         text.data(), text.size(), kASCIIEncoding,
-        (screen_width - text.size() * text_glyph_width_) / 2 + 55, 35);
+        (screen_width - (int)text.size() * text_glyph_width_) / 2 + 55, 35);
   }
 }
 
@@ -180,7 +180,7 @@ void UiGameInterface::drawArrow() {
     GetBitmapSizes(playdate_, bitmap, bitmap_width, bitmap_height);
 
     std::string text = std::to_string((int)arrow_distance_);
-    int text_width = text.size() * text_glyph_width_;
+    int text_width = (int)text.size() * text_glyph_width_;
 
     Point2d sprite_pos = intersection.p;
     int text_x = 0;

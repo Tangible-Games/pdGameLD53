@@ -1,9 +1,22 @@
 fs = import('fs')
 
-# Try env first, it not set try default install dir
-pd_sdk = run_command('sh', '-c', 'echo $PLAYDATE_SDK_PATH', check: true).stdout().strip()
-if pd_sdk == ''
-    default_path = fs.expanduser('~/Developer/PlaydateSDK')
+unix_oses = ['darwin', 'linux']
+if build_machine.system() in unix_oses
+    # Try env first, it not set try default install dir
+    pd_sdk = run_command('sh', '-c', 'echo $PLAYDATE_SDK_PATH', check: true).stdout().strip()
+    if pd_sdk == ''
+        default_path = fs.expanduser('~/Developer/PlaydateSDK')
+        message('Try to use default path: ' + default_path)
+        if fs.is_dir(default_path)
+            pd_sdk = default_path
+        endif
+    endif
+endif
+if build_machine.system() == 'windows'
+    if meson.is_cross_build()
+        error('Cross build on ' + build_machine.system() + ' is not supported')
+    endif
+    default_path = fs.expanduser('~' / 'Documents' / 'PlaydateSDK')
     message('Try to use default path: ' + default_path)
     if fs.is_dir(default_path)
         pd_sdk = default_path
@@ -25,16 +38,30 @@ add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'])
 add_project_arguments('-DTARGET_EXTENSION=1', language: ['c', 'cpp'], native: true)
 
 # Arguments don't apply properly from project default options
+if build_machine.system() in unix_oses
 add_project_arguments('-std=c++2a', language: 'cpp', native: true)
 add_project_arguments('-std=gnu11', language: 'c', native: true)
+add_project_arguments('-std=c++2a', language: 'cpp')
+add_project_arguments('-std=gnu11', language: 'c')
+endif
+if build_machine.system() == 'windows'
+add_project_arguments('/std:c++20', language: 'cpp', native: true)
+add_project_arguments('/std:c11', language: 'c', native: true)
+endif
 
 # host only
 add_project_arguments('-DTARGET_SIMULATOR=1', language: ['c', 'cpp'], native: true)
+
+if build_machine.system() in unix_oses
 add_project_arguments('-Wno-unknown-pragmas', language: ['c', 'cpp'], native: true)
 add_project_arguments('-Wdouble-promotion', language: ['c', 'cpp'], native: true)
 # always debug for the host
 add_project_arguments('-O0', language: ['c', 'cpp'], native: true)
 add_project_arguments('-ggdb', language: ['c', 'cpp'], native: true)
+endif
+if build_machine.system() == 'windows'
+add_project_arguments('-D_WINDLL=1', language: 'c', native: true)
+endif
 
 # cross build
 if meson.is_cross_build()

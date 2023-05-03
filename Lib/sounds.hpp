@@ -21,7 +21,7 @@ class Sounds {
       playdate_->sound->sampleplayer->setSample(player, sounds_[sample]);
     }
     if (player && !playdate_->sound->sampleplayer->isPlaying(player)) {
-      playdate_->sound->sampleplayer->play(player, 1.0, 1.0);
+      playdate_->sound->sampleplayer->play(player, 1, 1.0);
     }
     if (player && playdate_->sound->sampleplayer->isPlaying(player)) {
       fading(player, FadingDir::Up);

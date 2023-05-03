@@ -4,11 +4,9 @@ project('pdGameLD53',
     meson_version : '>= 0.60',
     default_options : [
         'warning_level=3',
-        'c_std=gnu11', 'cpp_std=c++2a',
-        'build.c_std=c11', 'build.cpp_std=c++2a',
         'werror=true',
         'default_library=static',
-        'buildtype=custom',
+        'buildtype=plain',
         'debug=false',
         'optimization=plain',
     ]
@@ -78,6 +76,8 @@ if build_machine.system() == 'darwin'
   pd_simulator += pd_sdk / 'bin' / 'Playdate Simulator.app' / 'Contents' / 'MacOS' / 'Playdate Simulator'
 elif build_machine.system() == 'linux'
   pd_simulator += pd_sdk / 'bin' / 'PlaydateSimulator'
+elif build_machine.system() == 'windows'
+  pd_simulator += pd_sdk / 'bin' / 'PlaydateSimulator.exe'
 endif
 
 if pd_simulator == ''

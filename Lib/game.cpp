@@ -471,7 +471,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
       delivery_time_ = mission.time_limit_sec;
       total_delivery_time_ = 0.0f;
-      cargo_health_ = mission.cargo_durability;
+      cargo_health_ = (float)mission.cargo_durability;
 
       if (mission.cargo_durability > 0) {
         game_interface_.SetCrateHealthPercent(100.0f);
@@ -544,13 +544,9 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   float running_time_{0.0f};
 };
 
-static int test = 0;
-static void __attribute__((constructor)) test_constructor(void) { test = 1234; }
-
 void *SetupGame(PlaydateAPI *playdate) {
   static Game game(playdate);
   playdate->system->logToConsole("#SetupGame");
-  playdate->system->logToConsole("test: %d", test);
   return &game;
 }
 

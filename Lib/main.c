@@ -16,6 +16,7 @@ __declspec(dllexport)
   return 0;
 }
 
+#ifndef _WINDLL
 void __attribute__((noreturn)) _exit(int status);
 void __attribute__((noreturn)) _exit(int status) {
   (void)status;
@@ -32,3 +33,4 @@ int _kill(int pid, int sig) {
   (void)sig;
   return -1;
 }
+#endif

@@ -3,6 +3,19 @@ import os
 import shutil
 import tempfile
 
+def touch(path):
+    with open(path, 'a'):
+        os.utime(path, None)
+
+def copy_dir_content(src, dest):
+    for path in os.listdir(src):
+        s = os.path.join(src, path)
+        d = os.path.join(dest, path)
+        if os.path.isfile(s):
+            shutil.copy2(s, d)
+        else:
+            shutil.copytree(s, d)
+
 def create_sim(pd_sdk, bin, dest, resources_dir):
     print("Creating {}...".format(dest))
     try:
@@ -15,10 +28,10 @@ def create_sim(pd_sdk, bin, dest, resources_dir):
         else:
             ext = os.path.splitext(bin)[1]
             shutil.copy(bin, os.path.join(tmp, 'pdex' + ext))
-            os.system('touch {}'.format(os.path.join(tmp, 'pdex.bin')))
-            os.system('touch {}'.format(os.path.join(tmp, 'main.pdz')))
+            touch(os.path.join(tmp, 'pdex.bin'))
+            touch(os.path.join(tmp, 'main.pdz'))
         if resources_dir is not None:
-            os.system('cp -r {}/* {}/'.format(resources_dir, tmp))
+            copy_dir_content(resources_dir, tmp) 
         os.system('{} -sdkpath {} {} {}'.format(os.path.join(pd_sdk, 'bin', 'pdc'), pd_sdk, tmp, dest))
 
 

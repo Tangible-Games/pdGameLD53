@@ -28,7 +28,7 @@ void SpaceStation::Update(float dt) {
 void SpaceStation::Draw(const Camera& camera) {
   LCDBitmap* bitmap = SelectFrameLooped(
       playdate_, station_bitmap_table_, kSpaceStationAnimationLength,
-      kSpaceStationAnimationNumFrames, running_time_);
+      (int)kSpaceStationAnimationNumFrames, running_time_);
 
   DrawBitmapCentered(playdate_, bitmap, camera.ConvertToCameraSpace(position_));
 
@@ -97,7 +97,8 @@ void SpaceStation::createAsteroids(const StationArea& station_area) {
                         ((float)StaticRandomGenerator::get().NextValue() /
                          (float)StaticRandomGenerator::get().MaxValue()) *
                             station_area.asteroids_area_distance;
-        auto angle = DegToRad(StaticRandomGenerator::get().NextValue() % 360);
+        auto angle =
+            DegToRad((float)(StaticRandomGenerator::get().NextValue() % 360));
         a.SetPosition(Point2d(distance * cos(angle), distance * sin(angle)));
 
         bool intersects = false;

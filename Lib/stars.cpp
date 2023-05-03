@@ -16,6 +16,6 @@ void Stars::drawDebug(const Point2d& position) {
     x = x - floor(x / (float)width_) * (float)width_;
     y = y - floor(y / (float)height_) * (float)height_;
 
-    playdate_->graphics->fillRect(x, y, s.size, s.size, kColorWhite);
+    playdate_->graphics->fillRect((int)x, (int)y, s.size, s.size, kColorWhite);
   });
 }
