@@ -44,6 +44,14 @@ add_project_arguments('-std=gnu11', language: 'c', native: true)
 add_project_arguments('-std=c++2a', language: 'cpp')
 add_project_arguments('-std=gnu11', language: 'c')
 endif
+if build_machine.system() == 'darwin'
+    message('Try to build universal binary for Mac')
+    universalbin_args = ['-arch x86_64', '-arch arm64', '-mmacosx-version-min=11.0']
+    foreach arg : universalbin_args
+        add_project_arguments(arg, language: 'cpp')
+        add_project_arguments(arg, language: 'c')
+    endforeach
+endif
 if build_machine.system() == 'windows'
 add_project_arguments('/std:c++20', language: 'cpp', native: true)
 add_project_arguments('/std:c11', language: 'c', native: true)
