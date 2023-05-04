@@ -1,7 +1,7 @@
 name=LD53
 author=Tangible Games
-description=When all you have is a ton of bricks, everything looks like a paddle.
-bundleID=com.tangiblegames.ld53
+description=Deliver various cargo to different space stations across the galaxy in this amazing stylish game!
+bundleID=com.tangiblegames.space_ex_interstellar
 version=1.0
 buildNumber=1
 imagePath=data/
