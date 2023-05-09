@@ -1,19 +1,28 @@
+#include "PdSymphony/pd_system_helpers.hpp"
 #include "game.h"
 #include "pd_api.h"
+
+static void *userdata = 0;
 
 #ifdef _WINDLL
 __declspec(dllexport)
 #endif
     int eventHandler(PlaydateAPI *playdate, PDSystemEvent event, uint32_t arg) {
   (void)arg;
-  playdate->system->logToConsole("Event handler");
+  playdate->system->logToConsole("#eventHandler, event: %s, arg: %i",
+                                 PDSystemEventToString(event), arg);
   if (event == kEventInit) {
     playdate->display->setRefreshRate(50);
 
-    void *userdata = SetupGame(playdate);
+    userdata = SetupGame(playdate);
     playdate->system->setUpdateCallback(Update, userdata);
   }
-  return 0;
+
+  int result = 0;
+  if (userdata) {
+    EventHandler(userdata, event, arg);
+  }
+  return result;
 }
 
 #ifndef _WINDLL

@@ -39,6 +39,12 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     return 1;
   }
 
+  int EventHandler(PDSystemEvent event, uint32_t arg) {
+    (void)event;
+    (void)arg;
+    return 0;
+  }
+
  private:
   void onStart() {
     playdate_->system->logToConsole("#onStart");
@@ -91,7 +97,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   }
 
   void onUpdateArea(uint32_t idx) {
-    playdate_->system->logToConsole("#onUpdateArea %d", idx);
+    playdate_->system->logToConsole("#onUpdateArea, space_station_index: %d",
+                                    idx);
 
     space_station_.Generate(stations_[idx]);
     stars_.Generate(stations_[idx].seed);
@@ -553,4 +560,9 @@ void *SetupGame(PlaydateAPI *playdate) {
 int Update(void *userdata) {
   Game *game = (Game *)userdata;
   return game->Update();
+}
+
+int EventHandler(void *userdata, PDSystemEvent event, uint32_t arg) {
+  Game *game = (Game *)userdata;
+  return game->EventHandler(event, arg);
 }

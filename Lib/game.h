@@ -15,6 +15,7 @@ extern "C" {
 
 void *SetupGame(PlaydateAPI *playdate);
 int Update(void *userdata);
+int EventHandler(void *userdata, PDSystemEvent event, uint32_t arg);
 
 #ifdef __cplusplus
 }  // extern "C"
