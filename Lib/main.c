@@ -1,4 +1,4 @@
-#include "PdSymphony/pd_system_helpers.hpp"
+#include "PdSymphony/pd_system_helpers.h"
 #include "game.h"
 #include "pd_api.h"
 

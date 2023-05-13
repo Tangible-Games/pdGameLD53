@@ -3,6 +3,8 @@
 #include "aa_rect2d.hpp"
 #include "angle.hpp"
 #include "circle.hpp"
+#include "pd_animations.hpp"
+#include "pd_system_helpers.h"
 #include "point2d.hpp"
 #include "point3d.hpp"
 #include "random_generator.hpp"

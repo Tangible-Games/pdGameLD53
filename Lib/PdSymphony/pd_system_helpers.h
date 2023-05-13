@@ -3,10 +3,9 @@
 #include "pd_api.h"
 
 #ifdef __cplusplus
-namespace PdSymphony {
-namespace System {
-#endif
-const char* PDSystemEventToString(PDSystemEvent event) {
+extern "C" {
+#endif  // __cplusplus
+static inline const char* PDSystemEventToString(PDSystemEvent event) {
   const char* result = "";
   switch (event) {
     case kEventInit:
@@ -43,6 +42,5 @@ const char* PDSystemEventToString(PDSystemEvent event) {
   return result;
 }
 #ifdef __cplusplus
-}  // namespace System
-}  // namespace PdSymphony
-#endif
+}  // extern "C"
+#endif  // __cplusplus
