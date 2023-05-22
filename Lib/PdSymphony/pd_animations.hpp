@@ -35,9 +35,10 @@ class PdAnimation {
 
   float GetLength() const { return ((float)num_frames_) / fps_; }
 
-  void Play(bool looped, bool from_start = true) {
+  void Play(bool looped, bool from_start = true, int looping_frame = 0) {
     is_playing_ = true;
     looped_ = looped;
+    looping_frame_ = looping_frame;
 
     if (from_start) {
       running_time_ = 0.0f;
@@ -86,6 +87,14 @@ class PdAnimation {
     float frame_length = 1.0f / fps_;
     int frame_index = 0;
     if (looped_) {
+      if (running_time_ < GetLength()) {
+        frame_index = floorf(running_time_ / frame_length);
+      } else {
+        float t = running_time_ - GetLength();
+        frame_index = looping_frame_ + ((int)floorf(t / frame_length)) %
+                                           (num_frames_ - looping_frame_);
+      }
+      frame_index = frame_index % num_frames_;
     } else {
       frame_index = floorf(running_time_ / frame_length);
       if (frame_index >= num_frames_) {
@@ -101,6 +110,7 @@ class PdAnimation {
   float fps_{1.0f};
   bool is_playing_{false};
   bool looped_{false};
+  int looping_frame_{};
   float running_time_{0.0f};
 };
 }  // namespace Engine

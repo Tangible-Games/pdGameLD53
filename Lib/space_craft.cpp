@@ -26,18 +26,7 @@ void SpaceCraft::Update(float dt) {
     }
   }
 
-  if (engine_state_ != EngineState::IDLE) {
-    engine_state_time_ += dt;
-    if (engine_state_ == EngineState::FLARE_UP) {
-      float seq_time = (kSpaceCraftForwardAnimationLength /
-                        kSpaceCraftForwardAnimationNumFrames) *
-                       kSpaceCraftFlareUpAnimationSeqLength;
-      if (engine_state_time_ > seq_time) {
-        engine_state_ = next_engine_state_;
-        engine_state_time_ = 0.0f;
-      }
-    }
-  }
+  forward_bitmap_animation_.Update(dt);
 
   if (rotation_state_ != RotationState::IDLE) {
     rotation_state_time_ += dt;
@@ -58,7 +47,6 @@ void SpaceCraft::UpdateSounds() {
       Sounds::instance().playStop(kSoundBackward);
       break;
 
-    case EngineState::FLARE_UP:
     case EngineState::FORWARD:
       Sounds::instance().play(kSoundTrusters);
       break;
@@ -106,12 +94,14 @@ void SpaceCraft::load() {
                                     error);
   }
 
-  forward_bitmap_table_ =
+  LCDBitmapTable* bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-forward.gif", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load ship's forward, error: %s",
                                     error);
   }
+  forward_bitmap_animation_.Create(playdate_, bitmap_table,
+                                   kSpaceCraftForwardAnimationFps);
 
   engine_left_up_bitmap_table_ =
       playdate_->graphics->loadBitmapTable("data/engine-l-up.gif", &error);
@@ -218,8 +208,10 @@ void SpaceCraft::updateInput(float dt) {
     update_velocity = true;
 
     if (engine_state_ == EngineState::IDLE) {
-      engine_state_ = EngineState::FLARE_UP;
-      next_engine_state_ = EngineState::FORWARD;
+      forward_bitmap_animation_.Play(
+          /* looped= */ true, /* from_start= */ true,
+          /* looping_frame= */ kSpaceCraftForwardAnimationLoopingFrame);
+      engine_state_ = EngineState::FORWARD;
       engine_state_time_ = 0.0f;
     }
   } else if ((buttons_current & kButtonA) || (buttons_current & kButtonDown)) {
@@ -344,20 +336,8 @@ void SpaceCraft::draw(const Point2d& position) {
       engine_bitmap = idle_bitmap_;
       break;
 
-    case EngineState::FLARE_UP:
-      engine_bitmap = SelectFrameFromSequence(
-          playdate_, forward_bitmap_table_, kSpaceCraftForwardAnimationLength,
-          kSpaceCraftForwardAnimationNumFrames,
-          kSpaceCraftFlareUpAnimationSeqStart,
-          kSpaceCraftFlareUpAnimationSeqLength, engine_state_time_);
-      break;
-
     case EngineState::FORWARD:
-      engine_bitmap = SelectFrameFromSequenceLooped(
-          playdate_, forward_bitmap_table_, kSpaceCraftForwardAnimationLength,
-          kSpaceCraftForwardAnimationNumFrames,
-          kSpaceCraftForwardAnimationSeqStart,
-          kSpaceCraftForwardAnimationSeqLength, engine_state_time_);
+      engine_bitmap = forward_bitmap_animation_.GetBitmap();
       break;
 
     case EngineState::BACKWARD:

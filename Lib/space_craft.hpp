@@ -7,6 +7,7 @@
 #include "space_object.hpp"
 
 using namespace PdSymphony::Math;
+using namespace PdSymphony::Engine;
 
 class SpaceStation;
 
@@ -89,7 +90,7 @@ class SpaceCraft : public SpaceObject {
 
   enum class State { IN_GAME, ALIGNING, PARKED, HYPER_JUMP };
 
-  enum class EngineState { IDLE, FLARE_UP, FORWARD, BACKWARD };
+  enum class EngineState { IDLE, FORWARD, BACKWARD };
 
   enum class RotationState { IDLE, LEFT, RIGHT };
 
@@ -111,10 +112,9 @@ class SpaceCraft : public SpaceObject {
   Vector2d align_velocity_from_;
   Vector2d align_to_direction_;
   EngineState engine_state_{EngineState::IDLE};
-  EngineState next_engine_state_{EngineState::IDLE};
   float engine_state_time_{0.0f};
   LCDBitmap* idle_bitmap_{nullptr};
-  LCDBitmapTable* forward_bitmap_table_{nullptr};
+  PdAnimation forward_bitmap_animation_;
   LCDBitmapTable* engine_left_up_bitmap_table_{nullptr};
   LCDBitmapTable* engine_left_down_bitmap_table_{nullptr};
   LCDBitmapTable* engine_right_up_bitmap_table_{nullptr};
