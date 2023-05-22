@@ -219,6 +219,7 @@ void SpaceCraft::updateInput(float dt) {
     update_velocity = true;
 
     if (engine_state_ != EngineState::BACKWARD) {
+      forward_bitmap_animation_.Stop();
       engine_state_ = EngineState::BACKWARD;
       engine_state_time_ = 0.0f;
     }
@@ -229,6 +230,7 @@ void SpaceCraft::updateInput(float dt) {
       velocity_ = velocity_ * (kSpaceCraftVelocityMax / v);
     }
   } else {
+    forward_bitmap_animation_.Stop();
     engine_state_ = EngineState::IDLE;
   }
 }
