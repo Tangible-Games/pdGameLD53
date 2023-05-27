@@ -208,9 +208,11 @@ void SpaceCraft::updateInput(float dt) {
     update_velocity = true;
 
     if (engine_state_ == EngineState::IDLE) {
-      forward_bitmap_animation_.Play(
-          /* looped= */ true, /* from_start= */ true,
-          /* looping_frame= */ kSpaceCraftForwardAnimationLoopingFrame);
+      PdAnimation::PlaybackParams playback_params;
+      playback_params.looped = true;
+      playback_params.looping_start_frame =
+          kSpaceCraftForwardAnimationLoopingFrame;
+      forward_bitmap_animation_.Play(playback_params);
       engine_state_ = EngineState::FORWARD;
       engine_state_time_ = 0.0f;
     }

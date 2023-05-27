@@ -128,16 +128,19 @@ TEST(PdAnimation, PlaysAndStops) {
   animation.Update(0.161f);  // 0.161f
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
 
-  animation.Stop(/* jump_to_start= */ false);
+  animation.Stop(PdAnimation::StopMode::STAY);
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
 
-  animation.Play(/* looped= */ true, /* from_start= */ false);
+  PdAnimation::PlaybackParams playback_params;
+  playback_params.looped = true;
+  playback_params.from_start = false;
+  animation.Play(playback_params);
 
   animation.Update(0.02f);  // 0.181f
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(5), animation.GetBitmap());
 }
 
-TEST(PdAnimation, PlaysLoopedWithLoopingFrame) {
+TEST(PdAnimation, PlaysLoopedWithLoopingStartFrame) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
@@ -149,8 +152,11 @@ TEST(PdAnimation, PlaysLoopedWithLoopingFrame) {
   // 0.06 - 0.08 -> 4
   // 0.08 - 0.10 -> 5
 
-  animation.Play(/* looped= */ true, /* from_start= */ true,
-                 /* looping_frame= */ 2);
+  PdAnimation::PlaybackParams playback_params;
+  playback_params.looped = true;
+  playback_params.from_start = true;
+  playback_params.looping_start_frame = 2;
+  animation.Play(playback_params);
 
   animation.Update(0.061f);  // 0.061f
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
@@ -163,4 +169,47 @@ TEST(PdAnimation, PlaysLoopedWithLoopingFrame) {
 
   animation.Update(0.02f);  // 0.13f
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
+}
+
+TEST(PdAnimation, PlaysLoopedWithLoopingCycle) {
+  graphics.getTableBitmap = getTableBitmap;
+  playdate.graphics = &graphics;
+
+  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+
+  // 0:    0 - 0.02 -> 1
+  // 1: 0.02 - 0.04 -> 2
+  // 2: 0.04 - 0.06 -> 3
+  // 3: 0.06 - 0.08 -> 4
+  // 4: 0.08 - 0.10 -> 5
+
+  PdAnimation::PlaybackParams playback_params;
+  playback_params.looped = true;
+  playback_params.from_start = true;
+  playback_params.looping_start_frame = 2;
+  playback_params.looping_end_frame = 3;
+  animation.Play(playback_params);
+
+  animation.Update(0.061f);  // 0.061f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
+
+  animation.Update(0.02f);  // 0.081f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(3), animation.GetBitmap());
+
+  animation.Update(0.02f);  // 0.101f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
+
+  animation.Update(0.02f);  // 0.121f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(3), animation.GetBitmap());
+
+  animation.Update(0.02f);  // 0.141f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(4), animation.GetBitmap());
+
+  animation.Stop(PdAnimation::StopMode::PLAY_TO_END);
+
+  animation.Update(0.02f);  // 0.161f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(5), animation.GetBitmap());
+
+  animation.Update(0.02f);  // 0.181f
+  ASSERT_EQ(reinterpret_cast<LCDBitmap*>(5), animation.GetBitmap());
 }
