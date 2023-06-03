@@ -19,17 +19,21 @@ void SpaceCraft::Update(float dt) {
     updateHyperJump(dt);
   }
 
-  if (field_state_ == FieldState::ACTIVE) {
-    field_state_time_ += dt;
-    if (field_state_time_ > kSpaceCraftFieldAnimationLength) {
-      field_state_ = FieldState::IDLE;
-    }
-  }
-
   forward_bitmap_animation_.Update(dt);
+  engine_left_up_bitmap_animation_.Update(dt);
+  engine_left_down_bitmap_animation_.Update(dt);
+  engine_right_up_bitmap_animation_.Update(dt);
+  engine_right_down_bitmap_animation_.Update(dt);
+  field_bitmap_animation_.Update(dt);
 
   if (rotation_state_ != RotationState::IDLE) {
     rotation_state_time_ += dt;
+  }
+
+  if (field_state_ == FieldState::ACTIVE) {
+    if (field_bitmap_animation_.IsIdle()) {
+      field_state_ = FieldState::IDLE;
+    }
   }
 }
 
@@ -103,40 +107,49 @@ void SpaceCraft::load() {
   forward_bitmap_animation_.Create(playdate_, bitmap_table,
                                    kSpaceCraftForwardAnimationFps);
 
-  engine_left_up_bitmap_table_ =
+  bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-l-up.gif", &error);
   if (error) {
     playdate_->system->logToConsole(
         "Failed to load ship's engine left up, error: %s", error);
   }
+  engine_left_up_bitmap_animation_.Create(playdate_, bitmap_table,
+                                          kSpaceCraftSmallEnginesAnimationFps);
 
-  engine_left_down_bitmap_table_ =
+  bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-l-dwn.gif", &error);
   if (error) {
     playdate_->system->logToConsole(
         "Failed to load ship's engine left down, error: %s", error);
   }
+  engine_left_down_bitmap_animation_.Create(
+      playdate_, bitmap_table, kSpaceCraftSmallEnginesAnimationFps);
 
-  engine_right_up_bitmap_table_ =
+  bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-r-up.gif", &error);
   if (error) {
     playdate_->system->logToConsole(
         "Failed to load ship's engine right up, error: %s", error);
   }
+  engine_right_up_bitmap_animation_.Create(playdate_, bitmap_table,
+                                           kSpaceCraftSmallEnginesAnimationFps);
 
-  engine_right_down_bitmap_table_ =
+  bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-r-dwn.gif", &error);
   if (error) {
     playdate_->system->logToConsole(
         "Failed to load ship's engine right down, error: %s", error);
   }
+  engine_right_down_bitmap_animation_.Create(
+      playdate_, bitmap_table, kSpaceCraftSmallEnginesAnimationFps);
 
-  field_bitmap_table_ =
-      playdate_->graphics->loadBitmapTable("data/field.gif", &error);
+  bitmap_table = playdate_->graphics->loadBitmapTable("data/field.gif", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load ship's field, error: %s",
                                     error);
   }
+  field_bitmap_animation_.Create(playdate_, bitmap_table,
+                                 kSpaceCraftFieldAnimationFps);
 }
 
 void SpaceCraft::updateInput(float dt) {
@@ -154,6 +167,7 @@ void SpaceCraft::updateInput(float dt) {
     }
 
     if (rotation_state_ == RotationState::IDLE) {
+      engine_left_down_bitmap_animation_.Play(/* looped= */ true);
       rotation_state_ = RotationState::LEFT;
       rotation_state_time_ = 0.0f;
     }
@@ -165,6 +179,7 @@ void SpaceCraft::updateInput(float dt) {
     }
 
     if (rotation_state_ == RotationState::IDLE) {
+      engine_right_down_bitmap_animation_.Play(/* looped= */ true);
       rotation_state_ = RotationState::RIGHT;
       rotation_state_time_ = 0.0f;
     }
@@ -183,6 +198,8 @@ void SpaceCraft::updateInput(float dt) {
       }
     }
 
+    engine_left_down_bitmap_animation_.Stop();
+    engine_right_down_bitmap_animation_.Stop();
     rotation_state_ = RotationState::IDLE;
   }
 
@@ -222,6 +239,8 @@ void SpaceCraft::updateInput(float dt) {
 
     if (engine_state_ != EngineState::BACKWARD) {
       forward_bitmap_animation_.Stop();
+      engine_left_up_bitmap_animation_.Play(/* looped= */ true);
+      engine_right_up_bitmap_animation_.Play(/* looped= */ true);
       engine_state_ = EngineState::BACKWARD;
       engine_state_time_ = 0.0f;
     }
@@ -318,8 +337,8 @@ void SpaceCraft::tryMove(const Vector2d& move) {
           kSpaceCraftAsteroidHitRotationVelocityReduction;
 
       if (field_state_ != FieldState::ACTIVE) {
+        field_bitmap_animation_.Play(/* looped */ false);
         field_state_ = FieldState::ACTIVE;
-        field_state_time_ = 0.0f;
       }
 
       callback_->OnHit(velocity_length);
@@ -346,14 +365,8 @@ void SpaceCraft::draw(const Point2d& position) {
 
     case EngineState::BACKWARD:
       engine_bitmap = idle_bitmap_;
-      small_engine_bitmap1 = SelectFrameLooped(
-          playdate_, engine_left_up_bitmap_table_,
-          kSpaceCraftSmallEnginesAnimationLenght,
-          kSpaceCraftSmallEnginesAnimationNumFrames, engine_state_time_);
-      small_engine_bitmap2 = SelectFrameLooped(
-          playdate_, engine_right_up_bitmap_table_,
-          kSpaceCraftSmallEnginesAnimationLenght,
-          kSpaceCraftSmallEnginesAnimationNumFrames, engine_state_time_);
+      small_engine_bitmap1 = engine_left_up_bitmap_animation_.GetBitmap();
+      small_engine_bitmap2 = engine_right_up_bitmap_animation_.GetBitmap();
       break;
   }
 
@@ -362,17 +375,11 @@ void SpaceCraft::draw(const Point2d& position) {
       break;
 
     case RotationState::LEFT:
-      small_engine_bitmap3 = SelectFrameLooped(
-          playdate_, engine_left_down_bitmap_table_,
-          kSpaceCraftSmallEnginesAnimationLenght,
-          kSpaceCraftSmallEnginesAnimationNumFrames, rotation_state_time_);
+      small_engine_bitmap3 = engine_left_down_bitmap_animation_.GetBitmap();
       break;
 
     case RotationState::RIGHT:
-      small_engine_bitmap3 = SelectFrameLooped(
-          playdate_, engine_right_down_bitmap_table_,
-          kSpaceCraftSmallEnginesAnimationLenght,
-          kSpaceCraftSmallEnginesAnimationNumFrames, rotation_state_time_);
+      small_engine_bitmap3 = engine_right_down_bitmap_animation_.GetBitmap();
       break;
   }
 
@@ -395,10 +402,8 @@ void SpaceCraft::draw(const Point2d& position) {
         0.5f, 0.5f, 1.0f, 1.0f);
   }
 
-  if (field_state_ == FieldState::ACTIVE) {
-    LCDBitmap* field_bitmap = SelectFrame(
-        playdate_, field_bitmap_table_, kSpaceCraftFieldAnimationLength,
-        kSpaceCraftFieldAnimationNumFrames, field_state_time_);
+  if (!field_bitmap_animation_.IsIdle()) {
+    LCDBitmap* field_bitmap = field_bitmap_animation_.GetBitmap();
     DrawBitmapCentered(playdate_, field_bitmap, position);
   }
 }

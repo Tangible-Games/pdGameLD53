@@ -94,6 +94,8 @@ class PdAnimation {
     }
   }
 
+  bool IsIdle() const { return (playback_state_ == PlaybackState::IDLE); }
+
   void Update(float dt) {
     float animation_length = GetLength();
 

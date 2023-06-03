@@ -115,13 +115,12 @@ class SpaceCraft : public SpaceObject {
   float engine_state_time_{0.0f};
   LCDBitmap* idle_bitmap_{nullptr};
   PdAnimation forward_bitmap_animation_;
-  LCDBitmapTable* engine_left_up_bitmap_table_{nullptr};
-  LCDBitmapTable* engine_left_down_bitmap_table_{nullptr};
-  LCDBitmapTable* engine_right_up_bitmap_table_{nullptr};
-  LCDBitmapTable* engine_right_down_bitmap_table_{nullptr};
+  PdAnimation engine_left_up_bitmap_animation_;
+  PdAnimation engine_left_down_bitmap_animation_;
+  PdAnimation engine_right_up_bitmap_animation_;
+  PdAnimation engine_right_down_bitmap_animation_;
   RotationState rotation_state_{RotationState::IDLE};
   float rotation_state_time_{0.0f};
   FieldState field_state_{FieldState::IDLE};
-  float field_state_time_{0.0f};
-  LCDBitmapTable* field_bitmap_table_{nullptr};
+  PdAnimation field_bitmap_animation_;
 };
