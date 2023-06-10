@@ -105,6 +105,7 @@ void SpaceCraft::load() {
                                     error);
   }
   forward_bitmap_animation_.Create(playdate_, bitmap_table,
+                                   "data/engine-forward.gif",
                                    kSpaceCraftForwardAnimationFps);
 
   bitmap_table =
@@ -114,6 +115,7 @@ void SpaceCraft::load() {
         "Failed to load ship's engine left up, error: %s", error);
   }
   engine_left_up_bitmap_animation_.Create(playdate_, bitmap_table,
+                                          "data/engine-l-up.gif",
                                           kSpaceCraftSmallEnginesAnimationFps);
 
   bitmap_table =
@@ -123,7 +125,8 @@ void SpaceCraft::load() {
         "Failed to load ship's engine left down, error: %s", error);
   }
   engine_left_down_bitmap_animation_.Create(
-      playdate_, bitmap_table, kSpaceCraftSmallEnginesAnimationFps);
+      playdate_, bitmap_table, "data/engine-l-dwn.gif",
+      kSpaceCraftSmallEnginesAnimationFps);
 
   bitmap_table =
       playdate_->graphics->loadBitmapTable("data/engine-r-up.gif", &error);
@@ -132,6 +135,7 @@ void SpaceCraft::load() {
         "Failed to load ship's engine right up, error: %s", error);
   }
   engine_right_up_bitmap_animation_.Create(playdate_, bitmap_table,
+                                           "data/engine-r-up.gif",
                                            kSpaceCraftSmallEnginesAnimationFps);
 
   bitmap_table =
@@ -141,14 +145,15 @@ void SpaceCraft::load() {
         "Failed to load ship's engine right down, error: %s", error);
   }
   engine_right_down_bitmap_animation_.Create(
-      playdate_, bitmap_table, kSpaceCraftSmallEnginesAnimationFps);
+      playdate_, bitmap_table, "data/engine-r-dwn.gif",
+      kSpaceCraftSmallEnginesAnimationFps);
 
   bitmap_table = playdate_->graphics->loadBitmapTable("data/field.gif", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load ship's field, error: %s",
                                     error);
   }
-  field_bitmap_animation_.Create(playdate_, bitmap_table,
+  field_bitmap_animation_.Create(playdate_, bitmap_table, "data/field.gif",
                                  kSpaceCraftFieldAnimationFps);
 }
 

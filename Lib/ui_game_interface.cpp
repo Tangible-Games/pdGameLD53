@@ -9,11 +9,13 @@
 void UiGameInterface::Load() {
   const char* error = nullptr;
 
-  arrow_bitmap_table_ =
+  LCDBitmapTable* bitmap_table =
       playdate_->graphics->loadBitmapTable("data/triangle_3.gif", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load arrow, error: %s", error);
   }
+  arrow_bitmap_animation_.Create(playdate_, bitmap_table, "data/triangle_3.gif",
+                                 kUiArrowAnimationFps);
 
   bottom_left_corner_ =
       playdate_->graphics->loadBitmap("data/bottom_left.png", &error);
@@ -48,10 +50,12 @@ void UiGameInterface::Load() {
     playdate_->system->logToConsole("Failed to load crate, error: %s", error);
   }
 
-  clock_ = playdate_->graphics->loadBitmapTable("data/clock.gif", &error);
+  bitmap_table = playdate_->graphics->loadBitmapTable("data/clock.gif", &error);
   if (error) {
     playdate_->system->logToConsole("Failed to load clock, error: %s", error);
   }
+  clock_.Create(playdate_, bitmap_table, "data/clock.gif",
+                kUiClockAnimationFps);
 }
 
 void UiGameInterface::Update(float dt) {
@@ -63,6 +67,9 @@ void UiGameInterface::Update(float dt) {
       moving_too_fast_time_ = 0.0f;
     }
   }
+
+  arrow_bitmap_animation_.Update(dt);
+  clock_.Update(dt);
 }
 
 void UiGameInterface::Draw() {
@@ -102,8 +109,7 @@ void UiGameInterface::Draw() {
   int clock_width = 0;
   int clock_height = 0;
   if (is_time_visible_) {
-    bitmap = SelectFrameLooped(playdate_, clock_, kUiClockAnimationLength,
-                               kUiClockAnimationNumFrames, running_time_);
+    bitmap = clock_.GetBitmap();
     GetBitmapSizes(playdate_, bitmap, clock_width, clock_height);
     playdate_->graphics->drawBitmap(
         bitmap, 15, screen_height - clock_height - 15, kBitmapUnflipped);
@@ -171,9 +177,7 @@ void UiGameInterface::drawArrow() {
     screen_rect.IntersectRayFromInside(ship_pos_, arrow_dir_norm_,
                                        intersection);
 
-    LCDBitmap* bitmap = SelectFrameLooped(
-        playdate_, arrow_bitmap_table_, kUiArrowAnimationLength,
-        kUiArrowAnimationNumFrames, running_time_);
+    LCDBitmap* bitmap = arrow_bitmap_animation_.GetBitmap();
 
     int bitmap_width = 0;
     int bitmap_height = 0;
@@ -212,7 +216,7 @@ void UiGameInterface::drawArrow() {
                                            (int)sprite_pos.y, angle, 0.5f, 0.5f,
                                            1.0f, 1.0f);
 
-    if (is_is_arrow_text_visble_) {
+    if (is_arrow_text_visble_) {
       playdate_->graphics->setFont(
           Fonts::instance().use(FontName::kFontBoldOutlined));
 

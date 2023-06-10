@@ -13,6 +13,7 @@ void SpaceStation::Generate(const StationArea& station_area) {
   playdate_->system->logToConsole("#SpaceStation::Generate");
 
   station_bitmap_animation_.Create(playdate_, station_bitmap_table_,
+                                   "data/circle_big.gif",
                                    kSpaceStationAnimationFps);
   station_bitmap_animation_.Play(/* looped= */ true);
 

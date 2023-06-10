@@ -5,6 +5,7 @@
 #include "pd_api.h"
 
 using namespace PdSymphony::Math;
+using namespace PdSymphony::Engine;
 
 class UiGameInterface {
  public:
@@ -16,14 +17,23 @@ class UiGameInterface {
 
   void SetArrow(bool is_visible, bool is_text_visble, const Point2d& ship_pos,
                 const Vector2d& dir, float distance) {
+    bool was_arrow_visible = is_arrow_visible_;
     is_arrow_visible_ = is_visible;
-    is_is_arrow_text_visble_ = is_text_visble;
+    is_arrow_text_visble_ = is_text_visble;
     ship_pos_ = ship_pos;
     arrow_dir_norm_ = dir;
     arrow_distance_ = distance;
+    if (is_arrow_visible_ && !was_arrow_visible) {
+      arrow_bitmap_animation_.Play(/* looped= */ true);
+    }
   }
 
-  void SetTimeVisibility(bool is_visible) { is_time_visible_ = is_visible; }
+  void SetTimeVisibility(bool is_visible) {
+    is_time_visible_ = is_visible;
+    if (is_time_visible_) {
+      clock_.Play(/* looped= */ true);
+    }
+  }
 
   void SetTimeSeconds(float time_seconds) { time_seconds_ = time_seconds; }
 
@@ -51,7 +61,7 @@ class UiGameInterface {
 
   PlaydateAPI* playdate_;
   bool is_arrow_visible_{false};
-  bool is_is_arrow_text_visble_{false};
+  bool is_arrow_text_visble_{false};
   Point2d ship_pos_;
   Vector2d arrow_dir_norm_;
   float arrow_distance_{0.0f};
@@ -63,13 +73,13 @@ class UiGameInterface {
   float moving_too_fast_time_{0.0f};
   bool moving_too_fast_force_hidden_{false};
   bool ready_to_jump_{false};
-  LCDBitmapTable* arrow_bitmap_table_{nullptr};
+  PdAnimation arrow_bitmap_animation_;
   LCDBitmap* bottom_left_corner_{nullptr};
   LCDBitmap* bottom_right_corner_{nullptr};
   LCDBitmap* top_left_corner_{nullptr};
   LCDBitmap* top_right_corner_{nullptr};
   LCDBitmap* crate_{nullptr};
-  LCDBitmapTable* clock_{nullptr};
+  PdAnimation clock_;
   float running_time_{0.0f};
   const int text_glyph_width_{10};
   const int text_glyph_height_{12};

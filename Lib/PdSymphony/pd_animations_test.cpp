@@ -35,7 +35,7 @@ TEST(PdAnimation, CalculatesNumFrames) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 10.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 10.0f);
 
   ASSERT_EQ(5, animation.GetNumFrames());
   ASSERT_NEAR(0.5f, animation.GetLength(), 0.0001f);
@@ -45,7 +45,7 @@ TEST(PdAnimation, PlaysNotLooped) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 50.0f);
 
   //    0 - 0.02 -> 1
   // 0.02 - 0.04 -> 2
@@ -77,7 +77,7 @@ TEST(PdAnimation, PlaysLooped) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 50.0f);
 
   //    0 - 0.02 -> 1
   // 0.02 - 0.04 -> 2
@@ -107,7 +107,7 @@ TEST(PdAnimation, PlaysAndStops) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 50.0f);
 
   animation.Update(0.061f);  // 0.061f
   ASSERT_EQ(reinterpret_cast<LCDBitmap*>(1), animation.GetBitmap());
@@ -144,7 +144,7 @@ TEST(PdAnimation, PlaysLoopedWithLoopingStartFrame) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 50.0f);
 
   //    0 - 0.02 -> 1
   // 0.02 - 0.04 -> 2
@@ -175,7 +175,7 @@ TEST(PdAnimation, PlaysLoopedWithLoopingCycle) {
   graphics.getTableBitmap = getTableBitmap;
   playdate.graphics = &graphics;
 
-  PdAnimation animation(&playdate, bitmap_table, /* fps= */ 50.0f);
+  PdAnimation animation(&playdate, bitmap_table, "animation", /* fps= */ 50.0f);
 
   // 0:    0 - 0.02 -> 1
   // 1: 0.02 - 0.04 -> 2

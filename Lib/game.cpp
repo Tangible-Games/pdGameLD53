@@ -64,19 +64,25 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     const char *error = nullptr;
 
-    docking_bitmap_table_ =
+    LCDBitmapTable *bitmap_table =
         playdate_->graphics->loadBitmapTable("data/cut-prkng-copy.gif", &error);
     if (error) {
       playdate_->system->logToConsole(
           "Failed to load docking animation, error: %s", error);
     }
+    docking_bitmap_animation_.Create(playdate_, bitmap_table,
+                                     "data/cut-prkng-copy.gif",
+                                     kSpaceStationDockingAnimationFps);
 
-    hyper_jump_bitmap_table_ =
+    bitmap_table =
         playdate_->graphics->loadBitmapTable("data/cut-hpr.gif", &error);
     if (error) {
       playdate_->system->logToConsole(
           "Failed to load docking animation, error: %s", error);
     }
+    hyper_jump_bitmap_animation_.Create(playdate_, bitmap_table,
+                                        "data/cut-hpr.gif",
+                                        kSpaceStationHyperJumpAnimationFps);
 
     game_interface_.SetTimeVisibility(false);
     game_interface_.SetCrateHealthVisibility(false);
@@ -146,16 +152,13 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     if (target_state_ == TargetState::DOCKING) {
       stars_.Draw(camera_);
-      LCDBitmap *bitmap = SelectFrame(
-          playdate_, docking_bitmap_table_, kSpaceStationDockingAnimationLength,
-          kSpaceStationDockingAnimationNumFrames, target_state_time_);
+      LCDBitmap *bitmap = docking_bitmap_animation_.GetBitmap();
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else if (target_state_ == TargetState::STATION) {
       ui_station_.Draw();
     } else if (target_state_ == TargetState::JUMP_ANIMATION) {
-      LCDBitmap *bitmap = SelectFrame(playdate_, hyper_jump_bitmap_table_, 1.5f,
-                                      8, target_state_time_);
+      LCDBitmap *bitmap = hyper_jump_bitmap_animation_.GetBitmap();
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else {
@@ -216,13 +219,14 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       case TargetState::ALIGN_IN_DOCK: {
         target_state_time_ += dt;
         if (target_state_time_ > kSpaceStationAlignTimeout) {
+          docking_bitmap_animation_.Play(/* looped= */ false);
           target_state_ = TargetState::DOCKING;
           target_state_time_ = 0.0f;
         }
       } break;
       case TargetState::DOCKING:
-        target_state_time_ += dt;
-        if (target_state_time_ > kSpaceStationDockingAnimationLength) {
+        docking_bitmap_animation_.Update(dt);
+        if (docking_bitmap_animation_.IsIdle()) {
           GenMissions(space_station_cur_, missions_to_select_,
                       missions_to_select_indices_);
           if (current_mission_ != -1) {
@@ -257,7 +261,6 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
           }
 
           target_state_ = TargetState::STATION;
-          target_state_time_ = kSpaceStationDockingAnimationLength;
         }
         break;
       case TargetState::STATION:
@@ -301,6 +304,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
       case TargetState::WAIT_TO_JUMP:
         target_state_time_ += dt;
         if (target_state_time_ > 3.0f) {
+          hyper_jump_bitmap_animation_.Play(/* looped= */ false);
           target_state_time_ = 0.0f;
           target_state_ = TargetState::JUMP_ANIMATION;
 
@@ -310,11 +314,9 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
         }
         break;
       case TargetState::JUMP_ANIMATION:
-        target_state_time_ += dt;
-        if (target_state_time_ > 1.5f) {
-          target_state_time_ = 0.0f;
+        hyper_jump_bitmap_animation_.Update(dt);
+        if (hyper_jump_bitmap_animation_.IsIdle()) {
           target_state_ = TargetState::JUMP;
-
           playdate_->system->logToConsole("Switch to state: JUMP");
         }
         break;
@@ -443,8 +445,6 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
   // SpaceCraft
   void OnHit(float impact) override {
-    playdate_->system->logToConsole("Hit with impact: %f", (double)impact);
-
     if (current_mission_ != -1) {
       float damage = kSpaceCraftCollisionImpactToDamageBase +
                      impact * kSpaceCraftCollisionImpactToDamageRatio;
@@ -545,8 +545,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   UiGameInterface game_interface_;
   UiStation ui_station_;
 
-  LCDBitmapTable *docking_bitmap_table_{nullptr};
-  LCDBitmapTable *hyper_jump_bitmap_table_{nullptr};
+  PdAnimation docking_bitmap_animation_;
+  PdAnimation hyper_jump_bitmap_animation_;
 
   float running_time_{0.0f};
 };

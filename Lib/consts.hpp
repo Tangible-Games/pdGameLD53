@@ -38,8 +38,8 @@ constexpr float kSpaceCraftToStationCameraOffset = 30.0f;
 constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
 constexpr float kSpaceStationDockSpeed = 30.0f;
 constexpr float kSpaceStationAlignTimeout = 2.0f;
-constexpr int kSpaceStationDockingAnimationNumFrames = 19;
-constexpr float kSpaceStationDockingAnimationLength = 1.9f;
+constexpr float kSpaceStationDockingAnimationFps = 10.0f;
+constexpr float kSpaceStationHyperJumpAnimationFps = 5.3f;
 constexpr float kSpaceStationTakeOffRadius = 80.0f;
 
 constexpr size_t kAsteroidInitCollisionCheckNum = 3;
@@ -1106,10 +1106,8 @@ constexpr size_t kStarsNum = 20;
 constexpr float kStarsVelocitySlowDown = 100.0f;
 constexpr float kStarsVelocitySlowDownHyperJump = 0.1f;
 
-constexpr int kUiArrowAnimationNumFrames = 8;
-constexpr float kUiArrowAnimationLength = 1.6f;
-constexpr int kUiClockAnimationNumFrames = 16;
-constexpr float kUiClockAnimationLength = 1.0f;
+constexpr float kUiArrowAnimationFps = 12.0f;
+constexpr float kUiClockAnimationFps = 12.0f;
 constexpr bool kUiDrawSpeed = false;
 constexpr float kUiMovingTooFastTimeout = 3.0f;
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.hpp"
 #include "pd_api.h"
 
 namespace PdSymphony {
@@ -17,15 +18,16 @@ class PdAnimation {
 
   PdAnimation() {}
 
-  PdAnimation(PlaydateAPI* playdate, LCDBitmapTable* bitmap_table, float fps,
-              int num_frames = -1) {
-    Create(playdate, bitmap_table, fps, num_frames);
+  PdAnimation(PlaydateAPI* playdate, LCDBitmapTable* bitmap_table,
+              const char* name, float fps, int num_frames = -1) {
+    Create(playdate, bitmap_table, name, fps, num_frames);
   }
 
-  void Create(PlaydateAPI* playdate, LCDBitmapTable* bitmap_table, float fps,
-              int num_frames = -1) {
+  void Create(PlaydateAPI* playdate, LCDBitmapTable* bitmap_table,
+              const char* name, float fps, int num_frames = -1) {
     playdate_ = playdate;
     bitmap_table_ = bitmap_table;
+    name_ = name;
     num_frames_ = num_frames;
     fps_ = fps;
 
@@ -146,8 +148,16 @@ class PdAnimation {
   }
 
   LCDBitmap* GetBitmap() {
-    return playdate_->graphics->getTableBitmap(bitmap_table_,
-                                               current_frame_index_);
+    LCDBitmap* result = playdate_->graphics->getTableBitmap(
+        bitmap_table_, current_frame_index_);
+    if (kPrintDebug) {
+      if (result == nullptr) {
+        playdate_->system->logToConsole("Null bitmap, name: %s, frame index: ",
+                                        name_, current_frame_index_);
+      }
+    }
+
+    return result;
   }
 
  private:
@@ -166,6 +176,7 @@ class PdAnimation {
 
   PlaydateAPI* playdate_{nullptr};
   LCDBitmapTable* bitmap_table_{nullptr};
+  const char* name_{nullptr};
   int num_frames_{-1};
   float fps_{1.0f};
   PlaybackState playback_state_{PlaybackState::IDLE};
