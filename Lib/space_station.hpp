@@ -10,6 +10,7 @@
 #include "space_object.hpp"
 
 using namespace PdSymphony::Collision;
+using namespace PdSymphony::Engine;
 
 class SpaceStation : public SpaceObject {
  public:
@@ -36,19 +37,14 @@ class SpaceStation : public SpaceObject {
   void drawDebug(const Point2d& position);
   void createAsteroids(const StationArea& station_area);
 
-  static bool circleCircleCCD(const Point2d& p1, float r1, const Vector2d& move,
-                              const Point2d& p2, float r2,
-                              float& move_factor_out);
-
   PlaydateAPI* playdate_{nullptr};
 
   static bool loaded;
   static std::vector<AsteroidType> asteroid_types_;
   static LCDBitmapTable* station_bitmap_table_;
+  PdAnimation station_bitmap_animation_;
   std::vector<Asteroid> asteroids_;
   SpatialBin2d<int> asteroids_spatial_bin_{kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsCellSize,
                                            kAsteroidsSpatialBinsSize};
-
-  float running_time_{0.0f};
 };

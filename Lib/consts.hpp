@@ -33,8 +33,7 @@ constexpr float kSpaceCraftHyperJumpAlignTimeout = 1.0f;
 constexpr float kSpaceCraftHyperJumpCrankSpins = 360.0f * 3.0f;
 
 constexpr float kSpaceStationRadius = 60.0f;
-constexpr float kSpaceStationAnimationNumFrames = 2.4f;
-constexpr float kSpaceStationAnimationLength = 2.4f;
+constexpr float kSpaceStationAnimationFps = 12.0f;
 constexpr float kSpaceCraftToStationCameraOffset = 30.0f;
 constexpr float kSpaceCraftToStationCameraOffsetRadius = 200.0f;
 constexpr float kSpaceStationDockSpeed = 30.0f;

@@ -12,24 +12,23 @@ LCDBitmapTable* SpaceStation::station_bitmap_table_ = nullptr;
 void SpaceStation::Generate(const StationArea& station_area) {
   playdate_->system->logToConsole("#SpaceStation::Generate");
 
+  station_bitmap_animation_.Create(playdate_, station_bitmap_table_,
+                                   kSpaceStationAnimationFps);
+  station_bitmap_animation_.Play(/* looped= */ true);
+
   StaticRandomGenerator::get().SetSeed(station_area.seed);
   createAsteroids(station_area);
-
-  running_time_ = 0.0f;
 }
 
 void SpaceStation::Update(float dt) {
-  running_time_ += dt;
+  station_bitmap_animation_.Update(dt);
 
   std::for_each(asteroids_.begin(), asteroids_.end(),
                 [dt](auto& a) { a.Update(dt); });
 }
 
 void SpaceStation::Draw(const Camera& camera) {
-  LCDBitmap* bitmap = SelectFrameLooped(
-      playdate_, station_bitmap_table_, kSpaceStationAnimationLength,
-      (int)kSpaceStationAnimationNumFrames, running_time_);
-
+  LCDBitmap* bitmap = station_bitmap_animation_.GetBitmap();
   DrawBitmapCentered(playdate_, bitmap, camera.ConvertToCameraSpace(position_));
 
   if (kDrawDebugStation) {
@@ -134,34 +133,4 @@ void SpaceStation::createAsteroids(const StationArea& station_area) {
   playdate_->system->logToConsole(
       "Spatial bins hashes collision: %i",
       asteroids_spatial_bin_.GetMaxHashesCollision());
-}
-
-bool SpaceStation::circleCircleCCD(const Point2d& p1, float r1,
-                                   const Vector2d& move, const Point2d& p2,
-                                   float r2, float& move_factor_out) {
-  Vector2d move_norm = move.GetNormalized();
-
-  Vector2d to_circle = p2 - p1;
-
-  float move_proj = to_circle * move_norm;
-  if (move_proj < 0.0f) {
-    return false;
-  }
-
-  Vector2d v = to_circle - move_norm * move_proj;
-  float d = v.GetLength();
-  if (d > (r1 + r2)) {
-    return false;
-  }
-
-  float m = move_proj - sqrtf((r1 + r2) * (r1 + r2) - d * d);
-
-  float move_length = move.GetLength();
-  if (move_length < m) {
-    return false;
-  }
-
-  move_factor_out = m / move_length;
-
-  return true;
 }
