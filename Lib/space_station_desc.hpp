@@ -1,9 +1,6 @@
 #pragma once
 
-#include <stdint.h>
-
-#include <array>
-#include <string>
+#include <vector>
 
 #include "PdSymphony/point2d.hpp"
 
