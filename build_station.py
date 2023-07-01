@@ -25,9 +25,9 @@ def main():
     cpp_file.write('\n')
     cpp_file.write('SpaceStationDesc Get{}Desc() {{\n'.format(args.var_name))
     cpp_file.write('  return SpaceStationDesc{\n')
+    cpp_file.write('    .pos{{{:.1f}f, {:.1f}f}},\n'.format(json_input['stations'][0]['x'], json_input['stations'][0]['y']))
     cpp_file.write('    .name{{"{}"}},\n'.format(args.name))
     cpp_file.write('    .desc{{"{}"}},\n'.format(args.desc))
-    cpp_file.write('    .pos{{{}, {}}},\n'.format(json_input['stations'][0]['x'], json_input['stations'][0]['y']))
     cpp_file.write('    .difficulty = {},\n'.format(args.difficulty))
     cpp_file.write('    .difficulty_str{{"{}"}},\n'.format(args.difficulty_str))
     cpp_file.write('    .jump_distance = {},\n'.format(args.jump_distance))
@@ -35,8 +35,8 @@ def main():
 
     for asteroid in json_input['asteroids']:
       cpp_file.write('      {\n')
-      cpp_file.write('        .pos{{{}, {}}},\n'.format(asteroid['x'], asteroid['y']))
-      cpp_file.write('        .radius = {},\n'.format(asteroid['r']))
+      cpp_file.write('        .pos{{{:.1f}f, {:.1f}f}},\n'.format(asteroid['x'], asteroid['y']))
+      cpp_file.write('        .radius = {:.1f}f,\n'.format(asteroid['r']))
       cpp_file.write('      },\n')
 
     cpp_file.write('    }\n')

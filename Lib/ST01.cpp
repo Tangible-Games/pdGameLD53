@@ -5,44 +5,44 @@
 
 SpaceStationDesc GetST01CentralStationDesc() {
   return SpaceStationDesc{
+    .pos{-119.2f, -562.8f},
     .name{"Central Station"},
     .desc{"Guten Tag, Hola, Hello! Welcome to Central!\nTravellers, businessmen and diplomats just love coming here.\nFeel at home and make sure to visit once in a while.\nRemember: Central is THE place."},
-    .pos{-119.21569567246287, -562.8312980824467},
     .difficulty = 0,
     .difficulty_str{"moderate"},
     .jump_distance = 1800,
     .asteroids{
       {
-        .pos{-304, -88.796875},
-        .radius = 10,
+        .pos{-304.0f, -88.8f},
+        .radius = 10.0f,
       },
       {
-        .pos{-38, -22.796875},
-        .radius = 10,
+        .pos{-38.0f, -22.8f},
+        .radius = 10.0f,
       },
       {
-        .pos{56, -110.796875},
-        .radius = 10,
+        .pos{56.0f, -110.8f},
+        .radius = 10.0f,
       },
       {
-        .pos{50, 74.203125},
-        .radius = 10,
+        .pos{50.0f, 74.2f},
+        .radius = 10.0f,
       },
       {
-        .pos{292.62034392331793, -302.724325706164},
-        .radius = 10,
+        .pos{292.6f, -302.7f},
+        .radius = 10.0f,
       },
       {
-        .pos{462.41239533561355, 517.3351566468382},
-        .radius = 10,
+        .pos{462.4f, 517.3f},
+        .radius = 10.0f,
       },
       {
-        .pos{-624.9792530707902, 430.63283252141065},
-        .radius = 10,
+        .pos{-625.0f, 430.6f},
+        .radius = 10.0f,
       },
       {
-        .pos{-534.6643321068032, -501.4171518269355},
-        .radius = 10,
+        .pos{-534.7f, -501.4f},
+        .radius = 10.0f,
       },
     }
   };
