@@ -6,6 +6,7 @@ exe_srcs += files(
     'main.c',
     'space_craft.cpp',
     'space_station.cpp',
+    'ST01.cpp',
     'stars.cpp',
     'static_random_generator.cpp',
     'ui_game_interface.cpp',
