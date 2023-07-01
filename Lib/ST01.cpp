@@ -7,6 +7,7 @@ SpaceStationDesc GetST01CentralStationDesc() {
   return SpaceStationDesc{
     .name{"Central Station"},
     .desc{"Guten Tag, Hola, Hello! Welcome to Central!\nTravellers, businessmen and diplomats just love coming here.\nFeel at home and make sure to visit once in a while.\nRemember: Central is THE place."},
+    .pos{-119.21569567246287, -562.8312980824467},
     .difficulty = 0,
     .difficulty_str{"moderate"},
     .jump_distance = 1800,
