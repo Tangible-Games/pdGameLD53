@@ -28,9 +28,9 @@ def main():
     cpp_file.write('    .pos{{{:.1f}f, {:.1f}f}},\n'.format(json_input['stations'][0]['x'], json_input['stations'][0]['y']))
     cpp_file.write('    .name{{"{}"}},\n'.format(args.name))
     cpp_file.write('    .desc{{"{}"}},\n'.format(args.desc))
-    cpp_file.write('    .difficulty = {},\n'.format(args.difficulty))
-    cpp_file.write('    .difficulty_str{{"{}"}},\n'.format(args.difficulty_str))
     cpp_file.write('    .jump_distance = {},\n'.format(args.jump_distance))
+    cpp_file.write('    .difficulty_str{{"{}"}},\n'.format(args.difficulty_str))
+    cpp_file.write('    .difficulty = {},\n'.format(args.difficulty))
     cpp_file.write('    .asteroids{\n')
 
     for asteroid in json_input['asteroids']:

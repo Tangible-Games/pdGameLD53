@@ -8,9 +8,9 @@ SpaceStationDesc GetST01CentralStationDesc() {
     .pos{-119.2f, -562.8f},
     .name{"Central Station"},
     .desc{"Guten Tag, Hola, Hello! Welcome to Central!\nTravellers, businessmen and diplomats just love coming here.\nFeel at home and make sure to visit once in a while.\nRemember: Central is THE place."},
-    .difficulty = 0,
-    .difficulty_str{"moderate"},
     .jump_distance = 1800,
+    .difficulty_str{"moderate"},
+    .difficulty = 0,
     .asteroids{
       {
         .pos{-304.0f, -88.8f},
