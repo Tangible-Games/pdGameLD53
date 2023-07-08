@@ -2,7 +2,8 @@ subdir('PdSymphony')
 
 python = find_program('python3')
 
-generated_srcs = [custom_target('generate_stations',
+generated_srcs = [
+custom_target(
     input : 'ST01_Central_Station.json',
     output : 'ST01.cpp',
     command : [python,
@@ -14,7 +15,21 @@ generated_srcs = [custom_target('generate_stations',
                 '--desc=Guten Tag, Hola, Hello! Welcome to Central! Travellers, businessmen and diplomats just love coming here. Feel at home and make sure to visit once in a while. Remember: Central is THE place.',
                 '--difficulty=0',
                 '--difficulty_str=moderate',
-                '--jump_distance=1800']])]
+                '--jump_distance=1800']]),
+custom_target(
+    input : 'ST99_Test.json',
+    output : 'ST99.cpp',
+    command : [python,
+                [meson.project_source_root() / 'Lib/build_station.py',
+                '--json_input=@INPUT@',
+                '--cpp_output=@OUTPUT@',
+                '--var_name=ST99Test',
+                '--name=Test Station',
+                '--desc=Test Station description.',
+                '--difficulty=0',
+                '--difficulty_str=moderate',
+                '--jump_distance=1800']]),
+]
 
 exe_srcs += files(
     'asteroid.cpp',
@@ -22,6 +37,7 @@ exe_srcs += files(
     'main.c',
     'space_craft.cpp',
     'space_station.cpp',
+    'space_stations_descs.cpp',
     'stars.cpp',
     'static_random_generator.cpp',
     'ui_game_interface.cpp',
