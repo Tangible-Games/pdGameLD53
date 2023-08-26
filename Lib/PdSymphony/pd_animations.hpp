@@ -38,6 +38,9 @@ class PdAnimation {
     playback_state_ = PlaybackState::IDLE;
     playback_params_ = PlaybackParams();
     time_in_animation_ = 0.0f;
+    looping_start_time_ = 0.0f;
+    looping_end_time_ = 0.0f;
+    current_frame_index_ = 0;
   }
 
   int GetNumFrames() const { return num_frames_; }
@@ -152,8 +155,9 @@ class PdAnimation {
         bitmap_table_, current_frame_index_);
     if (kPrintDebug) {
       if (result == nullptr) {
-        playdate_->system->logToConsole("Null bitmap, name: %s, frame index: ",
-                                        name_, current_frame_index_);
+        playdate_->system->logToConsole(
+            "Null bitmap, name: %s, frame index: %i", name_,
+            current_frame_index_);
       }
     }
 
@@ -162,6 +166,7 @@ class PdAnimation {
 
  private:
   void updateNumFrames() {
+    num_frames_ = -1;
     while (true) {
       ++num_frames_;
       LCDBitmap* bitmap =
