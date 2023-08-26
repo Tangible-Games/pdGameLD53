@@ -108,8 +108,9 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
                                     idx);
 
     space_station_.Generate(stations_[idx]);
-    // TODO(truvorskameikin): Generate seed out of something here.
-    stars_.Generate(0);
+    stars_.Generate(/* seed= */ PdSymphony::Hash::HashLy(
+        (unsigned char *)stations_[idx].name.data(),
+        stations_[idx].name.size()));
     space_craft_.ResetSpaceStation(&space_station_);
 
     if (space_station_cur_ != space_station_target_) {

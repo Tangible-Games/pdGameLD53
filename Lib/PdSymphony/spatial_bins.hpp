@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 
+#include "hash.hpp"
 #include "point2d.hpp"
 #include "vector2d.hpp"
 
@@ -69,17 +70,8 @@ class SpatialBin2d {
 
  private:
   static uint32_t hash(int i, int j) {
-    uint32_t result = hashLy((unsigned char*)&i, sizeof(int));
-    result = hashLy((unsigned char*)&j, sizeof(int), result);
-    return result;
-  }
-
-  static uint32_t hashLy(const unsigned char* str, size_t length,
-                         uint32_t start = 0) {
-    uint32_t result = start;
-    for (size_t i = 0; i < length; ++i) {
-      result = (result * 1664525) + (*str) + 1013904223;
-    }
+    uint32_t result = PdSymphony::Hash::HashLy((unsigned char*)&i, sizeof(int));
+    result = PdSymphony::Hash::HashLy((unsigned char*)&j, sizeof(int), result);
     return result;
   }
 
