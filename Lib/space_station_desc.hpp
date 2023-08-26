@@ -7,12 +7,12 @@
 using namespace PdSymphony::Math;
 
 struct AsteroidDesc {
-  Point2d pos;
+  Point2d pos;  // Local to station.
   float radius{0.0f};
 };
 
 struct SpaceStationDesc {
-  Point2d pos;  // Local to station.
+  Point2d pos;  // Global position of station.
   std::string name;
   std::string desc;
   float jump_distance{0.0f};
