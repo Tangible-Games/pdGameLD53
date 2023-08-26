@@ -171,7 +171,8 @@ void UiStation::Draw() {
 
     playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold2x));
 
-    playdate_->graphics->drawText(station_.name.data(), station_.name.size(),
+    playdate_->graphics->drawText(space_station_desc_.name.data(),
+                                  space_station_desc_.name.size(),
                                   kASCIIEncoding, 25, 50);
 
     playdate_->graphics->setFont(Fonts::instance().use(FontName::kFontBold));
@@ -182,7 +183,8 @@ void UiStation::Draw() {
     playdate_->graphics->drawText(ss.str().data(), ss.str().size(),
                                   kASCIIEncoding, 18, 4);
 
-    playdate_->graphics->drawText(station_.desc.data(), station_.desc.size(),
+    playdate_->graphics->drawText(space_station_desc_.desc.data(),
+                                  space_station_desc_.desc.size(),
                                   kASCIIEncoding, 25, 100);
 
   } else if (mode_ == Mode::MISSIONS) {

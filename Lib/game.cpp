@@ -10,6 +10,7 @@
 #include "sounds.hpp"
 #include "space_craft.hpp"
 #include "space_station.hpp"
+#include "space_stations_descs.hpp"
 #include "stars.hpp"
 #include "ui_game_interface.hpp"
 #include "ui_station.hpp"
@@ -107,7 +108,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
                                     idx);
 
     space_station_.Generate(stations_[idx]);
-    stars_.Generate(stations_[idx].seed);
+    // TODO(truvorskameikin): Generate seed out of something here.
+    stars_.Generate(0);
     space_craft_.ResetSpaceStation(&space_station_);
 
     if (space_station_cur_ != space_station_target_) {
@@ -513,7 +515,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   SpaceStation space_station_;
   Stars stars_;
 
-  std::vector<StationArea> stations_{GetStations()};
+  std::vector<SpaceStationDesc> stations_{GetSpaceStationsDescs()};
   std::vector<MissionDesc> missions_{GetMissions()};
 
   // current state

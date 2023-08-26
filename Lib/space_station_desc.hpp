@@ -6,7 +6,7 @@
 
 using namespace PdSymphony::Math;
 
-struct AsteroidPositionDesc {
+struct AsteroidDesc {
   Point2d pos;
   float radius{0.0f};
 };
@@ -18,5 +18,5 @@ struct SpaceStationDesc {
   float jump_distance{0.0f};
   std::string difficulty_str;
   int difficulty{0};
-  std::vector<AsteroidPositionDesc> asteroids;
+  std::vector<AsteroidDesc> asteroids;
 };

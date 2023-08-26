@@ -8,6 +8,7 @@
 #include "consts.hpp"
 #include "pd_api.h"
 #include "space_object.hpp"
+#include "space_station_desc.hpp"
 
 using namespace PdSymphony::Collision;
 using namespace PdSymphony::Engine;
@@ -21,7 +22,7 @@ class SpaceStation : public SpaceObject {
     }
   }
 
-  void Generate(const StationArea& station_area);
+  void Generate(const SpaceStationDesc& space_station_desc);
 
   void Update(float dt);
   void Draw(const Camera& camera);
@@ -35,7 +36,8 @@ class SpaceStation : public SpaceObject {
  private:
   static void load(PlaydateAPI* playdate);
   void drawDebug(const Point2d& position);
-  void createAsteroids(const StationArea& station_area);
+  int asteroidSizeToTypeIndex(float radius) const;
+  void createAsteroids(const SpaceStationDesc& space_station_desc);
 
   PlaydateAPI* playdate_{nullptr};
 

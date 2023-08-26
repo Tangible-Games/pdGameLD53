@@ -3,6 +3,7 @@
 #include "PdSymphony/all_symphony.hpp"
 #include "consts.hpp"
 #include "pd_api.h"
+#include "space_station_desc.hpp"
 
 using namespace PdSymphony::Math;
 
@@ -43,8 +44,8 @@ class UiStation {
     result_money_ = money;
   }
 
-  void SetStation(const StationArea& station, int money) {
-    station_ = station;
+  void SetStation(const SpaceStationDesc& space_station_desc, int money) {
+    space_station_desc_ = space_station_desc;
     money_ = money;
   }
 
@@ -83,7 +84,7 @@ class UiStation {
   float result_delivery_time_{0.0f};
   float result_crate_health_percent_{0.0f};
   int result_money_{0};
-  StationArea station_;
+  SpaceStationDesc space_station_desc_;
   int money_{0};
   int cur_mission_{0};
   std::vector<MissionDesc> missions_;
