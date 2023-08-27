@@ -12,7 +12,7 @@ custom_target(
                 '--cpp_output=@OUTPUT@',
                 '--var_name=ST01CentralStation',
                 '--name=Central Station',
-                '--desc=Guten Tag, Hola, Hello! Welcome to Central! Travellers, businessmen and diplomats just love coming here. Feel at home and make sure to visit once in a while. Remember: Central is THE place.',
+                '--desc=Guten Tag, Hola, Hello! Welcome to Central!|Travellers, businessmen and diplomats just love coming here.|Feel at home and make sure to visit once in a while.|Remember: Central is THE place.',
                 '--difficulty=0',
                 '--difficulty_str=moderate',
                 '--jump_distance=1800']]),
