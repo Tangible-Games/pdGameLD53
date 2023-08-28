@@ -15,7 +15,9 @@ custom_target(
                 '--desc=Guten Tag, Hola, Hello! Welcome to Central!|Travellers, businessmen and diplomats just love coming here.|Feel at home and make sure to visit once in a while.|Remember: Central is THE place.',
                 '--difficulty=0',
                 '--difficulty_str=moderate',
-                '--jump_distance=1800']]),
+                '--jump_distance=1800',
+                '--station_global_x=0.0',
+                '--station_global_y=0.0']]),
 custom_target(
     input : 'ST99_Test.json',
     output : 'ST99.cpp',
