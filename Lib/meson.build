@@ -30,7 +30,9 @@ custom_target(
                 '--desc=Test Station description.',
                 '--difficulty=0',
                 '--difficulty_str=moderate',
-                '--jump_distance=1800']]),
+                '--jump_distance=1800',
+                '--station_global_x=2.0',
+                '--station_global_y=2.0']]),
 ]
 
 exe_srcs += files(
