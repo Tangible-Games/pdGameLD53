@@ -81,6 +81,9 @@ add_project_arguments('-fomit-frame-pointer', language: ['c', 'cpp'])
 add_project_arguments('-fverbose-asm', language: ['c', 'cpp'])
 add_project_arguments('-ffunction-sections', language: ['c', 'cpp'])
 add_project_arguments('-fdata-sections', language: ['c', 'cpp'])
+# As in the SDK build rules: the binary is relocated when it is loaded
+add_project_arguments('-mword-relocations', language: ['c', 'cpp'])
+add_project_arguments('-fno-common', language: ['c', 'cpp'])
 add_project_arguments('-fno-exceptions', language: ['cpp'])
 add_project_arguments('-fno-rtti', language: ['cpp'])
 add_project_arguments('-fno-use-cxa-atexit', language: ['cpp'])
@@ -88,9 +91,13 @@ add_project_arguments('-fno-threadsafe-statics', language: ['cpp'])
 add_project_arguments('-fms-extensions', language: ['cpp'])
 add_project_arguments('-fsingle-precision-constant', language: ['c', 'cpp'])
 
+# Linker script must match setup.c, so both are taken from the SDK
 pdsdk_link_args = [
-    '-T@0@'.format(meson.current_source_dir() / 'link_map.ld'),
-    '-Wl,-Map=game.map,--cref,--gc-sections,--no-warn-mismatch',
+    '-nostartfiles',
+    '-T@0@'.format(pd_sdk / 'C_API' / 'buildsupport' / 'link_map.ld'),
+    '-Wl,-Map=game.map,--cref,--gc-sections,--no-warn-mismatch,--emit-relocs',
+    # SDK script drops unwind tables, libstdc++ still refers to their bounds
+    '-Wl,--defsym=__exidx_start=0,--defsym=__exidx_end=0',
     '-mthumb', '-mcpu=cortex-m7', '-mfloat-abi=hard', '-mfpu=fpv5-sp-d16',
     '--specs=nosys.specs'
 ]

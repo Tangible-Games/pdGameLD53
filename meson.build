@@ -95,28 +95,24 @@ pd_exe = executable(
     exe_srcs + exe_srcs_cross,
     include_directories: exe_incs,
     link_args: pdsdk_link_args,
+    name_suffix: 'elf',
     dependencies: [
         targets_dep['cross'],
         pdsdk_dep
     ]
 )
 
-objcopy = find_program('arm-none-eabi-objcopy')
-pd_bin = custom_target('pdex.bin',
-  output : 'pdex.bin',
-  command : [objcopy, ['-O', 'binary', '-S', pd_exe.full_path(), 'pdex.bin']],
-  depends : pd_exe)
-
+# pdc converts pdex.elf to pdex.bin itself
 pd_pdx_dir = meson.project_name() + '.pdx'
 pd_pdx = custom_target(pd_pdx_dir,
   output : pd_pdx_dir,
   command : [python,
                 [meson.project_source_root() / 'scripts' / 'create_pdx.py',
                 pd_sdk,
-                pd_bin.full_path(),
+                pd_exe.full_path(),
                 meson.current_build_dir() / pd_pdx_dir,
                 resources_dir]],
-  depends : pd_bin,
+  depends : pd_exe,
   build_always_stale: true)
 
 message('cross pdx: ', pd_pdx.full_path())

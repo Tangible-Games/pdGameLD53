@@ -43,3 +43,9 @@ int _kill(int pid, int sig) {
   return -1;
 }
 #endif
+
+#ifdef TARGET_PLAYDATE
+// Device build links with -nostartfiles, newlib's exit code still refers to it.
+void _fini(void);
+void _fini(void) {}
+#endif
