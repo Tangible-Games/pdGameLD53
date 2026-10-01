@@ -2,6 +2,7 @@ lib_incs = include_directories('.')
 
 tests = [
     'aa_rect2d',
+    'hash',
     'pd_animations',
     'point2d',
     'ray_casting_projection',
