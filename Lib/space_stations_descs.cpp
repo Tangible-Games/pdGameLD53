@@ -4,7 +4,7 @@ SpaceStationDesc GetST01CentralStationDesc();
 SpaceStationDesc GetST99TestDesc();
 
 const std::vector<SpaceStationDesc>& GetSpaceStationsDescs() {
-  bool initialized = false;
+  static bool initialized = false;
   static std::vector<SpaceStationDesc> descs;
 
   if (!initialized) {
