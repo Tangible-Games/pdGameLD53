@@ -13,21 +13,21 @@ class Vector3d {
   Vector3d(float new_x, float new_y, float new_z)
       : x(new_x), y(new_y), z(new_z) {}
 
-  Vector3d operator+(const Vector3d &rhv) const {
+  Vector3d operator+(const Vector3d& rhv) const {
     return Vector3d(x + rhv.x, y + rhv.y, z + rhv.z);
   }
 
-  Vector3d operator-(const Vector3d &rhv) const {
+  Vector3d operator-(const Vector3d& rhv) const {
     return Vector3d(x - rhv.x, y - rhv.y, z - rhv.z);
   }
 
   Vector3d operator*(float v) { return Vector3d(x * v, y * v, z * v); }
 
-  float operator*(const Vector3d &v) const {
+  float operator*(const Vector3d& v) const {
     return x * v.x + y * v.y + z * v.z;
   }
 
-  Vector3d Cross(const Vector3d &rhv) const {
+  Vector3d Cross(const Vector3d& rhv) const {
     return Vector3d(y * rhv.z - z * rhv.y, z * rhv.x - x * rhv.z,
                     x * rhv.y - y * rhv.x);
   }
