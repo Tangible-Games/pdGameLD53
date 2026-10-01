@@ -20,15 +20,15 @@ class TransformationMatrix3d {
     }
   }
 
-  TransformationMatrix3d(const float *new_matrix) {
-    float *m = &m11;
+  TransformationMatrix3d(const float* new_matrix) {
+    float* m = &m11;
     for (int i = 0; i < kSize; ++i) {
       m[i] = new_matrix[i];
     }
   }
 
   void MakeZero() {
-    float *m = &m11;
+    float* m = &m11;
     for (int i = 0; i < kSize; ++i) {
       m[i] = 0.0f;
     }
@@ -50,7 +50,7 @@ class TransformationMatrix3d {
     m44 = 1.0f;
   }
 
-  void MakeScale(const Vector3d &scale) {
+  void MakeScale(const Vector3d& scale) {
     MakeScale(scale.x, scale.y, scale.z);
   }
 
@@ -62,7 +62,7 @@ class TransformationMatrix3d {
     m43 = translate_z;
   }
 
-  void MakeTranslation(const Vector3d &translate) {
+  void MakeTranslation(const Vector3d& translate) {
     MakeTranslation(translate.x, translate.y, translate.z);
   }
 
@@ -81,8 +81,8 @@ class TransformationMatrix3d {
     m43 = 2.0f * near_z * far_z / (near_z - far_z);
   }
 
-  void MakeLookAt(const Point3d &eye, const Vector3d &forward_norm,
-                  const Vector3d &up_norm) {
+  void MakeLookAt(const Point3d& eye, const Vector3d& forward_norm,
+                  const Vector3d& up_norm) {
     Vector3d s = forward_norm.Cross(up_norm);
     Vector3d u = s.Cross(forward_norm);
 
@@ -103,16 +103,16 @@ class TransformationMatrix3d {
     *this = m1 * m2;
   }
 
-  TransformationMatrix3d operator*(const TransformationMatrix3d &rhv) const {
+  TransformationMatrix3d operator*(const TransformationMatrix3d& rhv) const {
     return Multiply(rhv);
   }
 
-  TransformationMatrix3d Multiply(const TransformationMatrix3d &rhv) const {
+  TransformationMatrix3d Multiply(const TransformationMatrix3d& rhv) const {
     TransformationMatrix3d result(/* make_identity= */ false);
-    float *result_m = &result.m11;
+    float* result_m = &result.m11;
 
-    const float *m = &m11;
-    const float *rhv_m = &rhv.m11;
+    const float* m = &m11;
+    const float* rhv_m = &rhv.m11;
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {
         result_m[i * 4 + j] =
@@ -124,21 +124,21 @@ class TransformationMatrix3d {
     return result;
   }
 
-  Point3d operator*(const Point3d &p) const { return Transform(p, 1.0f); }
+  Point3d operator*(const Point3d& p) const { return Transform(p, 1.0f); }
 
-  Point3d Transform(const Point3d &p) const { return Transform(p, 1.0f); }
+  Point3d Transform(const Point3d& p) const { return Transform(p, 1.0f); }
 
-  Point3d Transform(const Point3d &p, float w) const {
+  Point3d Transform(const Point3d& p, float w) const {
     Point3d result;
     transform(&p.x, w, &result.x);
     return result;
   }
 
-  Vector3d operator*(const Vector3d &p) const { return Transform(p, 1.0f); }
+  Vector3d operator*(const Vector3d& p) const { return Transform(p, 1.0f); }
 
-  Vector3d Transform(const Vector3d &p) const { return Transform(p, 1.0f); }
+  Vector3d Transform(const Vector3d& p) const { return Transform(p, 1.0f); }
 
-  Vector3d Transform(const Vector3d &v, float w) const {
+  Vector3d Transform(const Vector3d& v, float w) const {
     Vector3d result;
     transform(&v.x, w, &result.x);
     return result;
@@ -168,8 +168,8 @@ class TransformationMatrix3d {
 #pragma pack(pop)
 
  private:
-  void transform(const float *vec, float w, float *vec_out) const {
-    const float *m = &m11;
+  void transform(const float* vec, float w, float* vec_out) const {
+    const float* m = &m11;
     vec_out[0] = vec[0] * m[0 * 4 + 0] + vec[1] * m[1 * 4 + 0] +
                  vec[2] * m[2 * 4 + 0] + w * m[3 * 4 + 0];
     vec_out[1] = vec[0] * m[0 * 4 + 1] + vec[1] * m[1 * 4 + 1] +

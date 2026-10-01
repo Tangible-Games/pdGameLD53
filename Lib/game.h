@@ -13,9 +13,9 @@ extern "C" {
 extern "C" {
 #endif  // __cplusplus
 
-void *SetupGame(PlaydateAPI *playdate);
-int Update(void *userdata);
-int EventHandler(void *userdata, PDSystemEvent event, uint32_t arg);
+void* SetupGame(PlaydateAPI* playdate);
+int Update(void* userdata);
+int EventHandler(void* userdata, PDSystemEvent event, uint32_t arg);
 
 #ifdef __cplusplus
 }  // extern "C"

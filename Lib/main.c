@@ -2,12 +2,12 @@
 #include "game.h"
 #include "pd_api.h"
 
-static void *userdata = 0;
+static void* userdata = 0;
 
 #ifdef _WINDLL
 __declspec(dllexport)
 #endif
-    int eventHandler(PlaydateAPI *playdate, PDSystemEvent event, uint32_t arg) {
+int eventHandler(PlaydateAPI* playdate, PDSystemEvent event, uint32_t arg) {
   (void)arg;
   playdate->system->logToConsole("#eventHandler, event: %s, arg: %i",
                                  PDSystemEventToString(event), arg);

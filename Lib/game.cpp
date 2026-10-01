@@ -17,7 +17,7 @@
 
 class Game : public SpaceCraft::Callback, public UiStation::Callback {
  public:
-  Game(PlaydateAPI *playdate)
+  Game(PlaydateAPI* playdate)
       : playdate_(playdate),
         camera_(playdate),
         space_craft_(playdate),
@@ -63,9 +63,9 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     game_interface_.Load();
     ui_station_.Load();
 
-    const char *error = nullptr;
+    const char* error = nullptr;
 
-    LCDBitmapTable *bitmap_table =
+    LCDBitmapTable* bitmap_table =
         playdate_->graphics->loadBitmapTable("data/cut-prkng-copy.gif", &error);
     if (error) {
       playdate_->system->logToConsole(
@@ -109,7 +109,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     space_station_.Generate(stations_[idx]);
     stars_.Generate(/* seed= */ PdSymphony::Hash::HashLy(
-        (unsigned char *)stations_[idx].name.data(),
+        (unsigned char*)stations_[idx].name.data(),
         stations_[idx].name.size()));
     space_craft_.ResetSpaceStation(&space_station_);
 
@@ -155,13 +155,13 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     if (target_state_ == TargetState::DOCKING) {
       stars_.Draw(camera_);
-      LCDBitmap *bitmap = docking_bitmap_animation_.GetBitmap();
+      LCDBitmap* bitmap = docking_bitmap_animation_.GetBitmap();
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else if (target_state_ == TargetState::STATION) {
       ui_station_.Draw();
     } else if (target_state_ == TargetState::JUMP_ANIMATION) {
-      LCDBitmap *bitmap = hyper_jump_bitmap_animation_.GetBitmap();
+      LCDBitmap* bitmap = hyper_jump_bitmap_animation_.GetBitmap();
 
       playdate_->graphics->drawBitmap(bitmap, 0, 0, kBitmapUnflipped);
     } else {
@@ -361,7 +361,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
                       to_station_norm * offset_factor);
   }
 
-  void updateArrowToStation(const Camera &camera) {
+  void updateArrowToStation(const Camera& camera) {
     Point2d ship_in_camera =
         camera.ConvertToCameraSpace(space_craft_.GetPosition());
 
@@ -401,8 +401,8 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   }
 
   void GenMissions(int current_station_index,
-                   std::vector<MissionDesc> &missions_out,
-                   std::vector<int> &missions_indices_out) const {
+                   std::vector<MissionDesc>& missions_out,
+                   std::vector<int>& missions_indices_out) const {
     missions_out.clear();
     missions_indices_out.clear();
 
@@ -469,7 +469,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
 
     if (target_state_ == TargetState::STATION) {
       current_mission_ = missions_to_select_indices_[mission_index];
-      const MissionDesc &mission = missions_to_select_[mission_index];
+      const MissionDesc& mission = missions_to_select_[mission_index];
 
       playdate_->system->logToConsole("Mission: %i, %s", current_mission_,
                                       mission.name.c_str());
@@ -508,7 +508,7 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
     }
   }
 
-  PlaydateAPI *playdate_;
+  PlaydateAPI* playdate_;
   float prev_time_;
 
   Camera camera_;
@@ -554,18 +554,18 @@ class Game : public SpaceCraft::Callback, public UiStation::Callback {
   float running_time_{0.0f};
 };
 
-void *SetupGame(PlaydateAPI *playdate) {
+void* SetupGame(PlaydateAPI* playdate) {
   static Game game(playdate);
   playdate->system->logToConsole("#SetupGame");
   return &game;
 }
 
-int Update(void *userdata) {
-  Game *game = (Game *)userdata;
+int Update(void* userdata) {
+  Game* game = (Game*)userdata;
   return game->Update();
 }
 
-int EventHandler(void *userdata, PDSystemEvent event, uint32_t arg) {
-  Game *game = (Game *)userdata;
+int EventHandler(void* userdata, PDSystemEvent event, uint32_t arg) {
+  Game* game = (Game*)userdata;
   return game->EventHandler(event, arg);
 }

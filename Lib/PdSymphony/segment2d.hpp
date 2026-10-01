@@ -9,18 +9,18 @@ class Segment2d {
  public:
   Segment2d() {}
 
-  Segment2d(const Point2d &new_p0, const Point2d new_p1)
+  Segment2d(const Point2d& new_p0, const Point2d new_p1)
       : p0(new_p0), p1(new_p1) {}
 
-  bool Intersect(const Segment2d &seg1, float eps, Point2d &intersection_out) {
+  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out) {
     float this_seg_fraction = 0.0f;
     float seg1_fraction = 0.0f;
     return Intersect(seg1, eps, intersection_out, this_seg_fraction,
                      seg1_fraction);
   }
 
-  bool Intersect(const Segment2d &seg1, float eps, Point2d &intersection_out,
-                 float &this_seg_fraction, float &seg1_fraction) {
+  bool Intersect(const Segment2d& seg1, float eps, Point2d& intersection_out,
+                 float& this_seg_fraction, float& seg1_fraction) {
     Vector2d v1 = p1 - p0;
     Vector2d v2 = seg1.p1 - seg1.p0;
 
