@@ -136,12 +136,14 @@ def drive_mount_linux():
     mount_out = cmd_run(['udisksctl', 'mount', '-b', disk_dev], 'Unable to mount device')
     mount_out = mount_out.strip().decode('UTF-8')
 
-    # find mount point
-    mount_pos = mount_out.find('/media/')
+    # find mount point, output is "Mounted <device> at <mount point>"
+    # (/media/<user>/... or /run/media/<user>/... depending on distro)
+    at_str = ' at '
+    mount_pos = mount_out.find(at_str)
     if mount_pos == -1:
         sys.exit(ERROR_STR + 'Unable to parse mount point')
 
-    return mount_out[mount_pos:]
+    return mount_out[mount_pos + len(at_str):].rstrip('.')
 
 def drive_mount_point_mac():
     mount_point = '/Volumes/PLAYDATE'
@@ -161,7 +163,7 @@ def drive_unmount_linux():
         print(ERROR_STR + 'Unable to unmount device:', err)
 
     # eject
-    cmd_run(['eject', disk_dev], 'Unable to eject device')
+    cmd_run(['sudo', 'eject', disk_dev], 'Unable to eject device')
 
 def drive_unmount_mac():
     cmd_run('diskutil unmount PLAYDATE', shell=True)
