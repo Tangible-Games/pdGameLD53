@@ -23,11 +23,10 @@ def create_sim(pd_sdk, bin, dest, resources_dir):
     except:
         pass
     with tempfile.TemporaryDirectory() as tmp:
-        if os.path.basename(bin) == "pdex.bin":
-            shutil.copy(bin, os.path.join(tmp, 'pdex.bin'))
-        else:
-            ext = os.path.splitext(bin)[1]
-            shutil.copy(bin, os.path.join(tmp, 'pdex' + ext))
+        ext = os.path.splitext(bin)[1]
+        shutil.copy(bin, os.path.join(tmp, 'pdex' + ext))
+        # Device build: pdc generates pdex.bin from pdex.elf
+        if ext != '.elf':
             touch(os.path.join(tmp, 'pdex.bin'))
             touch(os.path.join(tmp, 'main.pdz'))
         if resources_dir is not None:
