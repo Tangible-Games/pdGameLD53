@@ -38,6 +38,8 @@ static inline const char* PDSystemEventToString(PDSystemEvent event) {
     case kEventLowPower:
       result = "kEventLowPower";
       break;
+    default:
+      break;
   }
   return result;
 }
